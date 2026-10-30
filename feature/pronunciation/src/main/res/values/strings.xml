@@ -1,0 +1,14 @@
+<resources>
+    <string name="feature_pronunciation_list_title">Pronunciation — %1$s</string>
+    <string name="feature_pronunciation_list_empty">No exercises for this language yet.</string>
+    <string name="feature_pronunciation_not_found">This exercise does not exist.</string>
+    <string name="feature_pronunciation_instructions">Instructions</string>
+    <string name="feature_pronunciation_items">Practice</string>
+    <string name="feature_pronunciation_recording_soon">Recording and scoring your pronunciation are coming in a future version.</string>
+
+    <string name="feature_pronunciation_type_listening">Listening discrimination</string>
+    <string name="feature_pronunciation_type_speaking">Minimal pairs to say</string>
+    <string name="feature_pronunciation_type_sentence">Targeted sentence</string>
+    <string name="feature_pronunciation_type_shadowing">Shadowing</string>
+    <string name="feature_pronunciation_type_word_stress">Word stress</string>
+</resources>

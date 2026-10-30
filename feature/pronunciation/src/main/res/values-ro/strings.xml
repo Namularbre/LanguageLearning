@@ -1,0 +1,14 @@
+<resources>
+    <string name="feature_pronunciation_list_title">Pronunție — %1$s</string>
+    <string name="feature_pronunciation_list_empty">Deocamdată nu există exerciții pentru această limbă.</string>
+    <string name="feature_pronunciation_not_found">Acest exercițiu nu există.</string>
+    <string name="feature_pronunciation_instructions">Instrucțiuni</string>
+    <string name="feature_pronunciation_items">De exersat</string>
+    <string name="feature_pronunciation_recording_soon">Înregistrarea și evaluarea pronunției tale vor veni într-o versiune viitoare.</string>
+
+    <string name="feature_pronunciation_type_listening">Discriminare auditivă</string>
+    <string name="feature_pronunciation_type_speaking">Perechi minimale de pronunțat</string>
+    <string name="feature_pronunciation_type_sentence">Propoziție țintă</string>
+    <string name="feature_pronunciation_type_shadowing">Shadowing</string>
+    <string name="feature_pronunciation_type_word_stress">Accentul cuvântului</string>
+</resources>
