@@ -1,0 +1,12 @@
+<resources>
+    <string name="feature_session_home_title">Entraînement du jour</string>
+    <string name="feature_session_daily_title">Session quotidienne</string>
+    <string name="feature_session_minutes">%1$d min</string>
+    <string name="feature_session_start">Démarrer</string>
+    <string name="feature_session_coming_soon">La session guidée arrive dans une prochaine version. En attendant, choisis un module ci-dessous.</string>
+    <string name="feature_session_a_la_carte">À la carte</string>
+    <string name="feature_session_module_pronunciation">Prononciation</string>
+    <string name="feature_session_module_pronunciation_description">Sons difficiles, accent de mot, phrases à écouter et à répéter.</string>
+    <string name="feature_session_module_lessons">Leçons</string>
+    <string name="feature_session_module_lessons_description">Le fonctionnement de la langue, avec des exemples à écouter.</string>
+</resources>

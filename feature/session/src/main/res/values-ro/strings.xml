@@ -1,0 +1,12 @@
+<resources>
+    <string name="feature_session_home_title">Antrenamentul zilei</string>
+    <string name="feature_session_daily_title">Sesiunea zilnică</string>
+    <string name="feature_session_minutes">%1$d min</string>
+    <string name="feature_session_start">Începe</string>
+    <string name="feature_session_coming_soon">Sesiunea ghidată va veni într-o versiune viitoare. Până atunci, alege un modul de mai jos.</string>
+    <string name="feature_session_a_la_carte">Exersare liberă</string>
+    <string name="feature_session_module_pronunciation">Pronunție</string>
+    <string name="feature_session_module_pronunciation_description">Sunete dificile, accentul cuvântului, propoziții de ascultat și de repetat.</string>
+    <string name="feature_session_module_lessons">Lecții</string>
+    <string name="feature_session_module_lessons_description">Cum funcționează limba, cu exemple de ascultat.</string>
+</resources>

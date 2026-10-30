@@ -1,0 +1,12 @@
+<resources>
+    <string name="feature_session_home_title">Today\'s practice</string>
+    <string name="feature_session_daily_title">Daily session</string>
+    <string name="feature_session_minutes">%1$d min</string>
+    <string name="feature_session_start">Start</string>
+    <string name="feature_session_coming_soon">The guided session is coming in a future version. Meanwhile, pick a module below.</string>
+    <string name="feature_session_a_la_carte">Free practice</string>
+    <string name="feature_session_module_pronunciation">Pronunciation</string>
+    <string name="feature_session_module_pronunciation_description">Difficult sounds, word stress, sentences to listen to and repeat.</string>
+    <string name="feature_session_module_lessons">Lessons</string>
+    <string name="feature_session_module_lessons_description">How the language works, with examples to listen to.</string>
+</resources>
