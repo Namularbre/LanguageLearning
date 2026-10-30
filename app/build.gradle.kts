@@ -13,6 +13,12 @@ android {
         versionName = "0.1.0"
     }
 
+    // Lists the app's languages (from the values-* folders) so Android 13+ offers a per-app
+    // language choice in the system settings. Default language: res/resources.properties.
+    androidResources {
+        generateLocaleConfig = true
+    }
+
     buildTypes {
         release {
             optimization {
