@@ -1,0 +1,6 @@
+<resources>
+    <string name="feature_grammar_list_title">Lessons — %1$s</string>
+    <string name="feature_grammar_list_empty">No lessons for this language yet.</string>
+    <string name="feature_grammar_not_found">This lesson does not exist.</string>
+    <string name="feature_grammar_lesson_number">Lesson %1$d</string>
+</resources>
