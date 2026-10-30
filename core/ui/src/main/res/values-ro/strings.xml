@@ -1,0 +1,8 @@
+<resources>
+    <string name="core_ui_back">Înapoi</string>
+    <string name="core_ui_listen">Ascultă</string>
+    <string name="core_ui_slow_speed">Viteză redusă (0,75×)</string>
+    <string name="core_ui_voice_not_installed">Nicio voce instalată pe dispozitiv pentru această limbă.</string>
+    <string name="core_ui_voice_settings">Setări</string>
+    <string name="core_ui_playback_failed">Redarea a eșuat. Încearcă din nou.</string>
+</resources>

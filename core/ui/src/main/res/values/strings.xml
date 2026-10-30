@@ -1,0 +1,8 @@
+<resources>
+    <string name="core_ui_back">Back</string>
+    <string name="core_ui_listen">Listen</string>
+    <string name="core_ui_slow_speed">Slow speed (0.75×)</string>
+    <string name="core_ui_voice_not_installed">No voice is installed for this language on the device.</string>
+    <string name="core_ui_voice_settings">Settings</string>
+    <string name="core_ui_playback_failed">Playback failed. Try again.</string>
+</resources>

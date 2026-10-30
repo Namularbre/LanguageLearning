@@ -1,0 +1,8 @@
+<resources>
+    <string name="core_ui_back">Retour</string>
+    <string name="core_ui_listen">Écouter</string>
+    <string name="core_ui_slow_speed">Vitesse lente (0,75×)</string>
+    <string name="core_ui_voice_not_installed">Aucune voix installée pour cette langue sur l’appareil.</string>
+    <string name="core_ui_voice_settings">Réglages</string>
+    <string name="core_ui_playback_failed">La lecture a échoué. Réessaie.</string>
+</resources>
