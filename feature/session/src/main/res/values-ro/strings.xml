@@ -9,4 +9,6 @@
     <string name="feature_session_module_pronunciation_description">Sunete dificile, accentul cuvântului, propoziții de ascultat și de repetat.</string>
     <string name="feature_session_module_lessons">Lecții</string>
     <string name="feature_session_module_lessons_description">Cum funcționează limba, cu exemple de ascultat.</string>
+    <string name="feature_session_module_library">Bibliotecă</string>
+    <string name="feature_session_module_library_description">Texte scurte de citit și ascultat. Atinge cuvintele pe care nu le știi.</string>
 </resources>

@@ -28,4 +28,17 @@ object AppIcons {
             fill = SolidColor(Color.Black),
         ).build()
     }
+
+    val Pause: ImageVector by lazy {
+        ImageVector.Builder(
+            name = "Pause",
+            defaultWidth = 24.dp,
+            defaultHeight = 24.dp,
+            viewportWidth = 24f,
+            viewportHeight = 24f,
+        ).addPath(
+            pathData = addPathNodes("M6,19h4L10,5L6,5v14zM14,5v14h4L18,5h-4z"),
+            fill = SolidColor(Color.Black),
+        ).build()
+    }
 }

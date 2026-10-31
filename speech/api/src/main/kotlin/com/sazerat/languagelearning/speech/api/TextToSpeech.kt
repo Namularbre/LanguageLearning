@@ -11,10 +11,11 @@ public interface TextToSpeech {
     public suspend fun speak(text: String, languageCode: LanguageCode, rate: SpeechRate = SpeechRate.NORMAL): SpeakResult
 }
 
-/** Playback speeds offered to the learner (spec §7: 0.75× and 1×). */
+/** Playback speeds offered to the learner (spec §4: 0.75×, 1× and 1.25× in the Reader). */
 public enum class SpeechRate(public val factor: Float) {
     NORMAL(factor = 1.0f),
     SLOW(factor = 0.75f),
+    FAST(factor = 1.25f),
 }
 
 public sealed interface SpeakResult {

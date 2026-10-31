@@ -4,9 +4,13 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
 import com.sazerat.languagelearning.core.domain.model.LanguageCode
+import com.sazerat.languagelearning.feature.grammar.navigation.LessonDetail
 import com.sazerat.languagelearning.feature.grammar.navigation.grammarScreens
 import com.sazerat.languagelearning.feature.grammar.navigation.navigateToLessonList
+import com.sazerat.languagelearning.feature.pronunciation.navigation.PronunciationDetail
 import com.sazerat.languagelearning.feature.pronunciation.navigation.navigateToPronunciationList
+import com.sazerat.languagelearning.feature.reading.navigation.navigateToLibrary
+import com.sazerat.languagelearning.feature.reading.navigation.readingScreens
 import com.sazerat.languagelearning.feature.pronunciation.navigation.pronunciationScreens
 import com.sazerat.languagelearning.feature.session.navigation.Home
 import com.sazerat.languagelearning.feature.session.navigation.homeScreen
@@ -23,9 +27,15 @@ fun LanguageLearningNavHost() {
             languages = studiedLanguages,
             onOpenPronunciation = { language -> navController.navigateToPronunciationList(language) },
             onOpenLessons = { language -> navController.navigateToLessonList(language) },
+            onOpenLibrary = { navController.navigateToLibrary() },
         )
         pronunciationScreens(navController)
         grammarScreens(navController)
+        readingScreens(
+            navController = navController,
+            onLessonClick = { id -> navController.navigate(LessonDetail(lessonId = id.value)) },
+            onExerciseClick = { id -> navController.navigate(PronunciationDetail(exerciseId = id.value)) },
+        )
     }
 }
 

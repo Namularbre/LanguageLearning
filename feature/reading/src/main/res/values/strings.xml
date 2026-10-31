@@ -1,0 +1,40 @@
+<resources>
+    <string name="feature_reading_library_title">Library</string>
+    <string name="feature_reading_library_title_language">Library — %1$s</string>
+    <string name="feature_reading_section_texts">Texts</string>
+    <string name="feature_reading_section_lessons">Lessons</string>
+    <string name="feature_reading_section_pronunciation">Pronunciation</string>
+    <string name="feature_reading_all_levels">All levels</string>
+    <string name="feature_reading_suggested">Suggested for you</string>
+    <string name="feature_reading_read">Read</string>
+    <string name="feature_reading_lesson_number">Lesson %1$d</string>
+    <string name="feature_reading_not_found">This text does not exist.</string>
+    <string name="feature_reading_hint">Tap a word to see what it means. Long press a sentence to translate it.</string>
+    <string name="feature_reading_translate_action">Show or hide the translation</string>
+    <string name="feature_reading_finish">I\'m done reading</string>
+    <string name="feature_reading_play">Play</string>
+    <string name="feature_reading_pause">Pause</string>
+    <string name="feature_reading_repeat">Repeat the sentence</string>
+    <string name="feature_reading_speed">Speed %1$s</string>
+    <string name="feature_reading_speed_slow">0.75×</string>
+    <string name="feature_reading_speed_normal">1×</string>
+    <string name="feature_reading_speed_fast">1.25×</string>
+    <string name="feature_reading_other_meanings">Also: %1$s</string>
+    <string name="feature_reading_pronunciation">Pronunciation</string>
+    <string name="feature_reading_add_to_review">Add to review</string>
+    <string name="feature_reading_already_known">I already know it</string>
+    <string name="feature_reading_in_reviews">In your reviews</string>
+    <string name="feature_reading_known_now">I know it now</string>
+    <string name="feature_reading_you_know_it">You know this word</string>
+    <string name="feature_reading_review_anyway">Review it anyway</string>
+    <string name="feature_reading_summary_title">Well done!</string>
+    <plurals name="feature_reading_summary_known">
+        <item quantity="one">%1$d new word is now marked as known.</item>
+        <item quantity="other">%1$d new words are now marked as known.</item>
+    </plurals>
+    <plurals name="feature_reading_summary_learning">
+        <item quantity="one">%1$d word of this text is in your reviews.</item>
+        <item quantity="other">%1$d words of this text are in your reviews.</item>
+    </plurals>
+    <string name="feature_reading_back_to_library">Back to the library</string>
+</resources>

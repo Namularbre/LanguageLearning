@@ -1,0 +1,42 @@
+<resources>
+    <string name="feature_reading_library_title">Bibliotecă</string>
+    <string name="feature_reading_library_title_language">Bibliotecă — %1$s</string>
+    <string name="feature_reading_section_texts">Texte</string>
+    <string name="feature_reading_section_lessons">Lecții</string>
+    <string name="feature_reading_section_pronunciation">Pronunție</string>
+    <string name="feature_reading_all_levels">Toate nivelurile</string>
+    <string name="feature_reading_suggested">Recomandat pentru tine</string>
+    <string name="feature_reading_read">Citit</string>
+    <string name="feature_reading_lesson_number">Lecția %1$d</string>
+    <string name="feature_reading_not_found">Acest text nu există.</string>
+    <string name="feature_reading_hint">Atinge un cuvânt ca să vezi ce înseamnă. Ține apăsat pe o propoziție ca s-o traduci.</string>
+    <string name="feature_reading_translate_action">Arată sau ascunde traducerea</string>
+    <string name="feature_reading_finish">Am terminat de citit</string>
+    <string name="feature_reading_play">Redă</string>
+    <string name="feature_reading_pause">Pauză</string>
+    <string name="feature_reading_repeat">Repetă propoziția</string>
+    <string name="feature_reading_speed">Viteză %1$s</string>
+    <string name="feature_reading_speed_slow">0,75×</string>
+    <string name="feature_reading_speed_normal">1×</string>
+    <string name="feature_reading_speed_fast">1,25×</string>
+    <string name="feature_reading_other_meanings">Și: %1$s</string>
+    <string name="feature_reading_pronunciation">Pronunție</string>
+    <string name="feature_reading_add_to_review">Adaugă la recapitulare</string>
+    <string name="feature_reading_already_known">Îl știu deja</string>
+    <string name="feature_reading_in_reviews">În recapitulările tale</string>
+    <string name="feature_reading_known_now">Acum îl știu</string>
+    <string name="feature_reading_you_know_it">Știi acest cuvânt</string>
+    <string name="feature_reading_review_anyway">Recapitulează-l oricum</string>
+    <string name="feature_reading_summary_title">Bravo!</string>
+    <plurals name="feature_reading_summary_known">
+        <item quantity="one">%1$d cuvânt nou este acum marcat ca știut.</item>
+        <item quantity="few">%1$d cuvinte noi sunt acum marcate ca știute.</item>
+        <item quantity="other">%1$d de cuvinte noi sunt acum marcate ca știute.</item>
+    </plurals>
+    <plurals name="feature_reading_summary_learning">
+        <item quantity="one">%1$d cuvânt din acest text este în recapitulările tale.</item>
+        <item quantity="few">%1$d cuvinte din acest text sunt în recapitulările tale.</item>
+        <item quantity="other">%1$d de cuvinte din acest text sunt în recapitulările tale.</item>
+    </plurals>
+    <string name="feature_reading_back_to_library">Înapoi la bibliotecă</string>
+</resources>

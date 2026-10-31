@@ -54,6 +54,7 @@ include(":lang:test")
 
 include(":feature:pronunciation")
 include(":feature:grammar")
+include(":feature:reading")
 include(":feature:oral")
 include(":feature:session")
 include(":feature:srs")

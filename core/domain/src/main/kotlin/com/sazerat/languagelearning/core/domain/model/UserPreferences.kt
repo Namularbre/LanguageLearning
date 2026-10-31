@@ -24,4 +24,11 @@ public data class UserPreferences(
     /** Shows IPA, pronunciation notes and exercises (spec §7). */
     val pronunciationHelp: Boolean = false,
     val onboardingDone: Boolean = false,
-)
+) {
+    /** The language being learnt; Romanian, the main content (spec §1), until one is chosen. */
+    public val learningLanguageOrDefault: LanguageCode get() = learningLanguage ?: DEFAULT_LEARNING_LANGUAGE
+
+    public companion object {
+        public val DEFAULT_LEARNING_LANGUAGE: LanguageCode = LanguageCode("ro-RO")
+    }
+}

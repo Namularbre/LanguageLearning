@@ -9,4 +9,6 @@
     <string name="feature_session_module_pronunciation_description">Sons difficiles, accent de mot, phrases à écouter et à répéter.</string>
     <string name="feature_session_module_lessons">Leçons</string>
     <string name="feature_session_module_lessons_description">Le fonctionnement de la langue, avec des exemples à écouter.</string>
+    <string name="feature_session_module_library">Bibliothèque</string>
+    <string name="feature_session_module_library_description">De courts textes à lire et à écouter. Touchez les mots que vous ne connaissez pas.</string>
 </resources>

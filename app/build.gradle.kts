@@ -38,6 +38,7 @@ dependencies {
 
     implementation(projects.feature.pronunciation)
     implementation(projects.feature.grammar)
+    implementation(projects.feature.reading)
     implementation(projects.feature.session)
 
     implementation(libs.androidx.core.ktx)

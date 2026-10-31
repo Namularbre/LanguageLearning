@@ -38,6 +38,7 @@ internal fun HomeScreen(
     languages: List<LanguageCode>,
     onOpenPronunciation: (LanguageCode) -> Unit,
     onOpenLessons: (LanguageCode) -> Unit,
+    onOpenLibrary: () -> Unit,
     viewModel: HomeViewModel = hiltViewModel(),
 ) {
     val selectedDuration by viewModel.selectedDuration.collectAsStateWithLifecycle()
@@ -51,6 +52,7 @@ internal fun HomeScreen(
         onLanguageSelected = viewModel::onLanguageSelected,
         onOpenPronunciation = { onOpenPronunciation(selectedLanguage) },
         onOpenLessons = { onOpenLessons(selectedLanguage) },
+        onOpenLibrary = onOpenLibrary,
     )
 }
 
@@ -63,6 +65,7 @@ internal fun HomeContent(
     onLanguageSelected: (LanguageCode) -> Unit,
     onOpenPronunciation: () -> Unit,
     onOpenLessons: () -> Unit,
+    onOpenLibrary: () -> Unit,
 ) {
     AppScaffold(title = stringResource(R.string.feature_session_home_title)) { padding ->
         Column(
@@ -73,6 +76,12 @@ internal fun HomeContent(
                 .padding(16.dp),
             verticalArrangement = Arrangement.spacedBy(16.dp),
         ) {
+            // Temporary entry to the reading loop until Today replaces this screen.
+            ModuleCard(
+                title = stringResource(R.string.feature_session_module_library),
+                description = stringResource(R.string.feature_session_module_library_description),
+                onClick = onOpenLibrary,
+            )
             DailySessionCard(selectedDuration, onDurationSelected)
             Text(stringResource(R.string.feature_session_a_la_carte), style = MaterialTheme.typography.titleMedium)
             LanguageChips(languages, selectedLanguage, onLanguageSelected)
@@ -158,6 +167,7 @@ private fun HomePreview() {
             onLanguageSelected = {},
             onOpenPronunciation = {},
             onOpenLessons = {},
+            onOpenLibrary = {},
         )
     }
 }
