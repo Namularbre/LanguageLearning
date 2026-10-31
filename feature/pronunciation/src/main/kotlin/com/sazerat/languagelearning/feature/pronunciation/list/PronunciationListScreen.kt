@@ -90,7 +90,7 @@ private fun ExerciseList(
 @PreviewLightDark
 @Composable
 private fun PronunciationListPreview() {
-    LanguageLearningTheme(dynamicColor = false) {
+    LanguageLearningTheme {
         PronunciationListContent(
             languageCode = LanguageCode("en-GB"),
             uiState = PronunciationListUiState.Success(previewExercises),

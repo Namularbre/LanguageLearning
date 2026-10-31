@@ -120,7 +120,7 @@ private fun LessonBody(
 @PreviewLightDark
 @Composable
 private fun LessonDetailPreview() {
-    LanguageLearningTheme(dynamicColor = false) {
+    LanguageLearningTheme {
         LessonDetailContent(
             uiState = LessonDetailUiState.Success(previewLessons.first(), playingText = "o fată"),
             onBack = {},

@@ -132,7 +132,7 @@ private fun ExerciseDetail(
 @PreviewLightDark
 @Composable
 private fun PronunciationDetailPreview() {
-    LanguageLearningTheme(dynamicColor = false) {
+    LanguageLearningTheme {
         PronunciationDetailContent(
             uiState = PronunciationDetailUiState.Success(previewExercises.first(), playingText = "sheep"),
             onBack = {},

@@ -149,7 +149,7 @@ private fun ModuleCard(title: String, description: String, onClick: () -> Unit) 
 @PreviewLightDark
 @Composable
 private fun HomePreview() {
-    LanguageLearningTheme(dynamicColor = false) {
+    LanguageLearningTheme {
         HomeContent(
             selectedDuration = SessionDuration.TEN,
             onDurationSelected = {},
