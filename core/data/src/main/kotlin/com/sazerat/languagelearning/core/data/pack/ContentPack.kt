@@ -20,7 +20,7 @@ import kotlinx.serialization.Serializable
 
 /**
  * A language pack (spec §9.2–9.3): all the reviewed content of one language, as published by the
- * content pipeline (`tools/content/`) and, from M2, served by `GET /packs/{languageCode}`.
+ * content pipeline (a separate project) and, from M2, served by `GET /packs/{languageCode}`.
  *
  * These classes mirror the JSON file one to one; the `to…()` functions turn them into domain
  * models. A text in several UI languages (`LocalizedText`) is a JSON object such as

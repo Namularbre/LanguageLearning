@@ -124,7 +124,7 @@ Each entry: goal · tool + prompt · what was produced · what was accepted / re
   - `ro-RO.json`, `en-GB.json`, `fr-FR.json` exported from the former Kotlin sample objects, checked to give back equal domain models; the Kotlin texts, lexicon and lessons removed.
   - `PackTextRepository`, `PackLexiconRepository`, `PackLessonRepository` wired in `DataModule`.
   - Tests: `ContentPackParserTest`, `PackRepositoriesTest`, `PackContentTest` (replaces `SampleReadingTest` and the lesson checks).
-  - `tools/content/format_pack.py`; docs: `docs/understanding/content-packs.md`, `ARCHITECTURE.md`.
+  - Docs: `docs/understanding/content-packs.md`, `ARCHITECTURE.md`.
 - **Choices made by the AI, to confirm:** tokens stored in the pack (not resolved by the app); one file per language; assets kept in memory until Room storage in M2; pronunciation exercises left in Kotlin for now.
 - **Accepted / rejected / modified and why:** _TODO (author)_
 - **How I verified it:** _TODO (author). The AI had no Android SDK: it ran the export round trip and the new `:core:data` unit tests in a plain JVM project (21 tests green); `assembleDebug`, the Android tests and lint are left to CI._

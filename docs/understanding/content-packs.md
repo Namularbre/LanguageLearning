@@ -42,7 +42,7 @@ Features only see the domain interfaces (`TextRepository`…), so none of them c
 
 **Checking a pack.** `PackContentTest` (`:core:data` unit tests) checks every bundled pack: unique ids, every word points to a lemma of its language, every lemma is used, translations present in the right UI languages, lessons numbered 1 to 6, Romanian ș/ț with a comma below, never a cedilla. A new or edited pack must pass it.
 
-**Formatting.** `python3 tools/content/format_pack.py <pack.json>` rewrites a pack in a stable layout (short objects on one line), so a reviewed change is a readable diff.
+**Where packs are produced.** Not in this repository: the content pipeline (AI draft, lemmatisation, review) is a separate project that writes these files. This app only reads them.
 
 ## Where to look in the code
 
