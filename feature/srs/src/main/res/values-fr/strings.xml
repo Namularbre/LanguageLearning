@@ -23,4 +23,7 @@
     <string name="feature_srs_continue">Continuer</string>
     <string name="feature_srs_right_answer">Bonne réponse !</string>
     <string name="feature_srs_wrong_answer">Pas tout à fait</string>
+    <string name="feature_srs_listen_sentence">Écouter la phrase</string>
+    <string name="feature_srs_form_in_sentence">Dans la phrase : %1$s</string>
+    <string name="feature_srs_listen_form">Écouter « %1$s »</string>
 </resources>

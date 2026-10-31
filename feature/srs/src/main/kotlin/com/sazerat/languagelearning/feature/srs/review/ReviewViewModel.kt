@@ -73,7 +73,28 @@ data class ReviewCardUiState(
      * then shows the answer and rates the card with the four FSRS buttons.
      */
     val exercise: ExerciseUiState? = null,
-)
+) {
+    /** The word as written in the sentence, e.g. "casei" for "casă". */
+    val form: String get() = sentence.tokens.getOrNull(tokenIndex)?.text ?: lemma.text
+
+    /** The sentence has the word in another form than its base form: it can be heard too. */
+    val formDiffers: Boolean get() = !form.equals(lemma.text, ignoreCase = true)
+
+    /** Hearing the sentence would give the hidden word away. */
+    val canHearSentence: Boolean get() = revealed || exercise?.kind == ExerciseKind.MEANING
+}
+
+/** What a speaker button of the card reads aloud. */
+enum class ReviewAudio {
+    /** The whole sentence. */
+    SENTENCE,
+
+    /** The base form, e.g. "casă". */
+    WORD,
+
+    /** The word as written in the sentence, e.g. "casei". */
+    FORM,
+}
 
 sealed interface ReviewUiState {
     data object Loading : ReviewUiState
@@ -270,9 +291,15 @@ class ReviewViewModel @Inject constructor(
         savedStateHandle[REVEALED_KEY] = true
     }
 
-    fun onPlayClick() {
+    fun onPlayClick(audio: ReviewAudio = ReviewAudio.SENTENCE) {
         val card = (uiState.value as? ReviewUiState.Reviewing)?.card ?: return
-        player.play(card.sentence.text, card.lemma.languageCode, SpeechRate.NORMAL)
+        val text = when (audio) {
+            ReviewAudio.SENTENCE -> card.sentence.text.takeIf { card.canHearSentence }
+            // Before the answer, the word would give it away.
+            ReviewAudio.WORD -> card.lemma.text.takeIf { card.revealed }
+            ReviewAudio.FORM -> card.form.takeIf { card.revealed }
+        } ?: return
+        player.play(text, card.lemma.languageCode, SpeechRate.NORMAL)
     }
 
     /** Rates a card that has no question, once its answer is shown. */

@@ -83,7 +83,7 @@ internal fun ReviewScreen(
 internal fun ReviewContent(
     uiState: ReviewUiState,
     onReveal: () -> Unit,
-    onPlay: () -> Unit,
+    onPlay: (ReviewAudio) -> Unit,
     onRating: (Rating) -> Unit,
     onSpeechErrorShown: () -> Unit,
     onReadText: (TextId) -> Unit,
@@ -114,7 +114,7 @@ internal fun ReviewContent(
 private fun ReviewingContent(
     uiState: ReviewUiState.Reviewing,
     onReveal: () -> Unit,
-    onPlay: () -> Unit,
+    onPlay: (ReviewAudio) -> Unit,
     onRating: (Rating) -> Unit,
     onChoice: (LemmaId) -> Unit,
     onContinue: () -> Unit,
@@ -138,7 +138,7 @@ private fun ReviewingContent(
             modifier = Modifier.weight(1f).verticalScroll(rememberScrollState()),
             verticalArrangement = Arrangement.spacedBy(16.dp),
         ) {
-            CardFront(card)
+            CardFront(card, uiState.isPlaying, onPlay)
             if (exercise != null) {
                 ChoiceButtons(card.lemma.id, exercise, onChoice)
                 if (exercise.answered) AnswerFeedback(correct = exercise.selected == card.lemma.id)
@@ -203,7 +203,7 @@ private fun AnswerFeedback(correct: Boolean) {
  * which would give the meaning away, waits for the answer.
  */
 @Composable
-private fun CardFront(card: ReviewCardUiState) {
+private fun CardFront(card: ReviewCardUiState, isPlaying: Boolean, onPlay: (ReviewAudio) -> Unit) {
     val asksMeaning = card.exercise?.kind == ExerciseKind.MEANING
     GlassCard(modifier = Modifier.fillMaxWidth()) {
         Overline(stringResource(if (asksMeaning) R.string.feature_srs_meaning_hint else R.string.feature_srs_front_hint))
@@ -220,7 +220,13 @@ private fun CardFront(card: ReviewCardUiState) {
                 }
             }
         }
-        Text(sentence, style = ReadingTextStyle, modifier = Modifier.padding(vertical = 8.dp))
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            Text(sentence, style = ReadingTextStyle, modifier = Modifier.weight(1f).padding(vertical = 8.dp))
+            // Hidden while hearing the sentence would give the missing word away.
+            if (card.canHearSentence) {
+                SpeakerButton(stringResource(R.string.feature_srs_listen_sentence), isPlaying) { onPlay(ReviewAudio.SENTENCE) }
+            }
+        }
         if (!asksMeaning || card.revealed) {
             Text(
                 card.sentence.translation.localized(),
@@ -233,7 +239,7 @@ private fun CardFront(card: ReviewCardUiState) {
 }
 
 @Composable
-private fun CardBack(card: ReviewCardUiState, isPlaying: Boolean, onPlay: () -> Unit) {
+private fun CardBack(card: ReviewCardUiState, isPlaying: Boolean, onPlay: (ReviewAudio) -> Unit) {
     GlassCard(modifier = Modifier.fillMaxWidth()) {
         Row(verticalAlignment = Alignment.CenterVertically) {
             Column(modifier = Modifier.weight(1f)) {
@@ -241,12 +247,18 @@ private fun CardBack(card: ReviewCardUiState, isPlaying: Boolean, onPlay: () -> 
                 val grammar = listOfNotNull(card.lemma.partOfSpeech.label(), card.lemma.gender?.label()).joinToString(" · ")
                 Text(grammar, style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
             }
-            IconButton(onClick = onPlay, enabled = !isPlaying) {
-                Icon(
-                    AppIcons.VolumeUp,
-                    contentDescription = stringResource(CoreUiR.string.core_ui_listen),
-                    tint = MaterialTheme.colorScheme.primary,
+            SpeakerButton(stringResource(CoreUiR.string.core_ui_listen), isPlaying) { onPlay(ReviewAudio.WORD) }
+        }
+        // A declined or conjugated form (casei for casă) can be heard as it is in the sentence.
+        if (card.formDiffers) {
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Text(
+                    stringResource(R.string.feature_srs_form_in_sentence, card.form),
+                    style = MaterialTheme.typography.bodyLarge,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    modifier = Modifier.weight(1f),
                 )
+                SpeakerButton(stringResource(R.string.feature_srs_listen_form, card.form), isPlaying) { onPlay(ReviewAudio.FORM) }
             }
         }
         Spacer(Modifier.padding(4.dp))
@@ -254,6 +266,13 @@ private fun CardBack(card: ReviewCardUiState, isPlaying: Boolean, onPlay: () -> 
         if (card.showPronunciation && card.lemma.ipa != null) {
             Text("/${card.lemma.ipa}/", style = MaterialTheme.typography.bodyLarge, color = MaterialTheme.colorScheme.onSurfaceVariant)
         }
+    }
+}
+
+@Composable
+private fun SpeakerButton(description: String, isPlaying: Boolean, onClick: () -> Unit) {
+    IconButton(onClick = onClick, enabled = !isPlaying) {
+        Icon(AppIcons.VolumeUp, contentDescription = description, tint = MaterialTheme.colorScheme.primary)
     }
 }
 
