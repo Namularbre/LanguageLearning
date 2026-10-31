@@ -1,4 +1,4 @@
-# Specification — English (pronunciation) & Romanian training app
+# Specification — Read, tap, review: a Romanian / English / French learning app
 
 > Document for Claude Code. It describes the need, the constraints of the *Mobile Computing* course (UPB, 2026-2027), the target architecture and a breakdown aligned with the course milestones, with acceptance criteria. Work **milestone by milestone**, in order.
 
@@ -6,27 +6,43 @@
 
 ## 0. Summary
 
-**Native Android app, Kotlin / Jetpack Compose**, **offline-first**, for personal use. The **UI is in English**, with **French and Romanian translations** chosen automatically from the phone's language (or the per-app language set in the system settings). Learning content (explanations, instructions, translations of examples) follows the same rule. Goals:
+**Native Android app, Kotlin / Jetpack Compose**, **offline-first**, to learn **Romanian, English or French** by **reading and listening to real short texts at the right level**, then **reviewing the words met** with spaced repetition.
 
-1. **Polish English pronunciation** (target accent: **Standard Southern British English, SSBE**) for an advanced user (TOEIC 900).
-2. **Understand how Romanian works** (grammar, rules, spelling) from an **A1-A2** level.
-3. **Practise speaking Romanian**.
+Promise: *"Understand real stories from the first week, and don't forget them."*
 
-Daily sessions of **5, 10 or 15 minutes**.
+The core is a **four-step loop**, 10 to 20 minutes a day:
+
+1. **Read** a short text (story, dialogue, simplified news) with its audio.
+2. **Tap a word** you don't know: its base form, meaning and pronunciation appear.
+3. **Add it to your reviews**: it becomes a card that keeps its original sentence.
+4. **Review** the cards that are due (FSRS). The words learnt choose the next text, so the learner stays at the right level without setting anything.
+
+Next to that loop:
+- **"How the language works" lessons** (spelling, alphabet, articles, cases…) for those who want to understand the rules. They live in the Library, apart from the texts.
+- **Optional pronunciation help**: when enabled in the settings, the IPA transcription and a pronunciation note appear on word sheets and card backs, and the pronunciation exercises are available in the Library.
+
+The **UI is in English, French or Romanian**: by default the phone's language (English if it is none of the three), changeable in the app. The UI language is also taken as the learner's **native language**: explanations and translations are shown in it.
 
 The app is also the **Mobile Computing course project**: it must meet the required technical baseline (§2) and carry a **defensible compute/data placement decision** (on-device vs cloud, §10). The project is graded mainly through a **live defence**: the student must be able to **explain and modify every part of the code**.
 
 ---
 
-## 1. Context and user
+## 1. Context and users
+
+The app is designed for the **six pairs** between Romanian, English and French. Content first targets **Romanian for French and English speakers** (few competitors, very motivated learners); English and French get a few texts so every pair works.
+
+| Segment | Language learnt | Profile |
+|---|---|---|
+| French and English speakers | Romanian | Expatriates, mixed couples, diaspora, people moving to Romania or Moldova |
+| Romanian speakers | English, French | Students, workers, people planning to emigrate |
+
+Personas used for the designs:
+- **Claire, 34, French**, moves to Bucharest for work. Zero Romanian, 20 minutes a day on public transport.
+- **Andrei, 22, Romanian**, student. Intermediate English, wants to follow TV series and pass a job interview in French.
 
 | Item | Value |
 |---|---|
-| User | 1 person, French speaker |
-| English | Advanced (TOEIC 900). Need: fine pronunciation, prosody, natural speech. |
-| Romanian | Beginner (A1-A2). Need: grammar and spelling, then speaking. |
-| Available time | 5 to 15 min/day |
-| Device | **Android 14 (API 34)** smartphone — to be confirmed in Settings › About phone |
+| Device | Android 14 (API 34) or later |
 | Framework | Mobile Computing course project (MSc PDCS, UPB). Team: **to be specified** (solo allowed, 3 max). |
 | UI languages | English (default), French, Romanian |
 
@@ -41,12 +57,12 @@ These requirements are **non-negotiable**: missing one caps the functionality gr
 | Kotlin only, no Java in the app code | §9.9 |
 | Jetpack Compose + Material 3, no XML; stateless composables, state hoisted into a ViewModel | §9.1, §9.9 |
 | MVVM + unidirectional data flow, **Hilt**, coroutines/Flow, logic behind interfaces testable with fakes | §9.1, §11 |
-| **Navigation Compose with type-safe routes**, several screens, at least one **list → detail** flow | §9.5 |
+| **Navigation Compose with type-safe routes**, several screens, at least one **list → detail** flow | §9.5 (Library → Reader) |
 | **Process-death survival** (back stack and screen state restored: `SavedStateHandle`, `rememberSaveable`) | §9.5 |
 | Network images with **Coil 3** (`AsyncImage`, placeholder and error state) | §9.7 |
 | **Room as the local source of truth** (entity + DAO + reactive reads as `Flow`); the UI observes Room, not the network | §9.2 |
 | **Remote tier** chosen deliberately (Retrofit REST) + **offline-first sync with WorkManager** under real constraints (network type, battery) | §9.2, §9.3 |
-| Dangerous **runtime permission**: rationale, denial handled without crash (degraded mode), path to ask again | §9.6 (`RECORD_AUDIO` + `POST_NOTIFICATIONS`) |
+| Dangerous **runtime permission**: rationale, denial handled without crash (degraded mode), path to ask again | §9.6 (`POST_NOTIFICATIONS`, then `RECORD_AUDIO`) |
 | Correct asynchronous work, main-thread safety, survives **Doze** | §9.2, §12 |
 | JVM unit tests with fakes, **at least one instrumented test**, blocking **GitHub Actions CI** on every PR | §11.4, §13 |
 | **Integrated concept**: on-device inference (ML Kit, LiteRT, MediaPipe), with a contrasting cloud path (Firebase AI Logic / Gemini) behind the same interface, and a **defensible placement decision** | §10 |
@@ -58,67 +74,64 @@ These requirements are **non-negotiable**: missing one caps the functionality gr
 
 | Priority | Feature | Milestone |
 |---|---|---|
-| **P1** | English pronunciation with phoneme-level feedback | M2 (basic version), M3 (on-device/cloud placement) |
-| **P2** | How Romanian works: lessons + corrected exercises | M2 (lessons 1 to 3), after the course (rest) |
-| **P3** | Romanian speaking: listening, scored repetition | M3 (simple repetition), after the course (dialogues) |
-| P4 | Daily session, spaced repetition, dashboard | M3 (simple session), after the course (complete) |
-| Later | Free writing, corrected translation, free conversation, lessons 7-13 | After the course |
+| **P1** | Reading loop: Library → Reader → word sheet → reviews (FSRS) | Prototype on sample content (done after M1), M2 (content from the API) |
+| **P2** | Today, Progress, onboarding (languages, level test, daily goal) | Prototype (done after M1), M2 (reminder) |
+| **P3** | "How the language works" lessons, optional pronunciation help | M1 lessons kept; M2 more lessons |
+| P4 | Sentence translation on the device or in the cloud (integrated concept) | M3 |
+| Phase 2 | Shadowing with speech recognition and pronunciation feedback, conversation with an AI limited to known words, correction of short written texts, import of personal content | After the course |
 
-The scope of the course milestones is deliberately **reduced**: a solid, tested, explainable base is better than many fragile features. The rest is built after the course on the same architecture.
+The scope of the course milestones is deliberately **reduced**: a solid, tested, explainable base is better than many fragile features.
 
----
-
-## 4. Session format
-
-The user picks **5 min**, **10 min** or **15 min** (5 min by default).
-
-| Length | Content |
-|---|---|
-| 5 min | 1 review (2 min) + 1 exercise targeting the main weakness (3 min) |
-| 10 min | Review (3 min) + English pronunciation (4 min) + Romanian grammar OR speaking (3 min) |
-| 15 min | Review (3 min) + English pronunciation (5 min) + Romanian grammar (4 min) + Romanian speaking (3 min) |
-
-Rules:
-- Content chosen automatically from the error log (§8.2).
-- An interrupted session (including by **process death**) resumes exactly where it was (§9.5).
-- "Free practice" mode to open any module directly.
+**Design principles**: calm and centred on reading (the text is the hero, the interface steps back); usable with one hand, main actions at the bottom; reading text at 18–20 pt at least with generous line spacing; dark mode; three word-status colours used everywhere (new, learning, known); light gamification only (day streak and daily goal, no points or leagues); honest feedback (known words and comprehension rate, not abstract rewards).
 
 ---
 
-## 5. English module — Pronunciation (P1)
+## 4. Navigation and screens
 
-### 5.1 Phonetic reference
+A **four-tab bar** (Today, Library, Review, Progress) plus an **onboarding** on first launch.
 
-Target accent: **SSBE**, non-rhotic, British IPA transcriptions.
-
-Priority targets for a French speaker:
-- Consonants: /θ/, /ð/, aspirated /h/, /ŋ/, British /r/ (not pronounced at the end of a syllable), *dark l*.
-- Vowels: /ɪ/–/iː/, /ʊ/–/uː/, /æ/–/ʌ/–/ɑː/, /ɒ/–/ɔː/, /ɜː/, schwa /ə/.
-- Diphthongs: /əʊ/, /eɪ/, /aɪ/, /aʊ/, /ɪə/, /eə/.
-- Word stress (*PHOtograph / phoTOgraphy*), sentence stress, **weak forms** (*can* /kən/, *of* /əv/).
-- *Connected speech*: linking, *linking r* / *intrusive r*, elision, assimilation.
-- Intonation: rising / falling, *tag questions*.
-
-### 5.2 Exercises
-
-1. **Listening discrimination** (minimal pairs, pick the word heard) — works **without microphone or network**.
-2. **Minimal pairs to say**.
-3. **Targeted sentences** (one phoneme or phenomenon).
-4. **Shadowing** (listen to the model, record, compare playback).
-5. **Word stress**.
-
-### 5.3 Expected feedback
-
-- **Immediate on-device feedback** (approximate): local transcription, words recognised or not.
-- **Detailed cloud feedback**: overall score, per word and **per phoneme** (colours), expected sound in IPA, short explanation in the UI language with an articulation tip, illustration of the mouth position (network image, §9.7).
-- When offline: the recording is **queued** and scored later by WorkManager (§9.2), with a notification when the result is ready.
-- Every error feeds the **error log**.
+| Area | Screen | Role |
+|---|---|---|
+| Onboarding | Languages | "I speak" pre-filled with the UI language; the learner only picks the language to learn among the two others |
+| Onboarding | Level test | 30 to 50 words from the most to the least frequent; the learner ticks those they know. "I'm a complete beginner" skips it |
+| Onboarding | Daily goal | 5, 10, 20 or 30 minutes a day |
+| Today | Today | Day streak, ring towards the daily goal, "To review" card (cards due, estimated time), "Read next" card (suggested text, level, length, estimated comprehension), new words this week |
+| Library | Catalogue | Texts filtered by level (A1–C1) and type (story, dialogue, news, lessons, and pronunciation when the help is on); comprehension badge (green ≥ 90 %, orange 75–90 %, grey below); read texts ticked |
+| Library | Reader | Text sentence by sentence, words coloured by status, audio player (play/pause, speed 0.75× / 1× / 1.25×, repeat sentence), sentence being read highlighted, long press on a sentence to translate it, "I'm done reading" marks the untouched new words as known |
+| Library | Word sheet (bottom sheet) | Word as written and its base form (*casei* → *casă*, noun, feminine), main meaning and 1–2 others, audio, original sentence, "Add to review" and "I already know it" |
+| Library | Lesson | "How the language works" lesson (kept from M1) |
+| Review | Review session | Card front: the original sentence with the word hidden; back: meaning, base form, audio; four FSRS ratings (Again, Hard, Good, Easy) with the next interval under each; session progress bar |
+| Review | End of session | Cards reviewed, success rate, next review; "Read a text now?" with the suggested text |
+| Progress | Statistics | Known words, known words over 30 days, regularity calendar, "You understand about 85 % of an A1 text" |
+| Progress | Settings | Languages, UI language, daily goal, pronunciation help |
 
 ---
 
-## 6. Romanian module — How the language works (P2)
+## 5. Reading and words
+
+### 5.1 Content
+
+- A **text** has a language, a level (A1–C1), a type (story, dialogue, news), a title, an estimated reading time and **sentences**. Each sentence carries its translation in the UI languages.
+- Texts ship **already split into words**, each word linked to its **base form** (lemma). The phone does not lemmatise: Romanian articles and cases change the end of the word (*casă, casa, casei, casele*) and an on-device lemmatiser would not be reliable. Prototype: a dictionary of forms in the sample content; M2: tokens delivered by the API.
+- A **lemma** has its base form, its part of speech (and gender), its meanings in the UI languages, a frequency rank (for the level test), and optionally its IPA and a pronunciation note.
+- Language rules to respect: **French** elisions (*l'homme*, *qu'il*) are two words; **English** phrasal verbs (*give up*) are one unit (phase 2: a multi-word selection gesture); **Romanian** always shows the base form; diacritics with a comma below (§6.1).
+
+### 5.2 Word status
+
+Every lemma has a status for the learner: **new** (never met or untouched), **learning** (added to the reviews), **known**. It is tracked per **base form**, so meeting *casei* after *casa* is the same word.
+
+- Tapping a word opens its sheet. "Add to review" → learning + a review card; "I already know it" → known.
+- "I'm done reading" marks the **new** words of the text that were not added to the reviews as **known**.
+- **Comprehension** of a text = share of its words (occurrences) whose lemma is known or learning. Shown in the Library and on Today.
+- The **suggested text** is the unread text whose comprehension is the highest while staying at or below 98 % (a text where everything is known teaches nothing), favouring the learner's level.
+
+---
+
+## 6. "How the language works" lessons
 
 ### 6.1 Curriculum (A1 → B1)
+
+Kept from M1, for Romanian first:
 
 1. Alphabet, **diacritics** (ă, â, î, ș, ț), pronunciation rules (ce/ci, che/chi, ge/gi, â vs î, *ea*, *oa*). ș and ț with a **comma below** (U+0219, U+021B), never a cedilla (U+015F, U+0163): normalise all input and content.
 2. Genders, including the **neuter**.
@@ -134,43 +147,39 @@ Priority targets for a French speaker:
 12. Future.
 13. Prepositions and cases.
 
-Explanations rely on **comparison with the app's other languages** (English and French).
+English and French have their own first lessons (from M1). Explanations rely on **comparison with the app's other languages**.
 
-### 6.2 Exercises
-
-Multiple choice, fill-in-the-blank sentences, transformations, short translations into Romanian, built-in diacritics keyboard.
-
-### 6.3 Content and reliability
+### 6.2 Content and reliability
 
 - **Lessons**: fixed, reviewed content, distributed by the content API (§9.3), stored in Room. An initial set ships in the APK for the first offline launch.
-- Every text meant for the learner (title, explanation, instructions, translation of an example) exists in **each UI language** (English, French, Romanian); the app shows the one matching the UI language, English otherwise.
-- **Generated exercises** from the LLM: JSON output validated against a schema.
-- **Correction** of free answers by the LLM: verdict, correction, explanation in the UI language, identifier of the rule involved.
+- Every text meant for the learner (title, explanation, instructions, translations) exists in **each UI language**; the app shows the one matching the UI language, English otherwise.
+- Content produced with the help of an AI is **reviewed by native speakers** before publication.
 
 ---
 
-## 7. Romanian module — Speaking (P3)
+## 7. Optional pronunciation help
 
-1. **Listening** (on-device `ro-RO` TTS, speed 0.75× / 1×). Works offline once the system voice is installed (§10.1).
-2. **Scored repetition**: same pipeline as English if `ro-RO` phonetic assessment is available (to be checked, §15), otherwise transcription + word-by-word comparison + qualitative LLM feedback, flagged as **indicative**.
-3. **Mini-dialogues** from everyday life (after the course).
-4. **Dictation**.
+Off by default, enabled in the settings or during onboarding later. When on:
+
+- word sheets and card backs show the **IPA** of the base form and a **pronunciation note** (e.g. "ă is the vowel of the French *le*");
+- the Library shows a **Pronunciation** filter with the exercises kept from M1 (minimal pairs, targeted sentences, listening with slow speed).
+
+Phase 2: shadowing (listen, record, compare), on-device speech recognition for immediate feedback and cloud phonetic assessment (Azure) per phoneme, as described in §9.4 and §10. It then needs `RECORD_AUDIO` (§9.6).
 
 ---
 
-## 8. Cross-cutting features (P4)
+## 8. Cross-cutting features
 
 ### 8.1 Spaced repetition
-**FSRS** algorithm. Cards: Romanian words, Romanian rules, English minimal pairs, failed English sentences. Created automatically from recurring errors.
+**FSRS** (version 4.5, default parameters, desired retention 0.9). One card per lemma, created from the word sheet, keeping the sentence where the word was met. Simplification: no intra-day learning steps, except that **Again** brings the card back after 10 minutes.
 
-### 8.2 Error log
-Language, type (phoneme, rule, spelling), target, date, score. Drives the choice of session content.
+### 8.2 Today and progress
+- **Day streak**: consecutive days with at least one review or one text read (today counts once something was done).
+- **Daily goal ring**: estimated practice minutes today (15 s per review, the reading time of each text finished) against the goal.
+- **Known words** over time, **regularity calendar**, estimated comprehension at the learner's level.
 
-### 8.3 Dashboard
-Day streak, practice time, progress per target phoneme, success rate per Romanian rule, top 5 weaknesses.
-
-### 8.4 Reminders
-Daily notification at a configurable time (WorkManager, requires `POST_NOTIFICATIONS`).
+### 8.3 Reminders
+Daily notification at a configurable time (WorkManager, requires `POST_NOTIFICATIONS`). M2.
 
 ---
 
@@ -199,8 +208,9 @@ Daily notification at a configurable time (WorkManager, requires `POST_NOTIFICAT
 
 | Data | Source of truth | Synchronisation |
 |---|---|---|
-| Learning content (lessons, minimal pairs, sentences, image URLs) | Room | `ContentSyncWorker`: downloads language packs from the API (§9.3) |
-| Attempts, scores, errors, SRS cards | Room | `ProgressBackupWorker`: backup to the API |
+| Learning content (texts with their words, lemmas, lessons, pronunciation exercises, image URLs) | Room | `ContentSyncWorker`: downloads language packs from the API (§9.3) |
+| Word statuses, review cards and review log, texts read | Room | `ProgressBackupWorker`: backup to the API |
+| Preferences (language learnt, daily goal, pronunciation help, onboarding done) | DataStore | None (device only) |
 | Recordings to score | Room (`PENDING` status) + local WAV file | `EvaluationWorker`: cloud scoring when the network is back |
 
 **Workers and constraints** (to be justified in `SYSTEMS.md`):
@@ -252,16 +262,16 @@ This is what makes it possible to **add a language on the API side**: publishing
 ### 9.5 Navigation and process-death survival
 
 - **Navigation Compose** with **type-safe routes** (`@Serializable`). No Navigation 3, no string routes.
-- Graph (first version):
-    - `Home` (session length, language, access to the modules)
-    - `PronunciationList(languageCode)` → `PronunciationDetail(exerciseId)` → `PronunciationResult(attemptId)` — **main list → detail flow**
-    - `LessonList(languageCode)` → `LessonDetail(lessonId)` → `Exercise(exerciseId)`
-    - `Session(sessionId)`
-    - `Settings` (including permissions, placement, providers)
+- Graph:
+    - `Onboarding` (first launch only), then the four tabs below, each a top-level destination of the bottom bar;
+    - `Today`;
+    - `Library` → `Reader(textId)` — **main list → detail flow** (the word sheet is a bottom sheet of the Reader, not a route); `Library` → `LessonDetail(lessonId)`; `Library` → `PronunciationDetail(exerciseId)` (pronunciation help on);
+    - `Review` (session, then end of session on the same route);
+    - `Progress` → `Settings`.
 - **Process death** (not just rotation):
     - route arguments and ViewModel screen state go through `SavedStateHandle`;
     - local UI state (text being typed, tab, scroll) through `rememberSaveable`;
-    - long-lived business state (current session, answers already given, evaluation queue) is **persisted in Room** as it changes;
+    - long-lived business state (word statuses, review cards, ratings already given) is **persisted in Room** as it changes;
     - an **audio recording in progress** is lost by definition: the screen returns to the "ready to record" state with a message, without crashing.
 - **Test**: an instrumented test checks that the back stack and state are restored after recreation (scenario documented for the demo: `adb shell am kill` on the app in the background, then return).
 
@@ -269,8 +279,8 @@ This is what makes it possible to **add a language on the API side**: publishing
 
 | Permission | Use | If denied |
 |---|---|---|
-| `RECORD_AUDIO` | Pronunciation and speaking exercises | **Degraded mode**: listening discrimination, grammar, listening and dictation stay available; speaking exercises show an explanation and a button to allow |
-| `POST_NOTIFICATIONS` | Sync and evaluation notifications, daily reminder | The app works normally; a banner in Settings offers to enable it |
+| `POST_NOTIFICATIONS` | Daily reminder, sync notifications (M2) | The app works normally; a banner in Settings offers to enable it |
+| `RECORD_AUDIO` | Shadowing and pronunciation feedback (phase 2, §7) | **Degraded mode**: reading, reviews and listening stay available; speaking exercises show an explanation and a button to allow |
 
 For each:
 - declared in the manifest;
@@ -281,7 +291,7 @@ For each:
 
 ### 9.7 Network images (Coil)
 
-- Images served by the content API: **articulation diagrams** per phoneme (tongue and lip position), Romanian vocabulary illustrations.
+- Images served by the content API: **cover illustrations** of the texts in the Library and on Today, and later articulation diagrams for the pronunciation help.
 - `AsyncImage(model = url, contentDescription = …)` with a **placeholder** and an **error state**; Coil disk cache for offline use; no blocking load on the main thread.
 
 ### 9.8 Data model (indicative)
@@ -289,12 +299,13 @@ For each:
 Every content entity carries a `languageCode` (BCP-47). No language-specific table. Texts shown to the learner are stored per UI language (`en`, `fr`, `ro`).
 
 - `LanguagePackEntity` (code, name, version, sync date)
-- `LessonEntity` (id, languageCode, title, order, JSON content)
-- `ExerciseEntity` (id, lessonId?, languageCode, type, instructions, expected answer, variants, imageUrl?)
-- `AttemptEntity` (id, exerciseId, date, text answer or audio path, **status**: `PENDING` / `EVALUATED` / `FAILED`, score, JSON feedback, **where it ran**: `ON_DEVICE` / `CLOUD`, measured latency)
-- `PhonemeScoreEntity` (attemptId, word, IPA phoneme, score)
-- `ErrorLogEntity`, `SrsCardEntity`, `SessionEntity` (with the current step, to resume)
-- `ProgressEventEntity` (append-only log, sync status)
+- `TextEntity` (id, languageCode, level, type, title, minutes, coverUrl?) and `SentenceEntity` (textId, index, translations)
+- `TokenEntity` (textId, sentence index, position, written form, lemmaId?, grammatical note?)
+- `LemmaEntity` (id, languageCode, base form, part of speech, gender?, meanings per UI language, frequency rank, IPA?, pronunciation note?)
+- `LessonEntity` (id, languageCode, title, order, JSON content), `PronunciationExerciseEntity`
+- `WordStatusEntity` (languageCode, lemmaId, status, updated at) — **implemented**
+- `ReviewCardEntity` (lemmaId, languageCode, context sentence, FSRS state: stability, difficulty, due, reps, lapses, last review) — **implemented**
+- `ReviewLogEntity` (cardId, rating, reviewed at) and `ReadingLogEntity` (textId, minutes, finished at) — **implemented**; append-only, they feed the statistics and the backup
 
 ### 9.9 Modern Kotlin and Android standards
 
@@ -333,7 +344,7 @@ Since `minSdk = 34`, **no compatibility code** for older versions.
 |---|---|---|---|
 | Immediate pronunciation feedback (recognised words) | **On-device** (ML Kit Speech Recognition) | Low latency, works offline, the voice never leaves the device | Locale not supported on the device → cloud |
 | Per-phoneme scores | **Cloud** (Azure), **deferred** when offline | No on-device model gives comparable phonetic accuracy on mobile | A LiteRT phoneme model reaching sufficient accuracy on the evaluation set |
-| Translation | **On-device** (ML Kit) for short sentences | Free, offline, private | Insufficient quality (ML Kit pivots through English for French↔Romanian) or an explanation is needed → cloud |
+| Translation of a sentence held in the Reader (when the content has no reviewed translation, e.g. imported texts) | **On-device** (ML Kit) for short sentences | Free, offline, private, instant | Insufficient quality (ML Kit pivots through English for French↔Romanian) or an explanation is needed → cloud |
 | Explanations and corrections | **Cloud** (Gemini) | Quality, grammatical knowledge | Gemini Nano-capable device + measured sufficient quality → on-device |
 | Speech synthesis (listening) | **On-device** (Android TTS engine) | Responsiveness (no network round trip on tap), offline once the voice is installed, free, no key to protect, nothing leaves the device | A system voice judged too poor for a language → Azure TTS for that language, system engine as fallback |
 
@@ -392,8 +403,15 @@ One page, in prose, structured by the course's five questions, applied to the de
 :lang:api                 → LanguagePack + content schemas (pure Kotlin)
 :lang:en-gb, :lang:ro-ro  → language-specific rules (normalisation, keyboard)
 :lang:test                → minimal test pack
-:feature:pronunciation, :feature:grammar, :feature:oral,
-:feature:session, :feature:srs, :feature:dashboard, :feature:settings
+:feature:reading          → Library, Reader, word sheet
+:feature:srs              → review session
+:feature:session          → Today
+:feature:dashboard        → Progress
+:feature:settings         → Settings
+:feature:onboarding       → first launch: languages, level test, daily goal
+:feature:grammar          → "How the language works" lessons
+:feature:pronunciation    → pronunciation exercises (optional help)
+:feature:oral             → shadowing, conversation (phase 2)
 ```
 
 **Rules** (automatic architecture test, Konsist or equivalent):
@@ -444,7 +462,7 @@ The `TaskRouter` combines this chain with the `PlacementPolicy` (§10.2) and fal
 
 ### 11.4 Tests
 
-- **JVM unit tests** with fakes: `PlacementPolicy`, `TaskRouter`, FSRS, session selection, diacritics normalisation, JSON parsers, repositories (with fake API and fake DAO), content completeness in every UI language.
+- **JVM unit tests** with fakes: FSRS, comprehension and text suggestion, streak and daily minutes, tokenisation, `PlacementPolicy`, `TaskRouter`, diacritics normalisation, JSON parsers, repositories (with fake API and fake DAO), content completeness in every UI language (every word of a text linked to a lemma).
 - **Contract tests**: the same suite against every implementation of an interface.
 - **Add-a-language test**: everything works with `:lang:test` without changing `:feature:*`.
 - **Worker tests** (`work-testing`): constraints, idempotence, resumption.
@@ -455,7 +473,7 @@ The `TaskRouter` combines this chain with the `PlacementPolicy` (§10.2) and fal
 
 ## 12. Non-functional requirements
 
-- **Offline**: lessons, already-synced exercises, reviews, listening discrimination, listening (on-device synthesis) and on-device feedback usable without network; cloud evaluations are queued.
+- **Offline**: texts and lessons already synced, reading with on-device audio, word sheets, reviews and statistics usable without network; cloud requests (translation, later evaluations) are queued or fall back to the device.
 - **Main thread**: no I/O, no audio or image decoding on it (StrictMode enabled in debug).
 - **Costs**: usage counter per provider, configurable monthly cap that switches to on-device or disables cloud evaluation.
 - **Privacy**: audio stored locally, purged after 30 days; "keep everything local when possible" setting.
@@ -496,23 +514,27 @@ In M2: owner of **architecture**, **networking**, **persistence**. In M3: owner 
 
 **Criteria**: the app installs on Android 14, list → detail navigation works, CI is green on the milestone PR.
 
+### After M1 — Reading loop prototype (branch `feature/reading-loop`)
+- New concept (§0, §4, §5): four tabs, Library → Reader → word sheet, reviews with FSRS, Today, Progress, Settings, onboarding.
+- Sample content in the APK (a few texts per language, forms dictionary); word statuses, review cards and logs in **Room**, preferences in **DataStore**.
+- Not yet: content from the API, reminder, Coil covers, multi-word selection, sentence translation by ML Kit / Gemini.
+
 ### M2 — Data layer (due: Sun. 6 Dec. 2026)
 - **Room**: entities, reactive DAOs, repositories; the UI only observes Room.
 - **REST API** (Cloud Functions): `/languages`, `/packs`, `/progress`; **Retrofit** client.
 - **WorkManager**: `ContentSyncWorker`, `ProgressBackupWorker`, `EvaluationWorker` with their constraints; end-of-sync notification.
 - **`POST_NOTIFICATIONS`** and **`RECORD_AUDIO`** permissions with rationale, degraded mode and asking again.
 - **Process-death survival** (`SavedStateHandle`, `rememberSaveable`, session state in Room).
-- **Coil**: articulation diagrams and illustrations.
-- Content: 20 English minimal pairs + Romanian lessons 1 to 3.
-- Basic English pronunciation: recording + Azure `en-GB` assessment + Gemini explanation (through the §11.3 interfaces).
+- **Coil**: text covers.
+- Content: a starting catalogue (aim: 60 to 100 short texts with audio, A1 to B1) as language packs, Romanian lessons 1 to 3.
+- Daily reminder (`ReminderWorker`, `POST_NOTIFICATIONS`).
 
-**Criteria**: in airplane mode, the app shows the synced content and accepts a recording, set to `PENDING`; when the network is back, `EvaluationWorker` scores it and posts a notification. After `adb shell am kill` in the background, the app comes back to the same screen with the same state. Denying `RECORD_AUDIO` does not crash the app and leaves the microphone-free exercises available.
+**Criteria**: in airplane mode, the app shows the synced texts and the reviews work; when the network is back, new packs are downloaded and progress is backed up. After `adb shell am kill` in the background, the app comes back to the same screen with the same state. Denying `POST_NOTIFICATIONS` does not crash the app.
 
 ### M3 — DI, tests, integrated concept (due: Sun. 11 Jan. 2027, defence 14 or 21 Jan.)
 - Complete Hilt, fakes, contract tests, architecture test, worker tests, **at least one instrumented test** (DAO + restoration).
-- **On-device paths**: ML Kit Speech Recognition (immediate feedback), ML Kit Translation; `PlacementPolicy` and `TaskRouter`.
+- **On-device paths**: ML Kit Translation for sentences held in the Reader (cloud: Gemini), then ML Kit Speech Recognition for shadowing; `PlacementPolicy` and `TaskRouter`.
 - **Instrumentation and measurements** (§10.3), evaluation set.
-- Simple daily session (5/10/15 min) and simple Romanian speaking repetition.
 - **`SYSTEMS.md`** written from the measurements.
 
 **Criteria**: toggling connectivity or the privacy setting changes the placement, and it is visible on the result screen ("scored on the device" / "in the cloud"); measurements can be exported; CI is green with all tests.
@@ -520,7 +542,7 @@ In M2: owner of **architecture**, **networking**, **persistence**. In M3: owner 
 > Early defence possible on 17 Dec. if M3 is submitted before 14 Dec.
 
 ### After the course
-Romanian lessons 4 to 13, spoken dialogues, complete SRS and dashboard, corrected writing and translation, Claude provider through the proxy, LiteRT phoneme model.
+Phase 2 (§3): shadowing and pronunciation feedback, AI conversation limited to known words, corrected writing, import of personal content; Romanian lessons 4 to 13; Claude provider through the proxy; LiteRT phoneme model.
 
 ---
 
