@@ -5,7 +5,7 @@ import com.sazerat.languagelearning.core.domain.model.Lesson
 import com.sazerat.languagelearning.core.domain.model.LessonId
 import com.sazerat.languagelearning.core.domain.model.LessonSection
 
-/** Placeholder French lessons 1 to 3 for M1. Replaced by packs downloaded from the API in M2. */
+/** Placeholder French lessons 1 to 6 for M1. Replaced by packs downloaded from the API in M2. */
 internal object SampleFrenchLessons {
     private val french = LanguageCode("fr-FR")
 
@@ -226,6 +226,146 @@ internal object SampleFrenchLessons {
                             "Do you speak French?",
                         ro = "Româna pune doar nu înaintea verbului (Nu vorbesc) și pune întrebări prin intonație, ca " +
                             "franceza familiară. Engleza are nevoie de auxiliarul do: Do you speak French?",
+                    ),
+                ),
+            ),
+        ),
+        Lesson(
+            id = LessonId("fr-04-present-er"),
+            languageCode = french,
+            order = 4,
+            title = text(en = "Present tense of -er verbs", fr = "Le présent des verbes en -er", ro = "Prezentul verbelor în -er"),
+            summary = text(
+                en = "Nine verbs in ten follow parler.",
+                fr = "Neuf verbes sur dix suivent parler.",
+                ro = "Nouă verbe din zece se conjugă ca parler.",
+            ),
+            sections = listOf(
+                LessonSection(
+                    heading = text(en = "The endings", fr = "Les terminaisons", ro = "Terminațiile"),
+                    body = same(
+                        "je parle, tu parles, il / elle parle\nnous parlons, vous parlez, ils / elles parlent",
+                    ),
+                    examples = listOf(
+                        example("Je parle français.", en = "I speak French.", ro = "Vorbesc franceza."),
+                        example("Tu habites à Paris ?", en = "Do you live in Paris?", ro = "Locuiești la Paris?"),
+                        example("Nous aimons le café.", en = "We love coffee.", ro = "Ne place cafeaua."),
+                        example("Ils travaillent ici.", en = "They work here.", ro = "Ei lucrează aici."),
+                    ),
+                ),
+                LessonSection(
+                    heading = text(en = "Silent endings", fr = "Les terminaisons muettes", ro = "Terminațiile mute"),
+                    body = text(
+                        en = "-e, -es and -ent are not pronounced: parle, parles and parlent sound the same. " +
+                            "Only the nous and vous forms are heard.",
+                        fr = "-e, -es et -ent ne se prononcent pas : parle, parles et parlent se disent pareil. " +
+                            "Seules les formes nous et vous s'entendent.",
+                        ro = "-e, -es și -ent nu se pronunță: parle, parles și parlent sună la fel. " +
+                            "Doar formele cu nous și vous se aud diferit.",
+                    ),
+                    examples = listOf(
+                        example("elle parle", en = "she speaks", ro = "ea vorbește"),
+                        example("elles parlent", en = "they speak", ro = "ele vorbesc"),
+                    ),
+                ),
+                LessonSection(
+                    heading = comparisonHeading,
+                    body = text(
+                        en = "In Romanian, every ending is heard and the pronoun can be dropped (vorbesc). In French, " +
+                            "since the endings are silent, the pronoun is always needed: je parle, never just parle.",
+                        fr = "En roumain, chaque terminaison s'entend et le pronom peut disparaître (vorbesc). En français, " +
+                            "les terminaisons étant muettes, le pronom est obligatoire : je parle, jamais parle seul.",
+                        ro = "În română, fiecare terminație se aude și pronumele poate lipsi (vorbesc). În franceză, " +
+                            "terminațiile fiind mute, pronumele este obligatoriu: je parle, niciodată doar parle.",
+                    ),
+                ),
+            ),
+        ),
+        Lesson(
+            id = LessonId("fr-05-negation"),
+            languageCode = french,
+            order = 5,
+            title = text(en = "Negation", fr = "La négation", ro = "Negația"),
+            summary = text(
+                en = "ne… pas and its relatives.",
+                fr = "ne… pas et ses cousins.",
+                ro = "ne… pas și înrudiții săi.",
+            ),
+            sections = listOf(
+                LessonSection(
+                    heading = text(en = "Around the verb", fr = "Autour du verbe", ro = "În jurul verbului"),
+                    body = text(
+                        en = "The negation surrounds the conjugated verb: je ne parle pas. ne becomes n' before a vowel: " +
+                            "je n'aime pas.",
+                        fr = "La négation encadre le verbe conjugué : je ne parle pas. ne devient n' devant une voyelle : " +
+                            "je n'aime pas.",
+                        ro = "Negația încadrează verbul conjugat: je ne parle pas. ne devine n' înaintea unei vocale: " +
+                            "je n'aime pas.",
+                    ),
+                    examples = listOf(
+                        example("Je ne parle pas anglais.", en = "I don't speak English.", ro = "Nu vorbesc engleza."),
+                        example("Je n'aime pas le thé.", en = "I don't like tea.", ro = "Nu-mi place ceaiul."),
+                    ),
+                ),
+                LessonSection(
+                    heading = text(en = "Never, no longer, nothing", fr = "Jamais, plus, rien", ro = "Niciodată, nu mai, nimic"),
+                    body = text(
+                        en = "pas can be replaced: ne… jamais (never), ne… plus (no longer), ne… rien (nothing).\n" +
+                            "In everyday speech, ne is often dropped: je sais pas.",
+                        fr = "pas peut être remplacé : ne… jamais, ne… plus, ne… rien.\n" +
+                            "À l'oral courant, ne disparaît souvent : je sais pas.",
+                        ro = "pas poate fi înlocuit: ne… jamais (niciodată), ne… plus (nu mai), ne… rien (nimic).\n" +
+                            "În vorbirea de zi cu zi, ne dispare adesea: je sais pas.",
+                    ),
+                    examples = listOf(
+                        example("Il ne fume jamais.", en = "He never smokes.", ro = "El nu fumează niciodată."),
+                        example("Je n'habite plus ici.", en = "I don't live here any more.", ro = "Nu mai locuiesc aici."),
+                        example("Je ne vois rien.", en = "I can't see anything.", ro = "Nu văd nimic."),
+                        example("Je sais pas.", en = "Dunno.", ro = "Nu știu."),
+                    ),
+                ),
+            ),
+        ),
+        Lesson(
+            id = LessonId("fr-06-questions"),
+            languageCode = french,
+            order = 6,
+            title = text(en = "Asking questions", fr = "Poser une question", ro = "Cum punem întrebări"),
+            summary = text(
+                en = "Three ways, from casual to formal.",
+                fr = "Trois façons, du familier au soutenu.",
+                ro = "Trei moduri, de la familiar la formal.",
+            ),
+            sections = listOf(
+                LessonSection(
+                    heading = text(en = "Three ways", fr = "Trois façons", ro = "Trei moduri"),
+                    body = text(
+                        en = "Rising intonation (casual): Tu viens ?\nest-ce que (neutral): Est-ce que tu viens ?\n" +
+                            "Inversion (formal): Viens-tu ?",
+                        fr = "Intonation montante (familier) : Tu viens ?\nest-ce que (courant) : Est-ce que tu viens ?\n" +
+                            "Inversion (soutenu) : Viens-tu ?",
+                        ro = "Intonație ascendentă (familiar): Tu viens ?\nest-ce que (neutru): Est-ce que tu viens ?\n" +
+                            "Inversiune (formal): Viens-tu ?",
+                    ),
+                    examples = listOf(
+                        example("Tu viens ?", en = "Are you coming?", ro = "Vii?"),
+                        example("Est-ce que tu viens ?", en = "Are you coming?", ro = "Vii?"),
+                        example("Viens-tu ?", en = "Are you coming?", ro = "Vii?"),
+                    ),
+                ),
+                LessonSection(
+                    heading = text(en = "Question words", fr = "Les mots interrogatifs", ro = "Cuvintele interogative"),
+                    body = text(
+                        en = "où (where), quand (when), comment (how), pourquoi (why), combien (how much), qui (who), " +
+                            "que / quoi (what).",
+                        fr = "où, quand, comment, pourquoi, combien, qui, que / quoi.",
+                        ro = "où (unde), quand (când), comment (cum), pourquoi (de ce), combien (cât), qui (cine), " +
+                            "que / quoi (ce).",
+                    ),
+                    examples = listOf(
+                        example("Où est la gare ?", en = "Where is the station?", ro = "Unde este gara?"),
+                        example("Combien ça coûte ?", en = "How much is it?", ro = "Cât costă?"),
+                        example("Pourquoi tu ris ?", en = "Why are you laughing?", ro = "De ce râzi?"),
                     ),
                 ),
             ),

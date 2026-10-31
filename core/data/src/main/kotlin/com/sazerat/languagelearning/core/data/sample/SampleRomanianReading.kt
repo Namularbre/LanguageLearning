@@ -30,6 +30,7 @@ internal object SampleRomanianReading {
     private val presentHeShe = text("present, he/she", "présent, il/elle", "prezent, el/ea")
     private val presentYouPlural = text("present, you (plural or polite)", "présent, vous", "prezent, voi")
     private val presentThey = text("present, they", "présent, ils/elles", "prezent, ei/ele")
+    private val participle = text("past participle", "participe passé", "participiu")
     private val imperativeYouPlural = text("imperative, you (plural or polite)", "impératif, vous", "imperativ, voi")
 
     private val schwaNote = text(
@@ -49,7 +50,10 @@ internal object SampleRomanianReading {
         names("Ana", "Brașov", "Mihai")
 
         word("și", CONJUNCTION, 1, meaning(en = "and", fr = "et"), ipa = "ʃi", note = shNote)
-        word("în", PREPOSITION, 2, meaning(en = "in, into", fr = "dans, en"), ipa = "ɨn", note = closeCentralNote)
+        word(
+            "în", PREPOSITION, 2, meaning(en = "in, into", fr = "dans, en"), ipa = "ɨn", note = closeCentralNote,
+            forms = mapOf("într" to text("before a vowel or un/o: într-un, într-o", "devant une voyelle ou un/o : într-un, într-o", "înaintea unei vocale sau a lui un/o: într-un, într-o")),
+        )
         word("la", PREPOSITION, 3, meaning(en = "at, to", fr = "à"), ipa = "la")
         word(
             "a fi", VERB, 4, meaning(en = "to be", fr = "être"), ipa = "a fi",
@@ -68,7 +72,7 @@ internal object SampleRomanianReading {
         word(
             "a face", VERB, 12, meaning(en = "to do, to make", fr = "faire"),
             other = meaning(en = "Ce mai faci? = How are you?", fr = "Ce mai faci ? = Comment vas-tu ?"),
-            ipa = "a ˈfat͡ʃe", forms = mapOf("faci" to presentYou),
+            ipa = "a ˈfat͡ʃe", forms = mapOf("faci" to presentYou, "face" to presentHeShe),
         )
         word("pentru", PREPOSITION, 13, meaning(en = "for", fr = "pour"), ipa = "ˈpentru")
         word("din", PREPOSITION, 14, meaning(en = "from, out of", fr = "de, hors de"), ipa = "din")
@@ -80,7 +84,7 @@ internal object SampleRomanianReading {
         word(
             "a merge", VERB, 20, meaning(en = "to go, to walk", fr = "aller, marcher"),
             other = meaning(en = "to work (a machine)", fr = "fonctionner"),
-            ipa = "a ˈmerd͡ʒe", forms = mapOf("merge" to presentHeShe),
+            ipa = "a ˈmerd͡ʒe", forms = mapOf("merge" to presentHeShe, "merg" to presentThey, "mers" to participle),
         )
         word(
             "zi", NOUN, 21, meaning(en = "day", fr = "jour"), gender = FEMININE,
@@ -136,14 +140,20 @@ internal object SampleRomanianReading {
             "ușă", NOUN, 40, meaning(en = "door", fr = "porte"), gender = FEMININE,
             ipa = "ˈuʃə", note = shNote, forms = mapOf("ușa" to definite),
         )
-        word("câine", NOUN, 41, meaning(en = "dog", fr = "chien"), gender = MASCULINE, ipa = "ˈkɨjne", note = closeCentralNote)
+        word(
+            "câine", NOUN, 41, meaning(en = "dog", fr = "chien"), gender = MASCULINE, ipa = "ˈkɨjne", note = closeCentralNote,
+            forms = mapOf("câinele" to definite),
+        )
         word("a dormi", VERB, 42, meaning(en = "to sleep", fr = "dormir"), ipa = "a dorˈmi", forms = mapOf("doarme" to presentHeShe))
         word("soare", NOUN, 43, meaning(en = "sun", fr = "soleil"), gender = MASCULINE, ipa = "ˈso̯are")
         word(
             "piață", NOUN, 44, meaning(en = "market", fr = "marché"), gender = FEMININE,
             other = meaning(en = "square", fr = "place"), ipa = "ˈpjat͡sə", note = tsNote, forms = mapOf("piața" to definite),
         )
-        word("sâmbătă", NOUN, 45, meaning(en = "Saturday", fr = "samedi"), gender = FEMININE, ipa = "ˈsɨmbətə", note = closeCentralNote)
+        word(
+            "sâmbătă", NOUN, 45, meaning(en = "Saturday", fr = "samedi"), gender = FEMININE, ipa = "ˈsɨmbətə", note = closeCentralNote,
+            forms = mapOf("sâmbăta" to definite),
+        )
         word("duminică", NOUN, 46, meaning(en = "Sunday", fr = "dimanche"), gender = FEMININE, ipa = "duˈminikə", note = schwaNote)
         word(
             "roșie", NOUN, 47, meaning(en = "tomato", fr = "tomate"), gender = FEMININE,
@@ -153,7 +163,10 @@ internal object SampleRomanianReading {
         word("brânză", NOUN, 49, meaning(en = "cheese", fr = "fromage"), gender = FEMININE, ipa = "ˈbrɨnzə", note = closeCentralNote)
         word("bilet", NOUN, 50, meaning(en = "ticket", fr = "billet"), gender = NEUTER, ipa = "biˈlet", forms = mapOf("biletul" to definite))
         word("tren", NOUN, 51, meaning(en = "train", fr = "train"), gender = NEUTER, ipa = "tren", forms = mapOf("trenul" to definite))
-        word("a pleca", VERB, 52, meaning(en = "to leave", fr = "partir"), ipa = "a pleˈka", forms = mapOf("pleacă" to presentHeShe))
+        word(
+            "a pleca", VERB, 52, meaning(en = "to leave", fr = "partir"), ipa = "a pleˈka",
+            forms = mapOf("pleacă" to presentHeShe, "plecat" to participle),
+        )
         word("zece", NUMERAL, 53, meaning(en = "ten", fr = "dix"), ipa = "ˈzet͡ʃe")
         word("cincizeci", NUMERAL, 54, meaning(en = "fifty", fr = "cinquante"), ipa = "t͡ʃint͡ʃˈzet͡ʃʲ")
         word(
@@ -191,6 +204,38 @@ internal object SampleRomanianReading {
         word("grad", NOUN, 72, meaning(en = "degree", fr = "degré"), gender = NEUTER, ipa = "ɡrad", forms = mapOf("grade" to plural))
         word("umbrelă", NOUN, 73, meaning(en = "umbrella", fr = "parapluie"), gender = FEMININE, ipa = "umˈbrelə")
         word("a ieși", VERB, 74, meaning(en = "to go out", fr = "sortir"), ipa = "a jeˈʃi", note = shNote, forms = mapOf("ieșiți" to presentYouPlural))
+        word("cu", PREPOSITION, 75, meaning(en = "with", fr = "avec"), ipa = "ku")
+        word("parc", NOUN, 76, meaning(en = "park", fr = "parc"), gender = NEUTER, ipa = "park")
+        word("a alerga", VERB, 77, meaning(en = "to run", fr = "courir"), ipa = "a alerˈɡa", forms = mapOf("aleargă" to presentHeShe))
+        word("prin", PREPOSITION, 78, meaning(en = "through, in", fr = "à travers, dans"), ipa = "prin")
+        word("iarbă", NOUN, 79, meaning(en = "grass", fr = "herbe"), gender = FEMININE, ipa = "ˈjarbə", note = schwaNote)
+        word("bancă", NOUN, 80, meaning(en = "bench", fr = "banc"), gender = FEMININE, other = meaning(en = "bank", fr = "banque"), ipa = "ˈbankə", note = schwaNote)
+        word("acasă", ADVERB, 81, meaning(en = "(at) home", fr = "à la maison"), ipa = "aˈkasə", note = schwaNote)
+        word("lapte", NOUN, 82, meaning(en = "milk", fr = "lait"), gender = NEUTER, ipa = "ˈlapte")
+        word("nu", ADVERB, 83, meaning(en = "no, not", fr = "non, ne… pas"), ipa = "nu")
+        word("corn", NOUN, 84, meaning(en = "croissant", fr = "croissant"), gender = NEUTER, other = meaning(en = "horn", fr = "corne"), ipa = "korn")
+        word(
+            "a pofti", VERB, 85, meaning(en = "to invite", fr = "inviter"),
+            other = meaning(en = "poftiți = here you are", fr = "poftiți = voilà, je vous en prie"),
+            ipa = "a pofˈti", forms = mapOf("poftiți" to presentYouPlural),
+        )
+        word("cincisprezece", NUMERAL, 86, meaning(en = "fifteen", fr = "quinze"), ipa = "ˈt͡ʃint͡ʃsprezet͡ʃe")
+        word("trecut", ADJECTIVE, 87, meaning(en = "last, past", fr = "dernier, passé"), ipa = "treˈkut", forms = mapOf("trecută" to feminine))
+        word(
+            "a avea", VERB, 88, meaning(en = "to have", fr = "avoir"),
+            other = meaning(en = "auxiliary of the past: a mers = went", fr = "auxiliaire du passé : a mers = est allé"),
+            ipa = "a aˈve̯a", forms = mapOf("a" to presentHeShe, "au" to presentThey),
+        )
+        word("a vizita", VERB, 89, meaning(en = "to visit", fr = "visiter"), ipa = "a viziˈta", forms = mapOf("vizitat" to participle))
+        word("vechi", ADJECTIVE, 90, meaning(en = "old", fr = "vieux"), ipa = "vekʲ")
+        word("soră", NOUN, 91, meaning(en = "sister", fr = "sœur"), gender = FEMININE, ipa = "ˈsorə", note = schwaNote, forms = mapOf("sora" to definite))
+        word("a mânca", VERB, 92, meaning(en = "to eat", fr = "manger"), ipa = "a mɨnˈka", note = closeCentralNote, forms = mapOf("mâncat" to participle))
+        word("restaurant", NOUN, 93, meaning(en = "restaurant", fr = "restaurant"), gender = NEUTER, ipa = "restawˈrant")
+        word("mic", ADJECTIVE, 94, meaning(en = "small", fr = "petit"), ipa = "mik")
+        word("a ploua", VERB, 95, meaning(en = "to rain", fr = "pleuvoir"), ipa = "a ploˈwa", forms = mapOf("plouat" to participle))
+        word("așa", ADVERB, 96, meaning(en = "so, like this", fr = "ainsi, comme ça"), ipa = "aˈʃa", note = shNote)
+        word("că", CONJUNCTION, 97, meaning(en = "that (așa că = so)", fr = "que (așa că = donc)"), ipa = "kə", note = schwaNote)
+        word("devreme", ADVERB, 98, meaning(en = "early", fr = "tôt"), ipa = "deˈvreme")
     }
 
     val lemmas: List<Lemma> = lexicon.all
@@ -255,6 +300,44 @@ internal object SampleRomanianReading {
                 meaning(en = "Temperatures fall to ten degrees.", fr = "Les températures baissent à dix degrés."),
             "Luați o umbrelă dacă ieșiți din casă!" means
                 meaning(en = "Take an umbrella if you leave the house!", fr = "Prenez un parapluie si vous sortez de la maison !"),
+        ),
+        lexicon.readingText(
+            "ro-park", CefrLevel.A1, TextKind.STORY, "În parc", minutes = 2,
+            "Seara, Ana merge cu câinele în parc." means
+                meaning(en = "In the evening, Ana goes to the park with the dog.", fr = "Le soir, Ana va au parc avec le chien."),
+            "Câinele aleargă prin iarbă." means
+                meaning(en = "The dog runs in the grass.", fr = "Le chien court dans l'herbe."),
+            "Ana citește o carte pe o bancă." means
+                meaning(en = "Ana reads a book on a bench.", fr = "Ana lit un livre sur un banc."),
+            "Apoi merg acasă." means
+                meaning(en = "Then they go home.", fr = "Ensuite, ils rentrent à la maison."),
+        ),
+        lexicon.readingText(
+            "ro-cafe", CefrLevel.A1, TextKind.DIALOGUE, "La cafenea", minutes = 2,
+            "— Bună ziua! O cafea, vă rog." means
+                meaning(en = "— Hello! A coffee, please.", fr = "— Bonjour ! Un café, s'il vous plaît."),
+            "— Cu lapte?" means
+                meaning(en = "— With milk?", fr = "— Avec du lait ?"),
+            "— Nu, mulțumesc. Și un corn, vă rog." means
+                meaning(en = "— No, thank you. And a croissant, please.", fr = "— Non, merci. Et un croissant, s'il vous plaît."),
+            "— Poftiți. Face cincisprezece lei." means
+                meaning(en = "— Here you are. That's fifteen lei.", fr = "— Voilà. Ça fait quinze lei."),
+            "— Mulțumesc. O zi bună!" means
+                meaning(en = "— Thank you. Have a nice day!", fr = "— Merci. Bonne journée !"),
+        ),
+        lexicon.readingText(
+            "ro-weekend", CefrLevel.A2, TextKind.STORY, "Weekendul trecut", minutes = 2,
+            "Sâmbăta trecută, Mihai a mers la Brașov cu trenul." means
+                meaning(en = "Last Saturday, Mihai went to Brașov by train.", fr = "Samedi dernier, Mihai est allé à Brașov en train."),
+            "A vizitat orașul vechi cu sora lui." means
+                meaning(en = "He visited the old town with his sister.", fr = "Il a visité la vieille ville avec sa sœur."),
+            "Seara, au mâncat într-un restaurant mic." means
+                meaning(en = "In the evening, they ate in a small restaurant.", fr = "Le soir, ils ont mangé dans un petit restaurant."),
+            "Duminică a plouat, așa că au plecat acasă devreme." means
+                meaning(
+                    en = "On Sunday it rained, so they went home early.",
+                    fr = "Dimanche, il a plu, alors ils sont rentrés tôt.",
+                ),
         ),
     )
 }
