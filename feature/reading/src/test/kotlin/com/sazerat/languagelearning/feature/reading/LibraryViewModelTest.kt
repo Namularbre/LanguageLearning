@@ -87,6 +87,22 @@ class LibraryViewModelTest {
     }
 
     @Test
+    fun `read texts can be hidden, and the choice survives process death`() = runTest {
+        assertEquals(false, viewModel.successState().hasReadTexts)
+        log.add(romanian, ReadingLogEntry(previewText.id, minutes = 2, finishedAt = 0))
+        viewModel.successState { it.hasReadTexts }
+
+        viewModel.onHideReadChange(true)
+
+        val state = viewModel.successState { it.hideRead }
+        assertEquals(listOf(harder.id), state.texts.map { it.id })
+        assertEquals(true, savedStateHandle["hideRead"])
+
+        viewModel.onHideReadChange(false)
+        assertEquals(listOf(previewText.id, harder.id), viewModel.successState { !it.hideRead }.texts.map { it.id })
+    }
+
+    @Test
     fun `pronunciation is offered only with the pronunciation help`() = runTest {
         assertEquals(listOf(LibrarySection.TEXTS, LibrarySection.LESSONS), viewModel.successState().sections)
 

@@ -40,4 +40,6 @@
     </plurals>
     <string name="feature_reading_back_to_library">Retour à la bibliothèque</string>
     <string name="feature_reading_read_again">Relire ce texte</string>
+    <string name="feature_reading_hide_read">Masquer les textes déjà lus</string>
+    <string name="feature_reading_all_read">Tous les textes ici sont lus. Décochez la case pour les revoir.</string>
 </resources>

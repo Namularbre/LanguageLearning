@@ -38,4 +38,6 @@
     </plurals>
     <string name="feature_reading_back_to_library">Back to the library</string>
     <string name="feature_reading_read_again">Read this text again</string>
+    <string name="feature_reading_hide_read">Hide texts already read</string>
+    <string name="feature_reading_all_read">Every text here has been read. Untick the box to see them again.</string>
 </resources>

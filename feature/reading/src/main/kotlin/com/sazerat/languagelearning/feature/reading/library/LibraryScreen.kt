@@ -7,11 +7,14 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.selection.toggleable
+import androidx.compose.material3.Checkbox
 import androidx.compose.material3.FilterChip
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -19,7 +22,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
@@ -55,6 +61,7 @@ internal fun LibraryScreen(
         uiState = uiState,
         onSectionSelected = viewModel::onSectionSelected,
         onLevelSelected = viewModel::onLevelSelected,
+        onHideReadChange = viewModel::onHideReadChange,
         onTextClick = onTextClick,
         onLessonClick = onLessonClick,
         onExerciseClick = onExerciseClick,
@@ -73,6 +80,7 @@ internal fun LibraryContent(
     onExerciseClick: (ExerciseId) -> Unit,
     onBack: (() -> Unit)?,
     languageSwitcher: @Composable () -> Unit = {},
+    onHideReadChange: (Boolean) -> Unit = {},
 ) {
     // The language is named by the switcher next to the title.
     AppScaffold(title = stringResource(R.string.feature_reading_library_title), onBack = onBack, actions = { languageSwitcher() }) { padding ->
@@ -88,7 +96,7 @@ internal fun LibraryContent(
                 ),
                 verticalArrangement = Arrangement.spacedBy(12.dp),
             ) {
-                item(key = "filters") { Filters(uiState, onSectionSelected, onLevelSelected) }
+                item(key = "filters") { Filters(uiState, onSectionSelected, onLevelSelected, onHideReadChange) }
                 when (uiState.section) {
                     LibrarySection.TEXTS -> texts(uiState, onTextClick)
                     LibrarySection.LESSONS -> items(uiState.lessons, key = { it.id.value }) { lesson ->
@@ -118,6 +126,7 @@ private fun Filters(
     uiState: LibraryUiState.Success,
     onSectionSelected: (LibrarySection) -> Unit,
     onLevelSelected: (CefrLevel?) -> Unit,
+    onHideReadChange: (Boolean) -> Unit,
 ) {
     Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
         Row(
@@ -151,10 +160,41 @@ private fun Filters(
                 }
             }
         }
+        if (uiState.section == LibrarySection.TEXTS && uiState.hasReadTexts) {
+            HideReadCheckbox(uiState.hideRead, onHideReadChange)
+        }
+    }
+}
+
+/** The whole row toggles the box, so the touch target is not just the 24 dp square. */
+@Composable
+private fun HideReadCheckbox(checked: Boolean, onCheckedChange: (Boolean) -> Unit) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .clip(MaterialTheme.shapes.small)
+            .toggleable(value = checked, onValueChange = onCheckedChange, role = Role.Checkbox)
+            .heightIn(min = 48.dp),
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        // Null: the row handles the click, the box only shows the state.
+        Checkbox(checked = checked, onCheckedChange = null, modifier = Modifier.padding(end = 12.dp))
+        Text(stringResource(R.string.feature_reading_hide_read), style = MaterialTheme.typography.bodyLarge)
     }
 }
 
 private fun LazyListScope.texts(uiState: LibraryUiState.Success, onTextClick: (TextId) -> Unit) {
+    if (uiState.texts.isEmpty() && uiState.hideRead) {
+        item(key = "all-read") {
+            Text(
+                stringResource(R.string.feature_reading_all_read),
+                modifier = Modifier.fillMaxWidth().padding(vertical = 24.dp),
+                style = MaterialTheme.typography.bodyLarge,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                textAlign = TextAlign.Center,
+            )
+        }
+    }
     items(uiState.texts, key = { it.id.value }) { text ->
         TextRow(text, isSuggested = text.id == uiState.suggestedTextId, onClick = { onTextClick(text.id) })
     }

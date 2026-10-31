@@ -84,6 +84,8 @@ internal val previewLibraryState = LibraryUiState.Success(
     section = LibrarySection.TEXTS,
     levels = listOf(CefrLevel.A1, CefrLevel.A2),
     level = null,
+    hideRead = false,
+    hasReadTexts = true,
     texts = listOf(
         TextItem(TextId("a"), "La piață", CefrLevel.A1, TextKind.STORY, 3, comprehension = 94, isRead = true),
         TextItem(TextId("b"), "La gară", CefrLevel.A1, TextKind.DIALOGUE, 3, comprehension = 82, isRead = false),
