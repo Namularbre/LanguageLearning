@@ -1,0 +1,16 @@
+<resources>
+    <string name="feature_dashboard_title">Progres</string>
+    <string name="feature_dashboard_settings">Setări</string>
+    <string name="feature_dashboard_known_words">Cuvinte știute</string>
+    <string name="feature_dashboard_in_review">În recapitulare</string>
+    <string name="feature_dashboard_streak">Zile la rând</string>
+    <string name="feature_dashboard_comprehension">Înțelegi cam %1$d%% dintr-un text de nivel %2$s.</string>
+    <string name="feature_dashboard_known_words_chart">Cuvinte știute, ultimele 30 de zile</string>
+    <plurals name="feature_dashboard_known_words_today">
+        <item quantity="one">%1$d cuvânt știut azi</item>
+        <item quantity="few">%1$d cuvinte știute azi</item>
+        <item quantity="other">%1$d de cuvinte știute azi</item>
+    </plurals>
+    <string name="feature_dashboard_calendar">Regularitate, ultimele 5 săptămâni</string>
+    <string name="feature_dashboard_calendar_description">Zile active: %1$d/%2$d</string>
+</resources>
