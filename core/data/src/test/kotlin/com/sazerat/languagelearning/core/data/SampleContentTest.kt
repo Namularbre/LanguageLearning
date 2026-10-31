@@ -1,9 +1,6 @@
 package com.sazerat.languagelearning.core.data
 
-import com.sazerat.languagelearning.core.data.sample.SampleEnglishLessons
-import com.sazerat.languagelearning.core.data.sample.SampleFrenchLessons
 import com.sazerat.languagelearning.core.data.sample.SamplePronunciationExercises
-import com.sazerat.languagelearning.core.data.sample.SampleRomanianLessons
 import com.sazerat.languagelearning.core.data.sample.SampleRomanianPronunciation
 import com.sazerat.languagelearning.core.domain.model.LocalizedText
 import kotlin.test.Test
@@ -11,8 +8,8 @@ import kotlin.test.assertEquals
 import kotlin.test.assertFalse
 import kotlin.test.assertTrue
 
+/** Checks on the sample pronunciation exercises. Texts, lexicon and lessons: see [PackContentTest]. */
 class SampleContentTest {
-    private val allLessons = SampleEnglishLessons.all + SampleRomanianLessons.all + SampleFrenchLessons.all
     private val exercises = SamplePronunciationExercises.all
     private val uiLanguages = setOf("en", "fr", "ro")
     private val cedillas = setOf('ş', 'Ş', 'ţ', 'Ţ')
@@ -30,45 +27,9 @@ class SampleContentTest {
     }
 
     @Test
-    fun `lesson ids are unique`() {
-        val ids = allLessons.map { it.id }
-        assertEquals(ids.size, ids.toSet().size)
-    }
-
-    @Test
     fun `every IPA transcription is between slashes`() {
         exercises.flatMap { it.items }.forEach { item ->
             assertTrue(item.ipa.startsWith("/") && item.ipa.endsWith("/"), "Bad IPA for ${item.text}: ${item.ipa}")
-        }
-    }
-
-    @Test
-    fun `lessons of each language are numbered 1 to 6`() {
-        assertEquals((1..6).toList(), SampleEnglishLessons.all.map { it.order })
-        assertEquals((1..6).toList(), SampleRomanianLessons.all.map { it.order })
-        assertEquals((1..6).toList(), SampleFrenchLessons.all.map { it.order })
-    }
-
-    @Test
-    fun `lesson texts exist in every UI language`() {
-        allLessons.forEach { lesson ->
-            val id = lesson.id.value
-            assertTranslated(lesson.title, "$id title")
-            assertTranslated(lesson.summary, "$id summary")
-            lesson.sections.forEach { section ->
-                assertTranslated(section.heading, "$id heading")
-                assertTranslated(section.body, "$id body")
-            }
-        }
-    }
-
-    @Test
-    fun `examples are translated into every UI language except their own`() {
-        allLessons.forEach { lesson ->
-            val expected = uiLanguages - lesson.languageCode.language
-            lesson.sections.flatMap { it.examples }.forEach { example ->
-                assertEquals(expected, example.translation.translations.keys, "Translations of \"${example.text}\"")
-            }
         }
     }
 
@@ -84,12 +45,7 @@ class SampleContentTest {
 
     @Test
     fun `romanian text never uses cedilla s or t`() {
-        val romanianTexts = SampleRomanianLessons.all.flatMap { it.sections }.flatMap { it.examples }.map { it.text } +
-            SampleRomanianPronunciation.all.flatMap { it.items }.map { it.text } +
-            allLessons.flatMap { lesson ->
-                listOf(lesson.title, lesson.summary) +
-                    lesson.sections.flatMap { listOf(it.heading, it.body) + it.examples.map { e -> e.translation } }
-            }.mapNotNull { it.translations["ro"] } +
+        val romanianTexts = SampleRomanianPronunciation.all.flatMap { it.items }.map { it.text } +
             exercises.flatMap { listOf(it.title, it.focus, it.instructions) }.mapNotNull { it.translations["ro"] }
         romanianTexts.forEach { text ->
             assertFalse(text.any { it in cedillas }, "Cedilla found in \"$text\"")
@@ -97,17 +53,8 @@ class SampleContentTest {
     }
 
     @Test
-    fun `examples are unique within a section`() {
-        // The lesson screen identifies the example being played by its text.
-        allLessons.flatMap { it.sections }.forEach { section ->
-            val texts = section.examples.map { it.text }
-            assertEquals(texts.size, texts.toSet().size, "Duplicate example in \"${section.heading}\"")
-        }
-    }
-
-    @Test
     fun `items are unique within an exercise`() {
-        // Same reason: the pronunciation screen identifies the item being played by its text.
+        // The pronunciation screen identifies the item being played by its text.
         exercises.forEach { exercise ->
             val texts = exercise.items.map { it.text }
             assertEquals(texts.size, texts.toSet().size, "Duplicate item in \"${exercise.id.value}\"")

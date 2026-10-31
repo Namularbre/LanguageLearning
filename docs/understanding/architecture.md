@@ -69,7 +69,8 @@ Repository (Flow) ──► ViewModel (StateFlow<UiState>) ──► Composable 
 | Wiring of implementations | `app/src/main/kotlin/.../di/DataModule.kt` |
 | Full list → detail example | `feature/pronunciation/src/main/kotlin/.../` |
 | Localised content | `core/domain/.../model/LocalizedText.kt`, `core/ui/.../Localization.kt` |
-| Sample content | `core/data/src/main/kotlin/.../sample/` |
+| Content: language packs | `core/data/src/main/assets/packs/`, read by `core/data/.../pack/` |
+| Sample pronunciation exercises | `core/data/src/main/kotlin/.../sample/` |
 | UI strings | `*/src/main/res/values{,-fr,-ro}/strings.xml` |
 | Contract of a language | `lang/api/src/main/kotlin/.../LanguagePack.kt` |
 | CI | `.github/workflows/ci.yml` |
