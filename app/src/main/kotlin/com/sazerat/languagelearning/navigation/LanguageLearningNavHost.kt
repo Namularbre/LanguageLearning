@@ -1,6 +1,7 @@
 package com.sazerat.languagelearning.navigation
 
 import androidx.annotation.StringRes
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
@@ -69,6 +70,8 @@ fun LanguageLearningNavHost(onboardingDone: Boolean) {
     val backStackEntry by navController.currentBackStackEntryAsState()
     val destination = backStackEntry?.destination
     Scaffold(
+        // Each screen handles the system bars itself; this frame only makes room for the tab bar.
+        contentWindowInsets = WindowInsets(0, 0, 0, 0),
         bottomBar = {
             // Only on the tabs themselves: the Reader, a lesson or the settings get the whole screen.
             if (Tab.entries.any { destination.isTab(it) }) {
@@ -88,7 +91,7 @@ fun LanguageLearningNavHost(onboardingDone: Boolean) {
         NavHost(
             navController = navController,
             startDestination = startDestination,
-            modifier = Modifier.padding(bottom = padding.calculateBottomPadding()).consumeWindowInsets(padding),
+            modifier = Modifier.padding(padding).consumeWindowInsets(padding),
         ) {
             onboardingScreen(languages = studiedLanguages) {
                 navController.navigate(Today) { popUpTo(Onboarding) { inclusive = true } }

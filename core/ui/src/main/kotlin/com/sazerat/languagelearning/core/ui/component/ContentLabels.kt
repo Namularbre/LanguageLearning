@@ -66,11 +66,12 @@ fun textMeta(kind: TextKind, level: CefrLevel, minutes: Int): String =
 /** A short delay, e.g. "10 min", "4 d", "3 mo": review intervals and the next review. */
 @Composable
 fun durationLabel(millis: Long): String {
-    val minutes = (millis / MILLIS_PER_MINUTE).coerceAtLeast(1)
-    val hours = minutes / 60
-    val days = millis / MILLIS_PER_DAY
+    // Rounded to the nearest unit: a due date a few seconds away from "4 d" must not read "3 d".
+    val minutes = ((millis + MILLIS_PER_MINUTE / 2) / MILLIS_PER_MINUTE).coerceAtLeast(1)
+    val hours = (minutes + 30) / 60
+    val days = (millis + MILLIS_PER_DAY / 2) / MILLIS_PER_DAY
     return when {
-        hours < 1 -> stringResource(R.string.core_ui_duration_minutes, minutes.toInt())
+        minutes < 60 -> stringResource(R.string.core_ui_duration_minutes, minutes.toInt())
         days < 1 -> stringResource(R.string.core_ui_duration_hours, hours.toInt())
         days < 60 -> stringResource(R.string.core_ui_duration_days, days.toInt())
         else -> stringResource(R.string.core_ui_duration_months, (days / 30).toInt())

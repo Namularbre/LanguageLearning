@@ -11,6 +11,7 @@
     <string name="feature_reading_not_found">Ce texte n\'existe pas.</string>
     <string name="feature_reading_hint">Touchez un mot pour voir son sens. Appui long sur une phrase pour la traduire.</string>
     <string name="feature_reading_translate_action">Afficher ou masquer la traduction</string>
+    <string name="feature_reading_look_up">Chercher « %1$s »</string>
     <string name="feature_reading_finish">J\'ai fini de lire</string>
     <string name="feature_reading_play">Lecture</string>
     <string name="feature_reading_pause">Pause</string>

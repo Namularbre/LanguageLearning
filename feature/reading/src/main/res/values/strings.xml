@@ -11,6 +11,7 @@
     <string name="feature_reading_not_found">This text does not exist.</string>
     <string name="feature_reading_hint">Tap a word to see what it means. Long press a sentence to translate it.</string>
     <string name="feature_reading_translate_action">Show or hide the translation</string>
+    <string name="feature_reading_look_up">Look up “%1$s”</string>
     <string name="feature_reading_finish">I\'m done reading</string>
     <string name="feature_reading_play">Play</string>
     <string name="feature_reading_pause">Pause</string>

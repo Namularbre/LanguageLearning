@@ -25,24 +25,29 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberUpdatedState
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.CustomAccessibilityAction
+import androidx.compose.ui.semantics.customActions
 import androidx.compose.ui.semantics.onLongClick
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.AnnotatedString
-import androidx.compose.ui.text.LinkAnnotation
 import androidx.compose.ui.text.SpanStyle
-import androidx.compose.ui.text.TextLinkStyles
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontStyle
+import androidx.compose.ui.text.withStyle
+import androidx.compose.ui.text.TextLayoutResult
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
-import androidx.compose.ui.text.withLink
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
@@ -191,8 +196,9 @@ private fun TextContent(uiState: ReaderUiState.Success, actions: ReaderActions, 
 }
 
 /**
- * One sentence: words are links styled by status (spec §5.2), a long press shows the translation.
- * The words' own taps are handled by the links, so the long press does not hide them.
+ * One sentence: words are styled by status (spec §5.2). A tap on a word opens its sheet, a long
+ * press anywhere on the sentence shows its translation. Both go through one gesture detector:
+ * with clickable links, a long press on a word would open the word instead.
  */
 @Composable
 private fun SentenceBlock(
@@ -205,24 +211,44 @@ private fun SentenceBlock(
 ) {
     val colors = MaterialTheme.appColors
     val translateLabel = stringResource(R.string.feature_reading_translate_action)
+    val lookUpLabels = sentence.tokens.map { stringResource(R.string.feature_reading_look_up, it.text) }
     val background = if (isCurrent) MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.5f) else Color.Transparent
+    val tokenAt = remember(sentence) { tokenIndexByChar(sentence) }
+    var layout by remember { mutableStateOf<TextLayoutResult?>(null) }
+    val currentOnWordClick by rememberUpdatedState(onWordClick)
+    val currentOnLongPress by rememberUpdatedState(onLongPress)
     Column(
         modifier = Modifier
             .fillMaxWidth()
             .background(background, MaterialTheme.shapes.medium)
             .padding(horizontal = 8.dp, vertical = 4.dp)
-            .pointerInput(onLongPress) { detectTapGestures(onLongPress = { onLongPress() }) }
+            .pointerInput(sentence) {
+                detectTapGestures(
+                    onTap = { position ->
+                        layout?.wordAt(position, tokenAt, sentence)?.let(currentOnWordClick)
+                    },
+                    onLongPress = { currentOnLongPress() },
+                )
+            }
+            // Screen readers get the same actions: translate, and look up each word.
             .semantics {
                 onLongClick(label = translateLabel) {
-                    onLongPress()
+                    currentOnLongPress()
                     true
+                }
+                customActions = sentence.tokens.indices.filter { sentence.tokens[it].isWord }.map { index ->
+                    CustomAccessibilityAction(lookUpLabels[index]) {
+                        currentOnWordClick(index)
+                        true
+                    }
                 }
             },
     ) {
         Text(
-            text = sentenceText(sentence, statuses, colors, onWordClick),
+            text = sentenceText(sentence, statuses, colors),
             style = ReadingTextStyle,
             color = MaterialTheme.colorScheme.onSurface,
+            onTextLayout = { layout = it },
         )
         if (showTranslation) {
             Text(
@@ -235,31 +261,30 @@ private fun SentenceBlock(
     }
 }
 
-private fun sentenceText(
-    sentence: Sentence,
-    statuses: Map<LemmaId, WordStatus>,
-    colors: AppColors,
-    onWordClick: (tokenIndex: Int) -> Unit,
-): AnnotatedString = buildAnnotatedString {
-    sentence.tokens.forEachIndexed { index, token ->
-        val lemmaId = token.lemmaId
-        if (lemmaId == null) {
-            append(token.text)
-        } else {
-            val style = when (statuses[lemmaId] ?: WordStatus.NEW) {
+/** For each character of the sentence, the index of the token it belongs to. */
+private fun tokenIndexByChar(sentence: Sentence): IntArray =
+    sentence.tokens.flatMapIndexed { index, token -> List(token.text.length) { index } }.toIntArray()
+
+/** The word under [position], or `null` for punctuation, a name or the blank after a line. */
+private fun TextLayoutResult.wordAt(position: Offset, tokenAt: IntArray, sentence: Sentence): Int? {
+    val line = getLineForVerticalPosition(position.y)
+    if (position.x < getLineLeft(line) || position.x > getLineRight(line)) return null
+    val token = tokenAt.getOrNull(getOffsetForPosition(position)) ?: return null
+    return token.takeIf { sentence.tokens[it].isWord }
+}
+
+private fun sentenceText(sentence: Sentence, statuses: Map<LemmaId, WordStatus>, colors: AppColors): AnnotatedString =
+    buildAnnotatedString {
+        sentence.tokens.forEach { token ->
+            val lemmaId = token.lemmaId
+            val style = when (lemmaId?.let { statuses[it] ?: WordStatus.NEW }) {
                 WordStatus.NEW -> SpanStyle(color = colors.newWord, textDecoration = TextDecoration.Underline)
                 WordStatus.LEARNING -> SpanStyle(color = colors.onLearningWord, background = colors.learningWord)
-                WordStatus.KNOWN -> SpanStyle()
+                WordStatus.KNOWN, null -> null
             }
-            val link = LinkAnnotation.Clickable(
-                tag = index.toString(),
-                styles = TextLinkStyles(style = style),
-                linkInteractionListener = { onWordClick(index) },
-            )
-            withLink(link) { append(token.text) }
+            if (style == null) append(token.text) else withStyle(style) { append(token.text) }
         }
     }
-}
 
 @Composable
 private fun PlayerBar(uiState: ReaderUiState.Success, actions: ReaderActions) {

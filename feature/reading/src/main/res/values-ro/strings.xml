@@ -11,6 +11,7 @@
     <string name="feature_reading_not_found">Acest text nu există.</string>
     <string name="feature_reading_hint">Atinge un cuvânt ca să vezi ce înseamnă. Ține apăsat pe o propoziție ca s-o traduci.</string>
     <string name="feature_reading_translate_action">Arată sau ascunde traducerea</string>
+    <string name="feature_reading_look_up">Caută „%1$s”</string>
     <string name="feature_reading_finish">Am terminat de citit</string>
     <string name="feature_reading_play">Redă</string>
     <string name="feature_reading_pause">Pauză</string>
