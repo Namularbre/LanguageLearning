@@ -15,6 +15,7 @@ import com.sazerat.languagelearning.feature.reading.navigation.readingScreens
 import com.sazerat.languagelearning.feature.pronunciation.navigation.pronunciationScreens
 import com.sazerat.languagelearning.feature.session.navigation.Home
 import com.sazerat.languagelearning.feature.session.navigation.homeScreen
+import com.sazerat.languagelearning.feature.settings.navigation.settingsScreen
 import com.sazerat.languagelearning.feature.srs.navigation.navigateToReview
 import com.sazerat.languagelearning.feature.srs.navigation.reviewScreen
 
@@ -41,6 +42,7 @@ fun LanguageLearningNavHost() {
             onExerciseClick = { id -> navController.navigate(PronunciationDetail(exerciseId = id.value)) },
         )
         reviewScreen(navController, onReadText = { id -> navController.navigateToReader(id) })
+        settingsScreen(navController, languages = studiedLanguages)
     }
 }
 

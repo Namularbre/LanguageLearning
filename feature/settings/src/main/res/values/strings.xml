@@ -1,0 +1,9 @@
+<resources>
+    <string name="feature_settings_title">Settings</string>
+    <string name="feature_settings_ui_language">I speak</string>
+    <string name="feature_settings_ui_language_description">The language of the app, the meanings and the translations.</string>
+    <string name="feature_settings_learning_language">I am learning</string>
+    <string name="feature_settings_daily_goal">Daily goal</string>
+    <string name="feature_settings_pronunciation_help">Pronunciation help</string>
+    <string name="feature_settings_pronunciation_help_description">Shows the pronunciation of words (IPA and tips) and adds the pronunciation exercises to the Library.</string>
+</resources>
