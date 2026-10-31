@@ -1,19 +1,24 @@
 package com.sazerat.languagelearning.feature.reading.reader
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material.icons.filled.Refresh
@@ -33,8 +38,10 @@ import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
@@ -56,6 +63,8 @@ import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.sazerat.languagelearning.core.domain.model.LemmaId
 import com.sazerat.languagelearning.core.domain.model.Sentence
+import com.sazerat.languagelearning.core.domain.model.TextKind
+import com.sazerat.languagelearning.core.domain.model.Token
 import com.sazerat.languagelearning.core.domain.model.WordStatus
 import com.sazerat.languagelearning.core.ui.component.AppScaffold
 import com.sazerat.languagelearning.core.ui.component.GlassCard
@@ -72,6 +81,7 @@ import com.sazerat.languagelearning.core.ui.theme.ReadingTextStyle
 import com.sazerat.languagelearning.core.ui.theme.appColors
 import com.sazerat.languagelearning.feature.reading.R
 import com.sazerat.languagelearning.feature.reading.previewReaderState
+import com.sazerat.languagelearning.feature.reading.previewText
 import com.sazerat.languagelearning.speech.api.SpeechRate
 
 @Composable
@@ -183,6 +193,9 @@ private fun TextContent(uiState: ReaderUiState.Success, actions: ReaderActions, 
         itemsIndexed(text.sentences) { index, sentence ->
             SentenceBlock(
                 sentence = sentence,
+                // A dialogue reads like a text message thread: each line is a turn, alternating
+                // between the two speakers.
+                bubbleSide = if (text.kind == TextKind.DIALOGUE) BubbleSide.of(index) else null,
                 statuses = uiState.statuses,
                 isCurrent = uiState.isPlaying && index == uiState.currentSentence,
                 showTranslation = index in uiState.translatedSentences,
@@ -208,6 +221,7 @@ private fun TextContent(uiState: ReaderUiState.Success, actions: ReaderActions, 
 @Composable
 private fun SentenceBlock(
     sentence: Sentence,
+    bubbleSide: BubbleSide?,
     statuses: Map<LemmaId, WordStatus>,
     isCurrent: Boolean,
     showTranslation: Boolean,
@@ -217,58 +231,125 @@ private fun SentenceBlock(
     val colors = MaterialTheme.appColors
     val translateLabel = stringResource(R.string.feature_reading_translate_action)
     val lookUpLabels = sentence.tokens.map { stringResource(R.string.feature_reading_look_up, it.text) }
-    val background = if (isCurrent) MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.5f) else Color.Transparent
-    val tokenAt = remember(sentence) { tokenIndexByChar(sentence) }
+    // In a bubble the dash that opens each line of a dialogue is not shown: the bubble marks the turn.
+    val firstToken = if (bubbleSide != null) firstSpokenToken(sentence) else 0
+    val tokenAt = remember(sentence, firstToken) { tokenIndexByChar(sentence, firstToken) }
     var layout by remember { mutableStateOf<TextLayoutResult?>(null) }
     val currentOnWordClick by rememberUpdatedState(onWordClick)
     val currentOnLongPress by rememberUpdatedState(onLongPress)
-    Column(
-        modifier = Modifier
+    val frame = if (bubbleSide == null) {
+        val background = if (isCurrent) MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.5f) else Color.Transparent
+        Modifier
             .fillMaxWidth()
             .background(background, MaterialTheme.shapes.medium)
             .padding(horizontal = 8.dp, vertical = 4.dp)
-            .pointerInput(sentence) {
-                detectTapGestures(
-                    onTap = { position ->
-                        layout?.wordAt(position, tokenAt, sentence)?.let(currentOnWordClick)
-                    },
-                    onLongPress = { currentOnLongPress() },
-                )
-            }
-            // Screen readers get the same actions: translate, and look up each word.
-            .semantics {
-                onLongClick(label = translateLabel) {
-                    currentOnLongPress()
-                    true
+    } else {
+        val shape = bubbleSide.shape()
+        val border = if (isCurrent) {
+            BorderStroke(2.dp, MaterialTheme.colorScheme.primary)
+        } else {
+            BorderStroke(1.dp, colors.glassBorder)
+        }
+        Modifier
+            .clip(shape)
+            .background(bubbleSide.color(), shape)
+            .border(border, shape)
+            .padding(horizontal = 14.dp, vertical = 10.dp)
+    }
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalArrangement = if (bubbleSide == BubbleSide.END) Arrangement.End else Arrangement.Start,
+    ) {
+        if (bubbleSide == BubbleSide.END) Spacer(Modifier.width(BUBBLE_GUTTER))
+        Column(
+            // A bubble is as wide as its text, up to the width left by a gutter on the other side.
+            modifier = Modifier
+                .weight(1f, fill = bubbleSide == null)
+                .then(frame)
+                .pointerInput(sentence, firstToken) {
+                    detectTapGestures(
+                        onTap = { position ->
+                            layout?.wordAt(position, tokenAt, sentence)?.let(currentOnWordClick)
+                        },
+                        onLongPress = { currentOnLongPress() },
+                    )
                 }
-                customActions = sentence.tokens.indices.filter { sentence.tokens[it].isWord }.map { index ->
-                    CustomAccessibilityAction(lookUpLabels[index]) {
-                        currentOnWordClick(index)
+                // Screen readers get the same actions: translate, and look up each word.
+                .semantics {
+                    onLongClick(label = translateLabel) {
+                        currentOnLongPress()
                         true
                     }
-                }
-            },
-    ) {
-        Text(
-            text = sentenceText(sentence, statuses, colors),
-            style = ReadingTextStyle,
-            color = MaterialTheme.colorScheme.onSurface,
-            onTextLayout = { layout = it },
-        )
-        if (showTranslation) {
+                    customActions = sentence.tokens.indices.filter { sentence.tokens[it].isWord }.map { index ->
+                        CustomAccessibilityAction(lookUpLabels[index]) {
+                            currentOnWordClick(index)
+                            true
+                        }
+                    }
+                },
+        ) {
             Text(
-                sentence.translation.localized(),
-                style = MaterialTheme.typography.bodyMedium,
-                fontStyle = FontStyle.Italic,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                text = sentenceText(sentence, statuses, colors, firstToken),
+                style = ReadingTextStyle,
+                color = MaterialTheme.colorScheme.onSurface,
+                onTextLayout = { layout = it },
             )
+            if (showTranslation) {
+                Text(
+                    sentence.translation.localized().let { if (bubbleSide != null) it.withoutDialogueDash() else it },
+                    style = MaterialTheme.typography.bodyMedium,
+                    fontStyle = FontStyle.Italic,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                )
+            }
         }
+        if (bubbleSide == BubbleSide.START) Spacer(Modifier.width(BUBBLE_GUTTER))
     }
 }
 
-/** For each character of the sentence, the index of the token it belongs to. */
-private fun tokenIndexByChar(sentence: Sentence): IntArray =
-    sentence.tokens.flatMapIndexed { index, token -> List(token.text.length) { index } }.toIntArray()
+/** Which speaker of a dialogue says a line: the first speaker on the left, the second on the right. */
+private enum class BubbleSide {
+    START,
+    END,
+    ;
+
+    companion object {
+        fun of(lineIndex: Int): BubbleSide = if (lineIndex % 2 == 0) START else END
+    }
+}
+
+/** Rounded bubble with a sharp corner at the bottom, on the speaker's side. */
+private fun BubbleSide.shape(): Shape = when (this) {
+    BubbleSide.START -> RoundedCornerShape(topStart = 20.dp, topEnd = 20.dp, bottomEnd = 20.dp, bottomStart = 4.dp)
+    BubbleSide.END -> RoundedCornerShape(topStart = 20.dp, topEnd = 20.dp, bottomEnd = 4.dp, bottomStart = 20.dp)
+}
+
+@Composable
+private fun BubbleSide.color(): Color = when (this) {
+    BubbleSide.START -> MaterialTheme.appColors.glass
+    BubbleSide.END -> MaterialTheme.colorScheme.secondaryContainer
+}
+
+private val BUBBLE_GUTTER = 48.dp
+
+/** Index of the first token after the dash that opens a line of dialogue, or 0 when there is none. */
+private fun firstSpokenToken(sentence: Sentence): Int {
+    val first = sentence.tokens.firstOrNull() ?: return 0
+    return if (!first.isWord && first.text.trim() in DIALOGUE_DASHES) 1 else 0
+}
+
+private val DIALOGUE_DASHES = setOf("—", "–", "-")
+
+private fun String.withoutDialogueDash(): String {
+    val trimmed = trimStart()
+    return if (trimmed.take(1) in DIALOGUE_DASHES) trimmed.drop(1).trimStart() else this
+}
+
+/** For each character shown, from token [firstToken] on, the index of the token it belongs to. */
+private fun tokenIndexByChar(sentence: Sentence, firstToken: Int): IntArray =
+    sentence.tokens.withIndex().drop(firstToken)
+        .flatMap { (index, token) -> List(token.text.length) { index } }
+        .toIntArray()
 
 /** The word under [position], or `null` for punctuation, a name or the blank after a line. */
 private fun TextLayoutResult.wordAt(position: Offset, tokenAt: IntArray, sentence: Sentence): Int? {
@@ -278,9 +359,14 @@ private fun TextLayoutResult.wordAt(position: Offset, tokenAt: IntArray, sentenc
     return token.takeIf { sentence.tokens[it].isWord }
 }
 
-private fun sentenceText(sentence: Sentence, statuses: Map<LemmaId, WordStatus>, colors: AppColors): AnnotatedString =
+private fun sentenceText(
+    sentence: Sentence,
+    statuses: Map<LemmaId, WordStatus>,
+    colors: AppColors,
+    firstToken: Int,
+): AnnotatedString =
     buildAnnotatedString {
-        sentence.tokens.forEach { token ->
+        sentence.tokens.drop(firstToken).forEach { token ->
             val lemmaId = token.lemmaId
             val style = when (lemmaId?.let { statuses[it] ?: WordStatus.NEW }) {
                 WordStatus.NEW -> SpanStyle(color = colors.newWord, textDecoration = TextDecoration.Underline)
@@ -384,6 +470,18 @@ private fun ReaderSummaryPreview() {
             actions = previewActions,
             onBack = {},
         )
+    }
+}
+
+@PreviewLightDark
+@Composable
+private fun ReaderDialoguePreview() {
+    val dialogue = previewText.copy(
+        kind = TextKind.DIALOGUE,
+        sentences = previewText.sentences.map { it.copy(tokens = listOf(Token("— ")) + it.tokens) },
+    )
+    LanguageLearningTheme {
+        ReaderContent(uiState = previewReaderState.copy(text = dialogue), actions = previewActions, onBack = {})
     }
 }
 
