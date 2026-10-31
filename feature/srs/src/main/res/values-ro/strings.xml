@@ -23,4 +23,7 @@
     <string name="feature_srs_continue">Continuă</string>
     <string name="feature_srs_right_answer">Corect!</string>
     <string name="feature_srs_wrong_answer">Nu chiar</string>
+    <string name="feature_srs_listen_sentence">Ascultă propoziția</string>
+    <string name="feature_srs_form_in_sentence">În propoziție: %1$s</string>
+    <string name="feature_srs_listen_form">Ascultă „%1$s”</string>
 </resources>

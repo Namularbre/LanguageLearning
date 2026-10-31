@@ -22,4 +22,7 @@
     <string name="feature_srs_continue">Continue</string>
     <string name="feature_srs_right_answer">Right!</string>
     <string name="feature_srs_wrong_answer">Not quite</string>
+    <string name="feature_srs_listen_sentence">Listen to the sentence</string>
+    <string name="feature_srs_form_in_sentence">In the sentence: %1$s</string>
+    <string name="feature_srs_listen_form">Listen to “%1$s”</string>
 </resources>

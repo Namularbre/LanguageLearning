@@ -30,6 +30,7 @@ import com.sazerat.languagelearning.core.domain.review.ExerciseKind
 import com.sazerat.languagelearning.core.testing.FakeReviewRepository
 import com.sazerat.languagelearning.core.testing.FakeUserPreferencesRepository
 import com.sazerat.languagelearning.core.testing.MainDispatcherRule
+import com.sazerat.languagelearning.feature.srs.review.ReviewAudio
 import com.sazerat.languagelearning.feature.srs.review.ReviewUiState
 import com.sazerat.languagelearning.feature.srs.review.ReviewViewModel
 import com.sazerat.languagelearning.speech.fake.FakeTextToSpeech
@@ -192,6 +193,35 @@ class ReviewViewModelTest {
         viewModel.onPlayClick()
 
         assertEquals(listOf("Merg la piață."), textToSpeech.requests.map { it.text })
+    }
+
+    @Test
+    fun `once answered, the base form and the form of the sentence can be heard apart`() = runTest {
+        reviews.cards.value = listOf(card("merge", 0, due = now))
+        val viewModel = viewModel()
+        viewModel.state<ReviewUiState.Reviewing>()
+
+        viewModel.onRevealClick()
+        val card = viewModel.state<ReviewUiState.Reviewing> { it.card.revealed }.card
+        assertEquals("Merg", card.form)
+        assertTrue(card.formDiffers)
+        viewModel.onPlayClick(ReviewAudio.WORD)
+        viewModel.onPlayClick(ReviewAudio.FORM)
+
+        assertEquals(listOf("merge", "Merg"), textToSpeech.requests.map { it.text })
+    }
+
+    @Test
+    fun `nothing that would give the hidden word away can be heard before the answer`() = runTest {
+        reviews.cards.value = listOf(card("piață", 4, due = now))
+        val viewModel = viewModel()
+        val card = viewModel.state<ReviewUiState.Reviewing>().card
+        assertFalse(card.canHearSentence)
+        assertFalse(card.formDiffers)
+
+        ReviewAudio.entries.forEach { viewModel.onPlayClick(it) }
+
+        assertTrue(textToSpeech.requests.isEmpty())
     }
 
     @Test
