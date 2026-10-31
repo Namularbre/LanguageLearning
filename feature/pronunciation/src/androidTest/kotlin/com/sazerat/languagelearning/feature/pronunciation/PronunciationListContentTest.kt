@@ -23,7 +23,7 @@ class PronunciationListContentTest {
     fun clickingAnExerciseReportsItsId() {
         var clicked: ExerciseId? = null
         composeRule.setContent {
-            LanguageLearningTheme(dynamicColor = false) {
+            LanguageLearningTheme {
                 PronunciationListContent(
                     languageCode = LanguageCode("en-GB"),
                     uiState = PronunciationListUiState.Success(previewExercises),

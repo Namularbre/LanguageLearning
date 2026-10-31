@@ -99,6 +99,22 @@ Each entry: goal · tool + prompt · what was produced · what was accepted / re
 - **Accepted / rejected / modified and why:** _TODO (author)_
 - **How I verified it:** _TODO (author). The AI ran `./gradlew assembleDebug test lintDebug assembleDebugAndroidTest` (green) and, on an API 37 emulator, switched the app language with `adb shell cmd locale set-app-locales` to en-US, fr-FR and ro-RO, reading Home, Romanian lesson 1 and the French pronunciation list with uiautomator in each language._
 
+### 2026-10-31 — Reading loop: Library, Reader, reviews, progress, onboarding (draft, to be completed by the author)
+
+- **Goal:** Implement the reading-loop concept and the "Lumo" design (both shared as claude.ai artifacts) on a separate branch, keeping spelling lessons as their own section and pronunciation as an option.
+- **Tool + prompt:** Claude Code (Claude Opus 5.5). Prompt: "Repart de la branche m1 et implémente tout, quite à faire ça sur une branche à part. Je relirai demain", after the note "Je garderai juste les leçons d'orthographe et de prononciation quand même…". The AI worked alone overnight, in small commits on `feature/reading-loop`.
+- **What was produced:**
+  - `SPEC.md` rewritten for the reading loop; the design's theme.
+  - Domain: texts, lemmas, word statuses, review cards; tokenizer, comprehension and next-text suggestion; FSRS 4.5 scheduler written in plain Kotlin; streak, minutes and known-words functions.
+  - Data: sample texts and lexicon (mainly Romanian, some English and French); Room (word statuses, review cards, review and reading logs) and DataStore (settings).
+  - Screens: Library, Reader with word sheet and sentence-by-sentence listening, Review session, Progress, Settings, Today, four tabs, onboarding with a level test.
+  - Tests: domain rules, content consistency, every new ViewModel, Room repositories (instrumented); fakes moved to `:core:testing`.
+  - Docs: `ARCHITECTURE.md`, `docs/understanding/reading-loop.md`, `docs/verifications.md`.
+- **Choices made by the AI, to confirm:** app name kept as "Languages"; lessons and pronunciation as Library sections; pronunciation off by default; UI language through Android's per-app language; no backdrop blur and system fonts; FSRS without a library; texts pre-tokenised; on-device TTS; no reminder (M2) and no multi-word selection; "Again" cards not shown again in the same session; old list routes left registered.
+- **To check by a human:** all texts, translations, meanings and IPA were written by the AI; the Romanian content especially needs a native speaker.
+- **Accepted / rejected / modified and why:** _TODO (author)_
+- **How I verified it:** _TODO (author). The AI ran `./gradlew assembleDebug test lintDebug` (green) and `connectedDebugAndroidTest` on an API 37 emulator, then went through onboarding, Today, Library, Reader, Review, Progress and Settings (English and French UI) with uiautomator and screenshots. That walkthrough found and fixed four issues (status-bar overlap, long press opening the word sheet, "3 d" shown for a 4-day interval, oversized calendar squares). Not checked: audio quality, process death on the new screens, IPA on the word sheet._
+
 ---
 
 ## Reflection

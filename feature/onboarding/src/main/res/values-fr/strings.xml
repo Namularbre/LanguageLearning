@@ -1,0 +1,17 @@
+<resources>
+    <string name="feature_onboarding_title">Bienvenue</string>
+    <string name="feature_onboarding_languages_title">Commençons par vos langues</string>
+    <string name="feature_onboarding_i_speak">Je parle</string>
+    <string name="feature_onboarding_i_learn">Je veux apprendre</string>
+    <string name="feature_onboarding_level_title">Cochez les mots que vous connaissez déjà</string>
+    <plurals name="feature_onboarding_known_count">
+        <item quantity="one">%1$d mot coché</item>
+        <item quantity="many">%1$d mots cochés</item>
+        <item quantity="other">%1$d mots cochés</item>
+    </plurals>
+    <string name="feature_onboarding_beginner">Je suis grand débutant</string>
+    <string name="feature_onboarding_goal_title">Combien de temps par jour ?</string>
+    <string name="feature_onboarding_goal_description">Les révisions et la lecture comptent. Vous pourrez le changer dans les réglages.</string>
+    <string name="feature_onboarding_next">Continuer</string>
+    <string name="feature_onboarding_start">Commencer</string>
+</resources>

@@ -88,7 +88,7 @@ private fun LessonList(
 @PreviewLightDark
 @Composable
 private fun LessonListPreview() {
-    LanguageLearningTheme(dynamicColor = false) {
+    LanguageLearningTheme {
         LessonListContent(
             languageCode = LanguageCode("ro-RO"),
             uiState = LessonListUiState.Success(previewLessons),

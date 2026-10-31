@@ -1,12 +1,27 @@
 <resources>
-    <string name="feature_session_home_title">Antrenamentul zilei</string>
-    <string name="feature_session_daily_title">Sesiunea zilnică</string>
-    <string name="feature_session_minutes">%1$d min</string>
-    <string name="feature_session_start">Începe</string>
-    <string name="feature_session_coming_soon">Sesiunea ghidată va veni într-o versiune viitoare. Până atunci, alege un modul de mai jos.</string>
-    <string name="feature_session_a_la_carte">Exersare liberă</string>
-    <string name="feature_session_module_pronunciation">Pronunție</string>
-    <string name="feature_session_module_pronunciation_description">Sunete dificile, accentul cuvântului, propoziții de ascultat și de repetat.</string>
-    <string name="feature_session_module_lessons">Lecții</string>
-    <string name="feature_session_module_lessons_description">Cum funcționează limba, cu exemple de ascultat.</string>
+    <string name="feature_session_today_title">Azi</string>
+    <string name="feature_session_goal_ring">%1$d/%2$d</string>
+    <string name="feature_session_goal_description">Minute de exercițiu azi: %1$d, obiectiv: %2$d</string>
+    <string name="feature_session_goal_reached">Obiectivul zilei e atins. Bravo!</string>
+    <string name="feature_session_goal_pending">Câteva minute pe zi sunt de ajuns.</string>
+    <plurals name="feature_session_streak">
+        <item quantity="one">%1$d zi la rând</item>
+        <item quantity="few">%1$d zile la rând</item>
+        <item quantity="other">%1$d de zile la rând</item>
+    </plurals>
+    <string name="feature_session_to_review">De recapitulat</string>
+    <string name="feature_session_nothing_to_review">Nimic de recapitulat. Citește un text ca să găsești cuvinte noi.</string>
+    <plurals name="feature_session_due_cards">
+        <item quantity="one">%1$d card</item>
+        <item quantity="few">%1$d carduri</item>
+        <item quantity="other">%1$d de carduri</item>
+    </plurals>
+    <string name="feature_session_review_time">Cam %1$d min</string>
+    <string name="feature_session_read_next">De citit în continuare</string>
+    <string name="feature_session_new_words">Săptămâna aceasta</string>
+    <plurals name="feature_session_new_words_count">
+        <item quantity="one">%1$d cuvânt nou adăugat la recapitulare</item>
+        <item quantity="few">%1$d cuvinte noi adăugate la recapitulare</item>
+        <item quantity="other">%1$d de cuvinte noi adăugate la recapitulare</item>
+    </plurals>
 </resources>

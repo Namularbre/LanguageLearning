@@ -1,0 +1,16 @@
+<resources>
+    <string name="feature_onboarding_title">Welcome</string>
+    <string name="feature_onboarding_languages_title">Let us start with your languages</string>
+    <string name="feature_onboarding_i_speak">I speak</string>
+    <string name="feature_onboarding_i_learn">I want to learn</string>
+    <string name="feature_onboarding_level_title">Tick the words you already know</string>
+    <plurals name="feature_onboarding_known_count">
+        <item quantity="one">%1$d word ticked</item>
+        <item quantity="other">%1$d words ticked</item>
+    </plurals>
+    <string name="feature_onboarding_beginner">I am a complete beginner</string>
+    <string name="feature_onboarding_goal_title">How much time a day?</string>
+    <string name="feature_onboarding_goal_description">Reviews and reading count towards it. You can change it in the settings.</string>
+    <string name="feature_onboarding_next">Continue</string>
+    <string name="feature_onboarding_start">Start learning</string>
+</resources>

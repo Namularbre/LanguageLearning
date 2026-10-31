@@ -8,7 +8,7 @@ import com.sazerat.languagelearning.core.domain.model.LocalizedText
 import java.util.Locale
 
 /** Languages the UI and the content are written in. Must match the `values-*` resource folders. */
-private val uiLanguages = setOf("en", "fr", "ro")
+val supportedUiLanguages: List<String> = listOf("en", "fr", "ro")
 
 /**
  * Language of the UI, e.g. "ro": the phone's language (or the one chosen for this app in the
@@ -18,7 +18,7 @@ private val uiLanguages = setOf("en", "fr", "ro")
 @Composable
 @ReadOnlyComposable
 fun uiLanguage(): String =
-    LocalConfiguration.current.locales[0].language.takeIf { it in uiLanguages } ?: LocalizedText.FALLBACK_LANGUAGE
+    LocalConfiguration.current.locales[0].language.takeIf { it in supportedUiLanguages } ?: LocalizedText.FALLBACK_LANGUAGE
 
 /** This text in the UI language. */
 @Composable

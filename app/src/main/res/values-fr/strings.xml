@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">Langues</string>
+    <string name="tab_today">Aujourd\'hui</string>
+    <string name="tab_library">Bibliothèque</string>
+    <string name="tab_review">Révisions</string>
+    <string name="tab_progress">Progrès</string>
 </resources>

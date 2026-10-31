@@ -1,0 +1,9 @@
+<resources>
+    <string name="feature_settings_title">Setări</string>
+    <string name="feature_settings_ui_language">Vorbesc</string>
+    <string name="feature_settings_ui_language_description">Limba aplicației, a sensurilor și a traducerilor.</string>
+    <string name="feature_settings_learning_language">Învăț</string>
+    <string name="feature_settings_daily_goal">Obiectiv zilnic</string>
+    <string name="feature_settings_pronunciation_help">Ajutor la pronunție</string>
+    <string name="feature_settings_pronunciation_help_description">Arată pronunția cuvintelor (AFI și sfaturi) și adaugă exercițiile de pronunție în bibliotecă.</string>
+</resources>

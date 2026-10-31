@@ -1,0 +1,43 @@
+<resources>
+    <string name="feature_reading_library_title">Bibliothèque</string>
+    <string name="feature_reading_library_title_language">Bibliothèque — %1$s</string>
+    <string name="feature_reading_section_texts">Textes</string>
+    <string name="feature_reading_section_lessons">Leçons</string>
+    <string name="feature_reading_section_pronunciation">Prononciation</string>
+    <string name="feature_reading_all_levels">Tous les niveaux</string>
+    <string name="feature_reading_suggested">Suggéré pour vous</string>
+    <string name="feature_reading_read">Lu</string>
+    <string name="feature_reading_lesson_number">Leçon %1$d</string>
+    <string name="feature_reading_not_found">Ce texte n\'existe pas.</string>
+    <string name="feature_reading_hint">Touchez un mot pour voir son sens. Appui long sur une phrase pour la traduire.</string>
+    <string name="feature_reading_translate_action">Afficher ou masquer la traduction</string>
+    <string name="feature_reading_look_up">Chercher « %1$s »</string>
+    <string name="feature_reading_finish">J\'ai fini de lire</string>
+    <string name="feature_reading_play">Lecture</string>
+    <string name="feature_reading_pause">Pause</string>
+    <string name="feature_reading_repeat">Répéter la phrase</string>
+    <string name="feature_reading_speed">Vitesse %1$s</string>
+    <string name="feature_reading_speed_slow">0,75×</string>
+    <string name="feature_reading_speed_normal">1×</string>
+    <string name="feature_reading_speed_fast">1,25×</string>
+    <string name="feature_reading_other_meanings">Aussi : %1$s</string>
+    <string name="feature_reading_pronunciation">Prononciation</string>
+    <string name="feature_reading_add_to_review">Ajouter aux révisions</string>
+    <string name="feature_reading_already_known">Je le connais déjà</string>
+    <string name="feature_reading_in_reviews">Dans vos révisions</string>
+    <string name="feature_reading_known_now">Je le connais maintenant</string>
+    <string name="feature_reading_you_know_it">Vous connaissez ce mot</string>
+    <string name="feature_reading_review_anyway">Le réviser quand même</string>
+    <string name="feature_reading_summary_title">Bravo !</string>
+    <plurals name="feature_reading_summary_known">
+        <item quantity="one">%1$d nouveau mot est maintenant marqué comme connu.</item>
+        <item quantity="many">%1$d nouveaux mots sont maintenant marqués comme connus.</item>
+        <item quantity="other">%1$d nouveaux mots sont maintenant marqués comme connus.</item>
+    </plurals>
+    <plurals name="feature_reading_summary_learning">
+        <item quantity="one">%1$d mot de ce texte est dans vos révisions.</item>
+        <item quantity="many">%1$d mots de ce texte sont dans vos révisions.</item>
+        <item quantity="other">%1$d mots de ce texte sont dans vos révisions.</item>
+    </plurals>
+    <string name="feature_reading_back_to_library">Retour à la bibliothèque</string>
+</resources>

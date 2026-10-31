@@ -38,9 +38,15 @@ dependencies {
 
     implementation(projects.feature.pronunciation)
     implementation(projects.feature.grammar)
+    implementation(projects.feature.reading)
     implementation(projects.feature.session)
+    implementation(projects.feature.srs)
+    implementation(projects.feature.settings)
+    implementation(projects.feature.dashboard)
+    implementation(projects.feature.onboarding)
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.activity.compose)
     implementation(libs.androidx.navigation.compose)
+    implementation(libs.androidx.lifecycle.runtime.compose)
 }

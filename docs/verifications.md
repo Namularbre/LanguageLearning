@@ -17,9 +17,24 @@ Latest stable versions read from Google Maven / Maven Central / the GitHub API.
 | Lifecycle | 2.11.0 |
 | Hilt / androidx.hilt | 2.60.1 / 1.4.0 |
 | kotlinx.coroutines / serialization | 1.11.0 / 1.12.0 |
+| Room | 2.8.5 (added 2026-10-30) |
+| DataStore Preferences | 1.3.0 (added 2026-10-30) |
 | GitHub Actions | checkout v7, setup-java v6, gradle/actions v6, upload-artifact v7 |
 
-Coil, Retrofit, Room and WorkManager will be added and checked in M2.
+Coil, Retrofit and WorkManager will be added and checked in M2.
+
+## Reading loop — 2026-10-31
+
+Checked on an API 37 emulator (`Medium_Phone`), debug build:
+
+- [x] `connectedDebugAndroidTest`: `RoomRepositoriesTest` (3/3) and `PronunciationListContentTest` (1/1).
+- [x] Onboarding: the UI language is not offered as a learning language; the level test shows 40 words; ticked words count as known.
+- [x] Reader: word colours, tap → word sheet, long press → sentence translation, playback highlight, "I'm done reading" summary.
+- [x] Review: cloze front and back, intervals 10 min / 1 d / 4 d / 14 d, end screen with a suggested text.
+- [x] Progress and Today numbers match the actions above; Settings switches the UI to French live.
+- [ ] IPA on the word sheet with pronunciation help on (not confirmed on the emulator).
+- [ ] Audio quality of the sentence-by-sentence playback (not listened to).
+- [ ] Process death on the Reader and the review session.
 
 ## To check at the start of M2
 
