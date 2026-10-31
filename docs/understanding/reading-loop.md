@@ -4,9 +4,9 @@ The loop from SPEC §0: **read a text → tap the words you do not know → revi
 
 ## How it works
 
-**Content.** Texts, lexicon and lessons are sample data in `:core:data` (`sample/`), served by in-memory repositories.
+**Content.** Texts, lexicon and lessons are language packs (JSON) in `:core:data` (`assets/packs/`), served by the `Pack…Repository` classes: see [content-packs.md](content-packs.md).
 - A `ReadingText` is a list of sentences; each sentence is a list of tokens. A word token points to a `Lemma` (its base form): *casei* and *casa* share `ro:casă`.
-- Texts are **pre-tokenised** when the content is written. `Tokenizer` (`:core:domain/reading/`) splits a sentence into words and the text between them; `SampleReadingTest` checks that every word token has a lemma. Nothing is tokenised on the learner's tap.
+- Texts are **pre-tokenised** when the content is written. `Tokenizer` (`:core:domain/reading/`) splits a sentence into words and the text between them; `PackContentTest` checks that every word token has a lemma. Nothing is tokenised on the learner's tap.
 - A `Lemma` has a frequency rank, a part of speech, a gender, meanings (`LocalizedText`), and optionally an IPA transcription and a usage note.
 
 **The learner's data.** Everything the learner does lives in Room (`LanguageLearningDatabase`, version 1, four tables), always filtered by language:
@@ -59,7 +59,7 @@ Settings (learning language, daily goal, pronunciation help, onboarding done) ar
 | Streak, minutes, known words | `core/domain/.../progress/Progress.kt` |
 | Room tables and DAOs | `core/data/.../database/` |
 | Room and DataStore repositories | `core/data/.../repository/RoomRepositories.kt`, `DataStoreUserPreferencesRepository.kt` |
-| Sample texts and lexicon | `core/data/.../sample/Sample*Reading.kt`, `Lexicon.kt` |
+| Texts, lexicon and lessons | `core/data/src/main/assets/packs/*.json`, read by `core/data/.../pack/` |
 | Reader, word sheet | `feature/reading/.../reader/` |
 | Review session | `feature/srs/.../review/` |
 | Fakes for tests | `core/testing/.../FakeRepositories.kt` |

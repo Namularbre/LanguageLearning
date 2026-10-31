@@ -2,6 +2,8 @@ plugins {
     alias(libs.plugins.languagelearning.android.library)
     alias(libs.plugins.ksp)
     alias(libs.plugins.room)
+    // Language packs are JSON files (pack/ContentPack.kt).
+    alias(libs.plugins.kotlin.serialization)
 }
 
 android {
@@ -17,6 +19,7 @@ room {
 dependencies {
     api(projects.core.domain)
     implementation(libs.kotlinx.coroutines.core)
+    implementation(libs.kotlinx.serialization.json)
     // api: :app builds the database and the DataStore, so it sees their types.
     api(libs.androidx.room.runtime)
     implementation(libs.androidx.room.ktx)
