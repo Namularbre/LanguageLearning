@@ -1,5 +1,6 @@
 package com.sazerat.languagelearning.feature.reading.navigation
 
+import androidx.compose.runtime.Composable
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
@@ -34,6 +35,7 @@ fun NavGraphBuilder.readingScreens(
     navController: NavController,
     onLessonClick: (LessonId) -> Unit,
     onExerciseClick: (ExerciseId) -> Unit,
+    languageSwitcher: @Composable () -> Unit,
 ) {
     composable<Library> {
         LibraryScreen(
@@ -42,6 +44,7 @@ fun NavGraphBuilder.readingScreens(
             onExerciseClick = onExerciseClick,
             // A tab: nothing to go back to.
             onBack = null,
+            languageSwitcher = languageSwitcher,
         )
     }
     composable<Reader> {

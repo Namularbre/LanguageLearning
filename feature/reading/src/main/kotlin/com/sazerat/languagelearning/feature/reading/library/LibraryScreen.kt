@@ -35,7 +35,6 @@ import com.sazerat.languagelearning.core.ui.component.LevelTile
 import com.sazerat.languagelearning.core.ui.component.LoadingContent
 import com.sazerat.languagelearning.core.ui.component.Overline
 import com.sazerat.languagelearning.core.ui.component.textMeta
-import com.sazerat.languagelearning.core.ui.displayName
 import com.sazerat.languagelearning.core.ui.localized
 import com.sazerat.languagelearning.core.ui.theme.LanguageLearningTheme
 import com.sazerat.languagelearning.core.ui.theme.appColors
@@ -48,6 +47,7 @@ internal fun LibraryScreen(
     onLessonClick: (LessonId) -> Unit,
     onExerciseClick: (ExerciseId) -> Unit,
     onBack: (() -> Unit)?,
+    languageSwitcher: @Composable () -> Unit,
     viewModel: LibraryViewModel = hiltViewModel(),
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
@@ -59,6 +59,7 @@ internal fun LibraryScreen(
         onLessonClick = onLessonClick,
         onExerciseClick = onExerciseClick,
         onBack = onBack,
+        languageSwitcher = languageSwitcher,
     )
 }
 
@@ -71,13 +72,10 @@ internal fun LibraryContent(
     onLessonClick: (LessonId) -> Unit,
     onExerciseClick: (ExerciseId) -> Unit,
     onBack: (() -> Unit)?,
+    languageSwitcher: @Composable () -> Unit = {},
 ) {
-    val title = when (uiState) {
-        LibraryUiState.Loading -> stringResource(R.string.feature_reading_library_title)
-        is LibraryUiState.Success ->
-            stringResource(R.string.feature_reading_library_title_language, uiState.languageCode.displayName())
-    }
-    AppScaffold(title = title, onBack = onBack) { padding ->
+    // The language is named by the switcher next to the title.
+    AppScaffold(title = stringResource(R.string.feature_reading_library_title), onBack = onBack, actions = { languageSwitcher() }) { padding ->
         when (uiState) {
             LibraryUiState.Loading -> LoadingContent(Modifier.padding(padding))
             is LibraryUiState.Success -> LazyColumn(

@@ -15,6 +15,7 @@ import com.sazerat.languagelearning.core.domain.progress.newWordsThisWeek
 import com.sazerat.languagelearning.core.domain.progress.streak
 import com.sazerat.languagelearning.core.domain.reading.comprehension
 import com.sazerat.languagelearning.core.domain.reading.suggestNextText
+import com.sazerat.languagelearning.core.domain.reading.suggestReread
 import com.sazerat.languagelearning.core.domain.repository.ReadingLogRepository
 import com.sazerat.languagelearning.core.domain.repository.ReviewRepository
 import com.sazerat.languagelearning.core.domain.repository.TextRepository
@@ -37,6 +38,8 @@ data class NextText(
     val kind: TextKind,
     val minutes: Int,
     val comprehension: Int,
+    /** Already read: suggested again because every text has been read. */
+    val isReread: Boolean = false,
 )
 
 sealed interface TodayUiState {
@@ -49,7 +52,7 @@ sealed interface TodayUiState {
         val dueCards: Int,
         /** Estimated minutes to review the due cards, at least 1 when there are some. */
         val reviewMinutes: Int,
-        /** `null` once every text has been read. */
+        /** Once every text has been read, the one read longest ago, to read again. */
         val nextText: NextText?,
         val newWordsThisWeek: Int,
     ) : TodayUiState
@@ -88,6 +91,8 @@ class TodayViewModel @Inject constructor(
                 reviewMinutes = (due * SECONDS_PER_REVIEW + 59) / 60,
                 nextText = suggestNextText(texts, statuses, readings.map { it.textId }.toSet())?.let { text ->
                     NextText(text.id, text.title, text.level, text.kind, text.minutes, text.comprehension(statuses))
+                } ?: suggestReread(texts, readings)?.let { text ->
+                    NextText(text.id, text.title, text.level, text.kind, text.minutes, text.comprehension(statuses), isReread = true)
                 },
                 newWordsThisWeek = newWordsThisWeek(words, today, clock),
             )

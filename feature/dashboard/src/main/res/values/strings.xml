@@ -12,4 +12,17 @@
     </plurals>
     <string name="feature_dashboard_calendar">Regularity, last 5 weeks</string>
     <string name="feature_dashboard_calendar_description">Days active: %1$d/%2$d</string>
+    <string name="feature_dashboard_all_languages">All languages</string>
+    <plurals name="feature_dashboard_all_known_words">
+        <item quantity="one">%1$d known word in total</item>
+        <item quantity="other">%1$d known words in total</item>
+    </plurals>
+    <plurals name="feature_dashboard_all_streak">
+        <item quantity="one">%1$d day in a row, all languages together</item>
+        <item quantity="other">%1$d days in a row, all languages together</item>
+    </plurals>
+    <plurals name="feature_dashboard_language_known_words">
+        <item quantity="one">%1$d word</item>
+        <item quantity="other">%1$d words</item>
+    </plurals>
 </resources>

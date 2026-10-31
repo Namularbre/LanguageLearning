@@ -21,4 +21,5 @@
         <item quantity="one">%1$d new word added to the reviews</item>
         <item quantity="other">%1$d new words added to the reviews</item>
     </plurals>
+    <string name="feature_session_read_again">Everything is read: read this one again</string>
 </resources>

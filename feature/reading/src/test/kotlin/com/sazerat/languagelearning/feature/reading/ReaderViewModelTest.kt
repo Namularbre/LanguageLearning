@@ -131,6 +131,26 @@ class ReaderViewModelTest {
     }
 
     @Test
+    fun `reading again starts the text over and logs a second reading`() = runTest {
+        val viewModel = viewModel()
+        viewModel.successState()
+        viewModel.onSentenceLongPress(1)
+        viewModel.onFinishClick()
+        viewModel.successState().summary!!
+
+        viewModel.onReadAgainClick()
+
+        val state = viewModel.successState()
+        assertNull(state.summary)
+        assertEquals(0, state.currentSentence)
+        assertTrue(state.translatedSentences.isEmpty())
+        // Every word is known by now: finishing again marks nothing new, but counts the reading.
+        viewModel.onFinishClick()
+        assertEquals(ReadingSummary(newlyKnown = 0, learning = 0), viewModel.successState().summary)
+        assertEquals(2, log.entries.value.size)
+    }
+
+    @Test
     fun `play reads every sentence in turn at the chosen speed`() = runTest {
         val viewModel = viewModel()
         viewModel.successState()

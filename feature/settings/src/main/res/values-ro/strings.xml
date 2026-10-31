@@ -6,4 +6,17 @@
     <string name="feature_settings_daily_goal">Obiectiv zilnic</string>
     <string name="feature_settings_pronunciation_help">Ajutor la pronunție</string>
     <string name="feature_settings_pronunciation_help_description">Arată pronunția cuvintelor (AFI și sfaturi) și adaugă exercițiile de pronunție în bibliotecă.</string>
+    <string name="feature_settings_switch_language">Schimbă limba pe care o înveți</string>
+    <string name="feature_settings_current_language">Limba actuală</string>
+    <string name="feature_settings_language_not_started">Neînceput încă</string>
+    <plurals name="feature_settings_language_known_words">
+        <item quantity="one">%1$d cuvânt știut</item>
+        <item quantity="few">%1$d cuvinte știute</item>
+        <item quantity="other">%1$d de cuvinte știute</item>
+    </plurals>
+    <plurals name="feature_settings_language_due_cards">
+        <item quantity="one">%1$d repetare de făcut</item>
+        <item quantity="few">%1$d repetări de făcut</item>
+        <item quantity="other">%1$d de repetări de făcut</item>
+    </plurals>
 </resources>

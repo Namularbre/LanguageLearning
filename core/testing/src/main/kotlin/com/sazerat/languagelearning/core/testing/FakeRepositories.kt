@@ -54,8 +54,11 @@ class FakeLexiconRepository(private val lemmas: List<Lemma>) : LexiconRepository
 class FakeWordStatusRepository : WordStatusRepository {
     val statuses = MutableStateFlow<Map<LemmaId, WordStatus>>(emptyMap())
 
-    override fun observeWords(languageCode: LanguageCode): Flow<List<LearnerWord>> =
-        statuses.map { all -> all.map { (id, status) -> LearnerWord(id, status, updatedAt = 0) } }
+    // Lemma ids start with their language ("ro:casă"); an id without one belongs to every language.
+    override fun observeWords(languageCode: LanguageCode): Flow<List<LearnerWord>> = statuses.map { all ->
+        all.filterKeys { it.value.substringBefore(':', languageCode.language) == languageCode.language }
+            .map { (id, status) -> LearnerWord(id, status, updatedAt = 0) }
+    }
 
     override suspend fun setStatus(languageCode: LanguageCode, lemmaIds: Collection<LemmaId>, status: WordStatus) {
         statuses.update { all -> all + lemmaIds.associateWith { status } }
@@ -84,9 +87,14 @@ class FakeReviewRepository : ReviewRepository {
 class FakeReadingLogRepository : ReadingLogRepository {
     val entries = MutableStateFlow<List<ReadingLogEntry>>(emptyList())
 
-    override fun observeLog(languageCode: LanguageCode): Flow<List<ReadingLogEntry>> = entries
+    // Language of each entry added with add(); one set directly in [entries] belongs to every language.
+    private val languages = mutableMapOf<ReadingLogEntry, LanguageCode>()
+
+    override fun observeLog(languageCode: LanguageCode): Flow<List<ReadingLogEntry>> =
+        entries.map { all -> all.filter { (languages[it] ?: languageCode) == languageCode } }
 
     override suspend fun add(languageCode: LanguageCode, entry: ReadingLogEntry) {
+        languages[entry] = languageCode
         entries.update { it + entry }
     }
 }

@@ -13,4 +13,20 @@
     </plurals>
     <string name="feature_dashboard_calendar">Régularité, 5 dernières semaines</string>
     <string name="feature_dashboard_calendar_description">Jours actifs : %1$d/%2$d</string>
+    <string name="feature_dashboard_all_languages">Toutes les langues</string>
+    <plurals name="feature_dashboard_all_known_words">
+        <item quantity="one">%1$d mot connu au total</item>
+        <item quantity="many">%1$d mots connus au total</item>
+        <item quantity="other">%1$d mots connus au total</item>
+    </plurals>
+    <plurals name="feature_dashboard_all_streak">
+        <item quantity="one">%1$d jour d\'affilée, toutes langues confondues</item>
+        <item quantity="many">%1$d jours d\'affilée, toutes langues confondues</item>
+        <item quantity="other">%1$d jours d\'affilée, toutes langues confondues</item>
+    </plurals>
+    <plurals name="feature_dashboard_language_known_words">
+        <item quantity="one">%1$d mot</item>
+        <item quantity="many">%1$d mots</item>
+        <item quantity="other">%1$d mots</item>
+    </plurals>
 </resources>

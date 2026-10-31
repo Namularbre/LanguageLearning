@@ -13,4 +13,20 @@
     </plurals>
     <string name="feature_dashboard_calendar">Regularitate, ultimele 5 săptămâni</string>
     <string name="feature_dashboard_calendar_description">Zile active: %1$d/%2$d</string>
+    <string name="feature_dashboard_all_languages">Toate limbile</string>
+    <plurals name="feature_dashboard_all_known_words">
+        <item quantity="one">%1$d cuvânt știut în total</item>
+        <item quantity="few">%1$d cuvinte știute în total</item>
+        <item quantity="other">%1$d de cuvinte știute în total</item>
+    </plurals>
+    <plurals name="feature_dashboard_all_streak">
+        <item quantity="one">%1$d zi la rând, toate limbile la un loc</item>
+        <item quantity="few">%1$d zile la rând, toate limbile la un loc</item>
+        <item quantity="other">%1$d de zile la rând, toate limbile la un loc</item>
+    </plurals>
+    <plurals name="feature_dashboard_language_known_words">
+        <item quantity="one">%1$d cuvânt</item>
+        <item quantity="few">%1$d cuvinte</item>
+        <item quantity="other">%1$d de cuvinte</item>
+    </plurals>
 </resources>

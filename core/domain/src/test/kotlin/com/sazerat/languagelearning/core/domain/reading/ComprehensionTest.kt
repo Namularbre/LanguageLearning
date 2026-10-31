@@ -10,6 +10,7 @@ import com.sazerat.languagelearning.core.domain.model.TextId
 import com.sazerat.languagelearning.core.domain.model.TextKind
 import com.sazerat.languagelearning.core.domain.model.Token
 import com.sazerat.languagelearning.core.domain.model.WordStatus
+import com.sazerat.languagelearning.core.domain.repository.ReadingLogEntry
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNull
@@ -87,5 +88,25 @@ class ComprehensionTest {
     @Test
     fun `nothing is suggested once everything is read`() {
         assertNull(suggestNextText(listOf(text("one", "a")), emptyMap(), setOf(TextId("one"))))
+    }
+
+    @Test
+    fun `nothing is suggested for rereading while a text is unread`() {
+        val log = listOf(ReadingLogEntry(TextId("a"), minutes = 2, finishedAt = 10))
+
+        assertNull(suggestReread(listOf(text("a", "x"), text("b", "y")), log))
+        assertNull(suggestReread(listOf(text("a", "x")), emptyList()))
+    }
+
+    @Test
+    fun `once everything is read, the text read longest ago is suggested again`() {
+        val log = listOf(
+            ReadingLogEntry(TextId("a"), minutes = 2, finishedAt = 10),
+            ReadingLogEntry(TextId("b"), minutes = 2, finishedAt = 20),
+            // Read again since: now the most recent.
+            ReadingLogEntry(TextId("a"), minutes = 2, finishedAt = 30),
+        )
+
+        assertEquals(TextId("b"), suggestReread(listOf(text("a", "x"), text("b", "y")), log)?.id)
     }
 }

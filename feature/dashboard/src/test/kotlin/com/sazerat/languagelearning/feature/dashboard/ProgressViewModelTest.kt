@@ -59,4 +59,30 @@ class ProgressViewModelTest {
         assertEquals(listOf(true, true), state.activeDays.takeLast(2))
         assertEquals(false, state.activeDays[state.activeDays.size - 3])
     }
+
+    @Test
+    fun `the global card adds up every language, and tapping one shows its details`() = runTest {
+        val french = LanguageCode("fr-FR")
+        val words = FakeWordStatusRepository()
+        words.setStatus(romanian, listOf(LemmaId("ro:a"), LemmaId("ro:b")), WordStatus.KNOWN)
+        words.setStatus(french, listOf(LemmaId("fr:c")), WordStatus.KNOWN)
+        val viewModel = ProgressViewModel(
+            FakeUserPreferencesRepository(UserPreferences(learningLanguage = romanian)),
+            words,
+            FakeReviewRepository(),
+            FakeReadingLogRepository(),
+            FakeTextRepository(emptyList()),
+            clock,
+        )
+        val state = viewModel.uiState.first { it is ProgressUiState.Success } as ProgressUiState.Success
+
+        assertEquals(3, state.global.knownWords)
+        assertEquals(2, state.knownWords)
+        assertEquals(listOf(0, 2, 1), state.global.languages.map { it.knownWords })
+
+        viewModel.onLanguageSelected(french)
+        val french1 = viewModel.uiState.first { it is ProgressUiState.Success && it.languageCode == french } as ProgressUiState.Success
+
+        assertEquals(1, french1.knownWords)
+    }
 }

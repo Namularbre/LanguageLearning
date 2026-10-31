@@ -6,4 +6,17 @@
     <string name="feature_settings_daily_goal">Objectif quotidien</string>
     <string name="feature_settings_pronunciation_help">Aide à la prononciation</string>
     <string name="feature_settings_pronunciation_help_description">Affiche la prononciation des mots (API et conseils) et ajoute les exercices de prononciation à la bibliothèque.</string>
+    <string name="feature_settings_switch_language">Changer la langue apprise</string>
+    <string name="feature_settings_current_language">Langue actuelle</string>
+    <string name="feature_settings_language_not_started">Pas encore commencée</string>
+    <plurals name="feature_settings_language_known_words">
+        <item quantity="one">%1$d mot connu</item>
+        <item quantity="many">%1$d mots connus</item>
+        <item quantity="other">%1$d mots connus</item>
+    </plurals>
+    <plurals name="feature_settings_language_due_cards">
+        <item quantity="one">%1$d révision à faire</item>
+        <item quantity="many">%1$d révisions à faire</item>
+        <item quantity="other">%1$d révisions à faire</item>
+    </plurals>
 </resources>
