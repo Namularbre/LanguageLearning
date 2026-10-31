@@ -11,4 +11,6 @@
     <string name="feature_session_module_lessons_description">How the language works, with examples to listen to.</string>
     <string name="feature_session_module_library">Library</string>
     <string name="feature_session_module_library_description">Short texts to read and listen to. Tap the words you do not know.</string>
+    <string name="feature_session_module_review">Review</string>
+    <string name="feature_session_module_review_description">The words you added, back when you are about to forget them.</string>
 </resources>

@@ -10,10 +10,13 @@ import com.sazerat.languagelearning.feature.grammar.navigation.navigateToLessonL
 import com.sazerat.languagelearning.feature.pronunciation.navigation.PronunciationDetail
 import com.sazerat.languagelearning.feature.pronunciation.navigation.navigateToPronunciationList
 import com.sazerat.languagelearning.feature.reading.navigation.navigateToLibrary
+import com.sazerat.languagelearning.feature.reading.navigation.navigateToReader
 import com.sazerat.languagelearning.feature.reading.navigation.readingScreens
 import com.sazerat.languagelearning.feature.pronunciation.navigation.pronunciationScreens
 import com.sazerat.languagelearning.feature.session.navigation.Home
 import com.sazerat.languagelearning.feature.session.navigation.homeScreen
+import com.sazerat.languagelearning.feature.srs.navigation.navigateToReview
+import com.sazerat.languagelearning.feature.srs.navigation.reviewScreen
 
 /**
  * The whole navigation graph. Each feature contributes its screens; only the app connects them.
@@ -28,6 +31,7 @@ fun LanguageLearningNavHost() {
             onOpenPronunciation = { language -> navController.navigateToPronunciationList(language) },
             onOpenLessons = { language -> navController.navigateToLessonList(language) },
             onOpenLibrary = { navController.navigateToLibrary() },
+            onOpenReview = { navController.navigateToReview() },
         )
         pronunciationScreens(navController)
         grammarScreens(navController)
@@ -36,6 +40,7 @@ fun LanguageLearningNavHost() {
             onLessonClick = { id -> navController.navigate(LessonDetail(lessonId = id.value)) },
             onExerciseClick = { id -> navController.navigate(PronunciationDetail(exerciseId = id.value)) },
         )
+        reviewScreen(navController, onReadText = { id -> navController.navigateToReader(id) })
     }
 }
 

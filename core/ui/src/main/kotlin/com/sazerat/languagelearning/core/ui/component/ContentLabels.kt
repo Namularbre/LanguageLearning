@@ -16,6 +16,8 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
 import com.sazerat.languagelearning.core.domain.model.CefrLevel
 import com.sazerat.languagelearning.core.domain.model.Gender
+import com.sazerat.languagelearning.core.domain.model.MILLIS_PER_DAY
+import com.sazerat.languagelearning.core.domain.model.MILLIS_PER_MINUTE
 import com.sazerat.languagelearning.core.domain.model.PartOfSpeech
 import com.sazerat.languagelearning.core.domain.model.TextKind
 import com.sazerat.languagelearning.core.ui.R
@@ -60,6 +62,20 @@ fun Gender.label(): String = stringResource(
 @Composable
 fun textMeta(kind: TextKind, level: CefrLevel, minutes: Int): String =
     stringResource(R.string.core_ui_text_meta, kind.label(), level.name, minutes)
+
+/** A short delay, e.g. "10 min", "4 d", "3 mo": review intervals and the next review. */
+@Composable
+fun durationLabel(millis: Long): String {
+    val minutes = (millis / MILLIS_PER_MINUTE).coerceAtLeast(1)
+    val hours = minutes / 60
+    val days = millis / MILLIS_PER_DAY
+    return when {
+        hours < 1 -> stringResource(R.string.core_ui_duration_minutes, minutes.toInt())
+        days < 1 -> stringResource(R.string.core_ui_duration_hours, hours.toInt())
+        days < 60 -> stringResource(R.string.core_ui_duration_days, days.toInt())
+        else -> stringResource(R.string.core_ui_duration_months, (days / 30).toInt())
+    }
+}
 
 /**
  * Estimated comprehension of a text, coloured as in spec §4: green from 90 %, orange from 75 %,

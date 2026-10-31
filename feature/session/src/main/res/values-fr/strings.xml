@@ -11,4 +11,6 @@
     <string name="feature_session_module_lessons_description">Le fonctionnement de la langue, avec des exemples à écouter.</string>
     <string name="feature_session_module_library">Bibliothèque</string>
     <string name="feature_session_module_library_description">De courts textes à lire et à écouter. Touchez les mots que vous ne connaissez pas.</string>
+    <string name="feature_session_module_review">Révisions</string>
+    <string name="feature_session_module_review_description">Les mots que vous avez ajoutés, au moment où vous alliez les oublier.</string>
 </resources>

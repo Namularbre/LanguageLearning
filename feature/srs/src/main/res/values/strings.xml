@@ -1,0 +1,21 @@
+<resources>
+    <string name="feature_srs_title">Review</string>
+    <string name="feature_srs_progress">%1$d / %2$d</string>
+    <string name="feature_srs_front_hint">Which word is missing?</string>
+    <string name="feature_srs_show_answer">Show the answer</string>
+    <string name="feature_srs_again">Again</string>
+    <string name="feature_srs_hard">Hard</string>
+    <string name="feature_srs_good">Good</string>
+    <string name="feature_srs_easy">Easy</string>
+    <string name="feature_srs_nothing_due">Nothing to review right now.</string>
+    <string name="feature_srs_no_cards">No words to review yet. While reading, tap the words you do not know and add them to your reviews.</string>
+    <string name="feature_srs_next_review">Next review in %1$s</string>
+    <string name="feature_srs_finished_title">Session done</string>
+    <plurals name="feature_srs_reviewed">
+        <item quantity="one">%1$d card reviewed</item>
+        <item quantity="other">%1$d cards reviewed</item>
+    </plurals>
+    <string name="feature_srs_success_rate">%1$d%% remembered</string>
+    <string name="feature_srs_read_now">Read a text now?</string>
+    <string name="feature_srs_read_suggested">Read “%1$s”</string>
+</resources>

@@ -39,6 +39,7 @@ internal fun HomeScreen(
     onOpenPronunciation: (LanguageCode) -> Unit,
     onOpenLessons: (LanguageCode) -> Unit,
     onOpenLibrary: () -> Unit,
+    onOpenReview: () -> Unit,
     viewModel: HomeViewModel = hiltViewModel(),
 ) {
     val selectedDuration by viewModel.selectedDuration.collectAsStateWithLifecycle()
@@ -53,6 +54,7 @@ internal fun HomeScreen(
         onOpenPronunciation = { onOpenPronunciation(selectedLanguage) },
         onOpenLessons = { onOpenLessons(selectedLanguage) },
         onOpenLibrary = onOpenLibrary,
+        onOpenReview = onOpenReview,
     )
 }
 
@@ -66,6 +68,7 @@ internal fun HomeContent(
     onOpenPronunciation: () -> Unit,
     onOpenLessons: () -> Unit,
     onOpenLibrary: () -> Unit,
+    onOpenReview: () -> Unit,
 ) {
     AppScaffold(title = stringResource(R.string.feature_session_home_title)) { padding ->
         Column(
@@ -81,6 +84,11 @@ internal fun HomeContent(
                 title = stringResource(R.string.feature_session_module_library),
                 description = stringResource(R.string.feature_session_module_library_description),
                 onClick = onOpenLibrary,
+            )
+            ModuleCard(
+                title = stringResource(R.string.feature_session_module_review),
+                description = stringResource(R.string.feature_session_module_review_description),
+                onClick = onOpenReview,
             )
             DailySessionCard(selectedDuration, onDurationSelected)
             Text(stringResource(R.string.feature_session_a_la_carte), style = MaterialTheme.typography.titleMedium)
@@ -168,6 +176,7 @@ private fun HomePreview() {
             onOpenPronunciation = {},
             onOpenLessons = {},
             onOpenLibrary = {},
+            onOpenReview = {},
         )
     }
 }

@@ -15,6 +15,7 @@ fun NavGraphBuilder.homeScreen(
     onOpenPronunciation: (LanguageCode) -> Unit,
     onOpenLessons: (LanguageCode) -> Unit,
     onOpenLibrary: () -> Unit,
+    onOpenReview: () -> Unit,
 ) {
     composable<Home> {
         HomeScreen(
@@ -22,6 +23,7 @@ fun NavGraphBuilder.homeScreen(
             onOpenPronunciation = onOpenPronunciation,
             onOpenLessons = onOpenLessons,
             onOpenLibrary = onOpenLibrary,
+            onOpenReview = onOpenReview,
         )
     }
 }

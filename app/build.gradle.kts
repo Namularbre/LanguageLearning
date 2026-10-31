@@ -40,6 +40,7 @@ dependencies {
     implementation(projects.feature.grammar)
     implementation(projects.feature.reading)
     implementation(projects.feature.session)
+    implementation(projects.feature.srs)
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.activity.compose)

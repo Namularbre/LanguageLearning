@@ -1,0 +1,22 @@
+<resources>
+    <string name="feature_srs_title">Recapitulare</string>
+    <string name="feature_srs_progress">%1$d / %2$d</string>
+    <string name="feature_srs_front_hint">Ce cuvânt lipsește?</string>
+    <string name="feature_srs_show_answer">Arată răspunsul</string>
+    <string name="feature_srs_again">Din nou</string>
+    <string name="feature_srs_hard">Greu</string>
+    <string name="feature_srs_good">Bine</string>
+    <string name="feature_srs_easy">Ușor</string>
+    <string name="feature_srs_nothing_due">Nimic de recapitulat acum.</string>
+    <string name="feature_srs_no_cards">Încă nu ai cuvinte de recapitulat. Când citești, atinge cuvintele pe care nu le știi și adaugă-le la recapitulare.</string>
+    <string name="feature_srs_next_review">Următoarea recapitulare în %1$s</string>
+    <string name="feature_srs_finished_title">Sesiune terminată</string>
+    <plurals name="feature_srs_reviewed">
+        <item quantity="one">%1$d card recapitulat</item>
+        <item quantity="few">%1$d carduri recapitulate</item>
+        <item quantity="other">%1$d de carduri recapitulate</item>
+    </plurals>
+    <string name="feature_srs_success_rate">%1$d%% reținute</string>
+    <string name="feature_srs_read_now">Citești un text acum?</string>
+    <string name="feature_srs_read_suggested">Citește „%1$s”</string>
+</resources>
