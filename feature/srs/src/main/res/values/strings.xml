@@ -18,4 +18,8 @@
     <string name="feature_srs_success_rate">%1$d%% remembered</string>
     <string name="feature_srs_read_now">Read a text now?</string>
     <string name="feature_srs_read_suggested">Read “%1$s”</string>
+    <string name="feature_srs_meaning_hint">What does this word mean?</string>
+    <string name="feature_srs_continue">Continue</string>
+    <string name="feature_srs_right_answer">Right!</string>
+    <string name="feature_srs_wrong_answer">Not quite</string>
 </resources>
