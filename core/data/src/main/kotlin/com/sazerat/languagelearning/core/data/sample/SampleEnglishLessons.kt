@@ -5,7 +5,7 @@ import com.sazerat.languagelearning.core.domain.model.Lesson
 import com.sazerat.languagelearning.core.domain.model.LessonId
 import com.sazerat.languagelearning.core.domain.model.LessonSection
 
-/** Placeholder English (UK) lessons 1 to 3 for M1. Replaced by packs downloaded from the API in M2. */
+/** Placeholder English (UK) lessons 1 to 6 for M1. Replaced by packs downloaded from the API in M2. */
 internal object SampleEnglishLessons {
     private val englishUk = LanguageCode("en-GB")
 
@@ -267,6 +267,153 @@ internal object SampleEnglishLessons {
                     examples = listOf(
                         example("I saw him yesterday.", fr = "Je l'ai vu hier.", ro = "L-am văzut ieri."),
                         example("I've lived here since 2020.", fr = "J'habite ici depuis 2020.", ro = "Locuiesc aici din 2020."),
+                    ),
+                ),
+            ),
+        ),
+        Lesson(
+            id = LessonId("en-04-articles"),
+            languageCode = englishUk,
+            order = 4,
+            title = text(en = "a, an and the", fr = "a, an et the", ro = "a, an și the"),
+            summary = text(
+                en = "When to use an article, and when not to.",
+                fr = "Quand mettre un article, et quand s'en passer.",
+                ro = "Când folosim articolul și când nu.",
+            ),
+            sections = listOf(
+                LessonSection(
+                    heading = text(en = "a or an", fr = "a ou an", ro = "a sau an"),
+                    body = text(
+                        en = "The choice depends on the first sound, not the first letter: a book, a university; " +
+                            "an apple, an hour.",
+                        fr = "Le choix dépend du premier son, pas de la première lettre : a book, a university ; " +
+                            "an apple, an hour (le h ne se prononce pas).",
+                        ro = "Alegerea depinde de primul sunet, nu de prima literă: a book, a university; " +
+                            "an apple, an hour (h nu se pronunță).",
+                    ),
+                    examples = listOf(
+                        example("a book", fr = "un livre", ro = "o carte"),
+                        example("an apple", fr = "une pomme", ro = "un măr"),
+                        example("an hour", fr = "une heure", ro = "o oră"),
+                        example("a university", fr = "une université", ro = "o universitate"),
+                    ),
+                ),
+                LessonSection(
+                    heading = text(en = "No article", fr = "Pas d'article", ro = "Fără articol"),
+                    body = text(
+                        en = "Plural or uncountable nouns used in general take no article: I like coffee, " +
+                            "dogs are friendly. the means a specific one: the coffee in this cup.",
+                        fr = "Un nom au pluriel ou indénombrable pris au sens général n'a pas d'article : I like coffee " +
+                            "(j'aime le café), dogs are friendly. the désigne une chose précise : the coffee in this cup.",
+                        ro = "Substantivele la plural sau nenumărabile, luate în general, nu au articol: I like coffee " +
+                            "(îmi place cafeaua), dogs are friendly. the arată ceva anume: the coffee in this cup.",
+                    ),
+                    examples = listOf(
+                        example("I like coffee.", fr = "J'aime le café.", ro = "Îmi place cafeaua."),
+                        example("Dogs are friendly.", fr = "Les chiens sont gentils.", ro = "Câinii sunt prietenoși."),
+                        example("The coffee is cold.", fr = "Le café est froid.", ro = "Cafeaua e rece."),
+                    ),
+                ),
+                LessonSection(
+                    heading = comparisonHeading,
+                    body = text(
+                        en = "French and Romanian use the definite article for general statements (j'aime le café, " +
+                            "îmi place cafeaua); English does not.",
+                        fr = "En français, on dit « j'aime le café » avec un article ; en anglais, le sens général se dit " +
+                            "sans article : I like coffee. C'est l'erreur la plus fréquente des francophones.",
+                        ro = "În română spunem „îmi place cafeaua”, cu articol; în engleză, sensul general se exprimă " +
+                            "fără articol: I like coffee.",
+                    ),
+                ),
+            ),
+        ),
+        Lesson(
+            id = LessonId("en-05-past-simple"),
+            languageCode = englishUk,
+            order = 5,
+            title = text(en = "The past simple", fr = "Le past simple", ro = "Past simple"),
+            summary = text(
+                en = "Finished actions: -ed and irregular verbs.",
+                fr = "Les actions terminées : -ed et verbes irréguliers.",
+                ro = "Acțiuni încheiate: -ed și verbe neregulate.",
+            ),
+            sections = listOf(
+                LessonSection(
+                    heading = text(en = "Regular verbs: -ed", fr = "Verbes réguliers : -ed", ro = "Verbe regulate: -ed"),
+                    body = text(
+                        en = "Add -ed, the same for every person: I worked, she played, they visited.\n" +
+                            "It is used with a finished time: yesterday, last week, in 2020.",
+                        fr = "On ajoute -ed, identique à toutes les personnes : I worked, she played, they visited.\n" +
+                            "Il s'emploie avec un moment terminé : yesterday, last week, in 2020.",
+                        ro = "Se adaugă -ed, la fel pentru toate persoanele: I worked, she played, they visited.\n" +
+                            "Se folosește cu un moment încheiat: yesterday, last week, in 2020.",
+                    ),
+                    examples = listOf(
+                        example("I worked yesterday.", fr = "J'ai travaillé hier.", ro = "Am lucrat ieri."),
+                        example("She visited London.", fr = "Elle a visité Londres.", ro = "Ea a vizitat Londra."),
+                    ),
+                ),
+                LessonSection(
+                    heading = text(en = "Irregular verbs", fr = "Verbes irréguliers", ro = "Verbe neregulate"),
+                    body = text(
+                        en = "The most common verbs are irregular and must be learnt: go → went, see → saw, " +
+                            "have → had, buy → bought.\nQuestions and negatives use did + base form: Did you go? I didn't go.",
+                        fr = "Les verbes les plus courants sont irréguliers et s'apprennent par cœur : go → went, " +
+                            "see → saw, have → had, buy → bought.\n" +
+                            "Questions et négations : did + base verbale. Did you go? I didn't go.",
+                        ro = "Cele mai folosite verbe sunt neregulate și trebuie învățate: go → went, see → saw, " +
+                            "have → had, buy → bought.\nÎntrebările și negațiile folosesc did + forma de bază: Did you go? I didn't go.",
+                    ),
+                    examples = listOf(
+                        example("We went to the market.", fr = "Nous sommes allés au marché.", ro = "Am mers la piață."),
+                        example("I bought some bread.", fr = "J'ai acheté du pain.", ro = "Am cumpărat pâine."),
+                        example("Did you see the film?", fr = "Tu as vu le film ?", ro = "Ai văzut filmul?"),
+                        example("I didn't go.", fr = "Je n'y suis pas allé.", ro = "Nu m-am dus."),
+                    ),
+                ),
+            ),
+        ),
+        Lesson(
+            id = LessonId("en-06-phrasal-verbs"),
+            languageCode = englishUk,
+            order = 6,
+            title = text(en = "Phrasal verbs", fr = "Les phrasal verbs", ro = "Phrasal verbs"),
+            summary = text(
+                en = "Verb + particle, with a meaning of its own.",
+                fr = "Verbe + particule, avec un sens à part.",
+                ro = "Verb + particulă, cu un sens propriu.",
+            ),
+            sections = listOf(
+                LessonSection(
+                    heading = text(en = "One meaning, two words", fr = "Un sens, deux mots", ro = "Un sens, două cuvinte"),
+                    body = text(
+                        en = "A phrasal verb is learnt as a whole: its meaning often cannot be guessed from its parts. " +
+                            "give up = stop trying, get up = leave your bed, look for = search.",
+                        fr = "Un phrasal verb s'apprend en bloc : son sens se devine rarement à partir de ses mots. " +
+                            "give up = abandonner, get up = se lever, look for = chercher.",
+                        ro = "Un phrasal verb se învață ca întreg: sensul lui rareori se deduce din părți. " +
+                            "give up = a renunța, get up = a se trezi, look for = a căuta.",
+                    ),
+                    examples = listOf(
+                        example("Don't give up!", fr = "N'abandonne pas !", ro = "Nu renunța!"),
+                        example("I get up at seven.", fr = "Je me lève à sept heures.", ro = "Mă trezesc la șapte."),
+                        example("I'm looking for my keys.", fr = "Je cherche mes clés.", ro = "Îmi caut cheile."),
+                    ),
+                ),
+                LessonSection(
+                    heading = text(en = "Where the object goes", fr = "La place du complément", ro = "Locul complementului"),
+                    body = text(
+                        en = "With many phrasal verbs, a noun can go before or after the particle: turn off the light, " +
+                            "turn the light off. A pronoun always goes in the middle: turn it off.",
+                        fr = "Avec beaucoup de phrasal verbs, un nom peut se placer avant ou après la particule : " +
+                            "turn off the light, turn the light off. Un pronom se met toujours au milieu : turn it off.",
+                        ro = "La multe phrasal verbs, substantivul poate sta înainte sau după particulă: turn off the light, " +
+                            "turn the light off. Pronumele stă mereu la mijloc: turn it off.",
+                    ),
+                    examples = listOf(
+                        example("Turn off the light.", fr = "Éteins la lumière.", ro = "Stinge lumina."),
+                        example("Turn it off.", fr = "Éteins-la.", ro = "Stinge-o."),
                     ),
                 ),
             ),

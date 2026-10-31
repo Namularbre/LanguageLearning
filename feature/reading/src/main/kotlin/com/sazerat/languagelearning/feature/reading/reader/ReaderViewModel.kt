@@ -265,6 +265,19 @@ class ReaderViewModel @Inject constructor(
         }
     }
 
+    /**
+     * Starts the text over from the end-of-text summary. Words met again keep their status: only a
+     * word that is still new and left untouched becomes known when the text is finished again.
+     */
+    fun onReadAgainClick() {
+        stopSpeech()
+        savedStateHandle[TOUCHED_KEY] = arrayListOf<String>()
+        savedStateHandle[CURRENT_SENTENCE_KEY] = 0
+        savedStateHandle[TRANSLATED_KEY] = intArrayOf()
+        savedStateHandle[OPEN_WORD_KEY] = null
+        summary.value = null
+    }
+
     fun onSpeechErrorShown() {
         speechError.value = null
     }

@@ -43,10 +43,10 @@ class SampleContentTest {
     }
 
     @Test
-    fun `lessons of each language are numbered 1 to 3`() {
-        assertEquals(listOf(1, 2, 3), SampleEnglishLessons.all.map { it.order })
-        assertEquals(listOf(1, 2, 3), SampleRomanianLessons.all.map { it.order })
-        assertEquals(listOf(1, 2, 3), SampleFrenchLessons.all.map { it.order })
+    fun `lessons of each language are numbered 1 to 6`() {
+        assertEquals((1..6).toList(), SampleEnglishLessons.all.map { it.order })
+        assertEquals((1..6).toList(), SampleRomanianLessons.all.map { it.order })
+        assertEquals((1..6).toList(), SampleFrenchLessons.all.map { it.order })
     }
 
     @Test

@@ -6,4 +6,15 @@
     <string name="feature_settings_daily_goal">Daily goal</string>
     <string name="feature_settings_pronunciation_help">Pronunciation help</string>
     <string name="feature_settings_pronunciation_help_description">Shows the pronunciation of words (IPA and tips) and adds the pronunciation exercises to the Library.</string>
+    <string name="feature_settings_switch_language">Change the language you are learning</string>
+    <string name="feature_settings_current_language">Current language</string>
+    <string name="feature_settings_language_not_started">Not started yet</string>
+    <plurals name="feature_settings_language_known_words">
+        <item quantity="one">%1$d known word</item>
+        <item quantity="other">%1$d known words</item>
+    </plurals>
+    <plurals name="feature_settings_language_due_cards">
+        <item quantity="one">%1$d review due</item>
+        <item quantity="other">%1$d reviews due</item>
+    </plurals>
 </resources>

@@ -24,4 +24,5 @@
         <item quantity="few">%1$d cuvinte noi adăugate la recapitulare</item>
         <item quantity="other">%1$d de cuvinte noi adăugate la recapitulare</item>
     </plurals>
+    <string name="feature_session_read_again">Ai citit tot: recitește</string>
 </resources>

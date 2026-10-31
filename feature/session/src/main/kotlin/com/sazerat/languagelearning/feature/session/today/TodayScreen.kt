@@ -42,15 +42,21 @@ import com.sazerat.languagelearning.feature.session.R
 internal fun TodayScreen(
     onOpenReview: () -> Unit,
     onReadText: (TextId) -> Unit,
+    languageSwitcher: @Composable () -> Unit,
     viewModel: TodayViewModel = hiltViewModel(),
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
-    TodayContent(uiState, onOpenReview, onReadText)
+    TodayContent(uiState, onOpenReview, onReadText, languageSwitcher)
 }
 
 @Composable
-internal fun TodayContent(uiState: TodayUiState, onOpenReview: () -> Unit, onReadText: (TextId) -> Unit) {
-    AppScaffold(title = stringResource(R.string.feature_session_today_title)) { padding ->
+internal fun TodayContent(
+    uiState: TodayUiState,
+    onOpenReview: () -> Unit,
+    onReadText: (TextId) -> Unit,
+    languageSwitcher: @Composable () -> Unit = {},
+) {
+    AppScaffold(title = stringResource(R.string.feature_session_today_title), actions = { languageSwitcher() }) { padding ->
         when (uiState) {
             TodayUiState.Loading -> LoadingContent(Modifier.padding(padding))
             is TodayUiState.Success -> Column(
@@ -137,7 +143,10 @@ private fun ReviewCard(uiState: TodayUiState.Success, onOpenReview: () -> Unit) 
 @Composable
 private fun NextTextCard(text: NextText, onClick: () -> Unit) {
     GlassCard(modifier = Modifier.fillMaxWidth(), onClick = onClick) {
-        Overline(stringResource(R.string.feature_session_read_next), color = MaterialTheme.colorScheme.primary)
+        Overline(
+            stringResource(if (text.isReread) R.string.feature_session_read_again else R.string.feature_session_read_next),
+            color = MaterialTheme.colorScheme.primary,
+        )
         Row(verticalAlignment = Alignment.CenterVertically) {
             Column(modifier = Modifier.weight(1f)) {
                 Text(text.title, style = MaterialTheme.typography.titleLarge)

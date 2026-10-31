@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -25,6 +26,7 @@ import androidx.compose.material3.FilledIconButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -98,6 +100,7 @@ internal fun ReaderScreen(onBack: () -> Unit, viewModel: ReaderViewModel = hiltV
             onAddToReview = viewModel::onAddToReviewClick,
             onKnown = viewModel::onKnownClick,
             onFinish = viewModel::onFinishClick,
+            onReadAgain = viewModel::onReadAgainClick,
             onSpeechErrorShown = viewModel::onSpeechErrorShown,
         ),
         onBack = onBack,
@@ -116,6 +119,8 @@ internal data class ReaderActions(
     val onAddToReview: () -> Unit,
     val onKnown: () -> Unit,
     val onFinish: () -> Unit,
+    /** From the end-of-text summary: starts the same text over. */
+    val onReadAgain: () -> Unit,
     val onSpeechErrorShown: () -> Unit,
 )
 
@@ -137,7 +142,7 @@ internal fun ReaderContent(uiState: ReaderUiState, actions: ReaderActions, onBac
             ReaderUiState.NotFound -> MessageContent(stringResource(R.string.feature_reading_not_found), modifier)
             is ReaderUiState.Success ->
                 if (uiState.summary != null) {
-                    SummaryContent(uiState.summary, onBack, modifier)
+                    SummaryContent(uiState.summary, onBack, actions.onReadAgain, modifier)
                 } else {
                     TextContent(uiState, actions, padding)
                 }
@@ -415,7 +420,7 @@ private fun SpeechRate.label(): String = stringResource(
 )
 
 @Composable
-private fun SummaryContent(summary: ReadingSummary, onBack: () -> Unit, modifier: Modifier = Modifier) {
+private fun SummaryContent(summary: ReadingSummary, onBack: () -> Unit, onReadAgain: () -> Unit, modifier: Modifier = Modifier) {
     Column(
         modifier = modifier.fillMaxSize().padding(24.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp, Alignment.CenterVertically),
@@ -437,6 +442,14 @@ private fun SummaryContent(summary: ReadingSummary, onBack: () -> Unit, modifier
             textAlign = TextAlign.Center,
         )
         PrimaryButton(text = stringResource(R.string.feature_reading_back_to_library), onClick = onBack)
+        OutlinedButton(
+            onClick = onReadAgain,
+            modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp),
+            shape = MaterialTheme.shapes.medium,
+        ) {
+            Icon(Icons.Default.Refresh, contentDescription = null, modifier = Modifier.padding(end = 8.dp))
+            Text(stringResource(R.string.feature_reading_read_again))
+        }
     }
 }
 
@@ -472,4 +485,4 @@ private fun ReaderDialoguePreview() {
     }
 }
 
-private val previewActions = ReaderActions({}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {})
+private val previewActions = ReaderActions({}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {})

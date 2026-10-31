@@ -1,12 +1,11 @@
 <resources>
     <string name="feature_reading_library_title">Bibliotecă</string>
-    <string name="feature_reading_library_title_language">Bibliotecă — %1$s</string>
     <string name="feature_reading_section_texts">Texte</string>
     <string name="feature_reading_section_lessons">Lecții</string>
     <string name="feature_reading_section_pronunciation">Pronunție</string>
     <string name="feature_reading_all_levels">Toate nivelurile</string>
     <string name="feature_reading_suggested">Recomandat pentru tine</string>
-    <string name="feature_reading_read">Citit</string>
+    <string name="feature_reading_read">Citit · atinge pentru a reciti</string>
     <string name="feature_reading_lesson_number">Lecția %1$d</string>
     <string name="feature_reading_not_found">Acest text nu există.</string>
     <string name="feature_reading_hint">Atinge un cuvânt ca să vezi ce înseamnă. Ține apăsat pe o propoziție ca s-o traduci.</string>
@@ -40,4 +39,5 @@
         <item quantity="other">%1$d de cuvinte din acest text sunt în recapitulările tale.</item>
     </plurals>
     <string name="feature_reading_back_to_library">Înapoi la bibliotecă</string>
+    <string name="feature_reading_read_again">Recitește textul</string>
 </resources>

@@ -1,12 +1,11 @@
 <resources>
     <string name="feature_reading_library_title">Bibliothèque</string>
-    <string name="feature_reading_library_title_language">Bibliothèque — %1$s</string>
     <string name="feature_reading_section_texts">Textes</string>
     <string name="feature_reading_section_lessons">Leçons</string>
     <string name="feature_reading_section_pronunciation">Prononciation</string>
     <string name="feature_reading_all_levels">Tous les niveaux</string>
     <string name="feature_reading_suggested">Suggéré pour vous</string>
-    <string name="feature_reading_read">Lu</string>
+    <string name="feature_reading_read">Lu · touchez pour relire</string>
     <string name="feature_reading_lesson_number">Leçon %1$d</string>
     <string name="feature_reading_not_found">Ce texte n\'existe pas.</string>
     <string name="feature_reading_hint">Touchez un mot pour voir son sens. Appui long sur une phrase pour la traduire.</string>
@@ -40,4 +39,5 @@
         <item quantity="other">%1$d mots de ce texte sont dans vos révisions.</item>
     </plurals>
     <string name="feature_reading_back_to_library">Retour à la bibliothèque</string>
+    <string name="feature_reading_read_again">Relire ce texte</string>
 </resources>

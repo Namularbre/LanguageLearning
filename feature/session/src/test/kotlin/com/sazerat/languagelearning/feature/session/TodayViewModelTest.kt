@@ -84,4 +84,23 @@ class TodayViewModelTest {
         assertEquals(2, state.reviewMinutes)
         assertEquals(NextText(TextId("next"), "next", CefrLevel.A1, TextKind.STORY, 3, 50), state.nextText)
     }
+
+    @Test
+    fun `once every text is read, the one read longest ago is offered again`() = runTest {
+        val readings = FakeReadingLogRepository()
+        readings.add(romanian, ReadingLogEntry(TextId("old"), 3, now - 2 * MILLIS_PER_DAY))
+        readings.add(romanian, ReadingLogEntry(TextId("recent"), 3, now - MILLIS_PER_DAY))
+        val viewModel = TodayViewModel(
+            FakeUserPreferencesRepository(UserPreferences(learningLanguage = romanian)),
+            FakeReviewRepository(),
+            readings,
+            FakeWordStatusRepository(),
+            FakeTextRepository(listOf(text("old", "a"), text("recent", "b"))),
+            FakeClock(now),
+        )
+
+        val state = viewModel.uiState.first { it is TodayUiState.Success } as TodayUiState.Success
+
+        assertEquals(NextText(TextId("old"), "old", CefrLevel.A1, TextKind.STORY, 3, 0, isReread = true), state.nextText)
+    }
 }

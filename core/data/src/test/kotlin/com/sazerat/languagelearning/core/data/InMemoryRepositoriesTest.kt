@@ -38,9 +38,9 @@ class InMemoryRepositoriesTest {
 
     @Test
     fun `lessons are filtered by language and sorted`() = runTest {
-        assertEquals(listOf(1, 2, 3), lessons.observeLessons(LanguageCode("ro-RO")).first().map { it.order })
-        assertEquals(listOf(1, 2, 3), lessons.observeLessons(LanguageCode("en-GB")).first().map { it.order })
-        assertEquals(listOf(1, 2, 3), lessons.observeLessons(LanguageCode("fr-FR")).first().map { it.order })
+        assertEquals((1..6).toList(), lessons.observeLessons(LanguageCode("ro-RO")).first().map { it.order })
+        assertEquals((1..6).toList(), lessons.observeLessons(LanguageCode("en-GB")).first().map { it.order })
+        assertEquals((1..6).toList(), lessons.observeLessons(LanguageCode("fr-FR")).first().map { it.order })
         assertTrue(lessons.observeLessons(LanguageCode("xx-TEST")).first().isEmpty())
     }
 

@@ -5,7 +5,7 @@ import com.sazerat.languagelearning.core.domain.model.Lesson
 import com.sazerat.languagelearning.core.domain.model.LessonId
 import com.sazerat.languagelearning.core.domain.model.LessonSection
 
-/** Placeholder Romanian lessons 1 to 3 for M1. Replaced by packs downloaded from the API in M2. */
+/** Placeholder Romanian lessons 1 to 6 for M1. Replaced by packs downloaded from the API in M2. */
 internal object SampleRomanianLessons {
     private val romanian = LanguageCode("ro-RO")
 
@@ -282,6 +282,146 @@ internal object SampleRomanianLessons {
                         ro = "În engleză, pluralul se formează aproape mereu regulat cu -s; în franceză, -s de plural nu " +
                             "se pronunță. În română, pluralul se aude întotdeauna și schimbă adesea vocala sau consoana " +
                             "rădăcinii: învață pluralul odată cu cuvântul.",
+                    ),
+                ),
+            ),
+        ),
+        Lesson(
+            id = LessonId("ro-04-definite-article"),
+            languageCode = romanian,
+            order = 4,
+            title = text(en = "The definite article", fr = "L'article défini", ro = "Articolul hotărât"),
+            summary = text(
+                en = "\"The\" is glued to the end of the noun.",
+                fr = "« Le, la » se collent à la fin du nom.",
+                ro = "Articolul hotărât se adaugă la sfârșitul substantivului.",
+            ),
+            sections = listOf(
+                LessonSection(
+                    heading = text(en = "Masculine and neuter: -ul, -le", fr = "Masculin et neutre : -ul, -le", ro = "Masculin și neutru: -ul, -le"),
+                    body = text(
+                        en = "A noun ending in a consonant takes -ul: băiat → băiatul, tren → trenul.\n" +
+                            "A noun ending in -e takes -le: frate → fratele, nume → numele.",
+                        fr = "Un nom terminé par une consonne prend -ul : băiat → băiatul, tren → trenul.\n" +
+                            "Un nom terminé par -e prend -le : frate → fratele, nume → numele.",
+                        ro = "Substantivele terminate în consoană primesc -ul: băiat → băiatul, tren → trenul.\n" +
+                            "Cele terminate în -e primesc -le: frate → fratele, nume → numele.",
+                    ),
+                    examples = listOf(
+                        example("băiatul", en = "the boy", fr = "le garçon"),
+                        example("trenul", en = "the train", fr = "le train"),
+                        example("fratele", en = "the brother", fr = "le frère"),
+                    ),
+                ),
+                LessonSection(
+                    heading = text(en = "Feminine: -a", fr = "Féminin : -a", ro = "Feminin: -a"),
+                    body = text(
+                        en = "The final -ă becomes -a: casă → casa. A final -e becomes -ea: carte → cartea.\n" +
+                            "Nouns in -ea take -ua: cafea → cafeaua.",
+                        fr = "Le -ă final devient -a : casă → casa. Un -e final devient -ea : carte → cartea.\n" +
+                            "Les noms en -ea prennent -ua : cafea → cafeaua.",
+                        ro = "-ă final devine -a: casă → casa. -e final devine -ea: carte → cartea.\n" +
+                            "Substantivele în -ea primesc -ua: cafea → cafeaua.",
+                    ),
+                    examples = listOf(
+                        example("casa", en = "the house", fr = "la maison"),
+                        example("cartea", en = "the book", fr = "le livre"),
+                        example("cafeaua", en = "the coffee", fr = "le café"),
+                    ),
+                ),
+                LessonSection(
+                    heading = comparisonHeading,
+                    body = text(
+                        en = "English and French put the article before the noun. In Romanian, \"a\" stays in front " +
+                            "(un tren, o casă) but \"the\" is an ending: listen for the end of the word.",
+                        fr = "Le français et l'anglais placent l'article devant le nom. En roumain, l'article indéfini " +
+                            "reste devant (un tren, o casă), mais l'article défini est une terminaison : écoute la fin du mot.",
+                        ro = "Engleza și franceza pun articolul înaintea substantivului. În română, articolul nehotărât " +
+                            "stă înainte (un tren, o casă), dar cel hotărât este o terminație.",
+                    ),
+                ),
+            ),
+        ),
+        Lesson(
+            id = LessonId("ro-05-a-fi"),
+            languageCode = romanian,
+            order = 5,
+            title = text(en = "The verb a fi (to be)", fr = "Le verbe a fi (être)", ro = "Verbul a fi"),
+            summary = text(
+                en = "Personal pronouns and the present of \"to be\".",
+                fr = "Les pronoms personnels et le présent d'« être ».",
+                ro = "Pronumele personale și prezentul verbului a fi.",
+            ),
+            sections = listOf(
+                LessonSection(
+                    heading = text(en = "The present", fr = "Le présent", ro = "Prezentul"),
+                    body = same(
+                        "eu sunt, tu ești, el / ea este (e)\nnoi suntem, voi sunteți, ei / ele sunt",
+                    ),
+                    examples = listOf(
+                        example("Eu sunt Ana.", en = "I am Ana.", fr = "Je suis Ana."),
+                        example("Tu ești acasă?", en = "Are you at home?", fr = "Tu es à la maison ?"),
+                        example("Ea este profesoară.", en = "She is a teacher.", fr = "Elle est professeure."),
+                        example("Noi suntem prieteni.", en = "We are friends.", fr = "Nous sommes amis."),
+                    ),
+                ),
+                LessonSection(
+                    heading = text(en = "Dropping the pronoun", fr = "Le pronom omis", ro = "Pronumele omis"),
+                    body = text(
+                        en = "The verb ending already says who: the pronoun is usually left out, " +
+                            "and kept only for emphasis. \"Sunt din Franța\" = I am from France.",
+                        fr = "La terminaison du verbe indique déjà la personne : le pronom est souvent omis et ne sert " +
+                            "qu'à insister. « Sunt din Franța » = Je suis de France.",
+                        ro = "Terminația verbului arată deja persoana, așa că pronumele se omite de obicei " +
+                            "și se folosește doar pentru accent.",
+                    ),
+                    examples = listOf(
+                        example("Sunt din Franța.", en = "I am from France.", fr = "Je suis de France."),
+                        example("Suntem obosiți.", en = "We are tired.", fr = "Nous sommes fatigués."),
+                        example("E bine.", en = "It's fine.", fr = "C'est bien."),
+                    ),
+                ),
+            ),
+        ),
+        Lesson(
+            id = LessonId("ro-06-numbers"),
+            languageCode = romanian,
+            order = 6,
+            title = text(en = "Numbers and prices", fr = "Les nombres et les prix", ro = "Numerele și prețurile"),
+            summary = text(
+                en = "Counting to twenty and asking how much.",
+                fr = "Compter jusqu'à vingt et demander combien.",
+                ro = "Numărăm până la douăzeci și întrebăm cât costă.",
+            ),
+            sections = listOf(
+                LessonSection(
+                    heading = text(en = "One to ten", fr = "De un à dix", ro = "De la unu la zece"),
+                    body = text(
+                        en = "unu, doi, trei, patru, cinci, șase, șapte, opt, nouă, zece.\n" +
+                            "Before a noun, one and two agree: un leu, o bancnotă; doi lei, două mere.",
+                        fr = "unu, doi, trei, patru, cinci, șase, șapte, opt, nouă, zece.\n" +
+                            "Devant un nom, un et deux s'accordent : un leu, o bancnotă ; doi lei, două mere.",
+                        ro = "unu, doi, trei, patru, cinci, șase, șapte, opt, nouă, zece.\n" +
+                            "Înaintea unui substantiv, unu și doi se acordă: un leu, o bancnotă; doi lei, două mere.",
+                    ),
+                    examples = listOf(
+                        example("trei", en = "three", fr = "trois"),
+                        example("șapte", en = "seven", fr = "sept"),
+                        example("doi lei", en = "two lei", fr = "deux lei"),
+                        example("două mere", en = "two apples", fr = "deux pommes"),
+                    ),
+                ),
+                LessonSection(
+                    heading = text(en = "From twenty: add de", fr = "À partir de vingt : ajoutez de", ro = "De la douăzeci: se adaugă de"),
+                    body = text(
+                        en = "From 20 on, de comes between the number and the noun: douăzeci de lei, o sută de grame.",
+                        fr = "À partir de 20, on place de entre le nombre et le nom : douăzeci de lei, o sută de grame.",
+                        ro = "De la 20 în sus, între numeral și substantiv apare de: douăzeci de lei, o sută de grame.",
+                    ),
+                    examples = listOf(
+                        example("Cât costă?", en = "How much is it?", fr = "Combien ça coûte ?"),
+                        example("Douăzeci de lei.", en = "Twenty lei.", fr = "Vingt lei."),
+                        example("Cincizeci de lei.", en = "Fifty lei.", fr = "Cinquante lei."),
                     ),
                 ),
             ),

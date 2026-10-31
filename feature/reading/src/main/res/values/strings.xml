@@ -1,12 +1,11 @@
 <resources>
     <string name="feature_reading_library_title">Library</string>
-    <string name="feature_reading_library_title_language">Library — %1$s</string>
     <string name="feature_reading_section_texts">Texts</string>
     <string name="feature_reading_section_lessons">Lessons</string>
     <string name="feature_reading_section_pronunciation">Pronunciation</string>
     <string name="feature_reading_all_levels">All levels</string>
     <string name="feature_reading_suggested">Suggested for you</string>
-    <string name="feature_reading_read">Read</string>
+    <string name="feature_reading_read">Read · tap to read again</string>
     <string name="feature_reading_lesson_number">Lesson %1$d</string>
     <string name="feature_reading_not_found">This text does not exist.</string>
     <string name="feature_reading_hint">Tap a word to see what it means. Long press a sentence to translate it.</string>
@@ -38,4 +37,5 @@
         <item quantity="other">%1$d words of this text are in your reviews.</item>
     </plurals>
     <string name="feature_reading_back_to_library">Back to the library</string>
+    <string name="feature_reading_read_again">Read this text again</string>
 </resources>

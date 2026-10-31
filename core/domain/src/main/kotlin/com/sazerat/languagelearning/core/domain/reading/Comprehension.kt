@@ -4,6 +4,7 @@ import com.sazerat.languagelearning.core.domain.model.LemmaId
 import com.sazerat.languagelearning.core.domain.model.ReadingText
 import com.sazerat.languagelearning.core.domain.model.TextId
 import com.sazerat.languagelearning.core.domain.model.WordStatus
+import com.sazerat.languagelearning.core.domain.repository.ReadingLogEntry
 
 /**
  * Share of the text the learner should understand, from 0 to 100 (spec §5.2): word occurrences
@@ -39,4 +40,14 @@ public fun suggestNextText(
     } else {
         unread.minByOrNull { it.second }?.first
     }
+}
+
+/**
+ * A text to read again once every text has been read: the one read longest ago, since rereading
+ * it brings back the most. `null` while some text is still unread, or with nothing read yet.
+ */
+public fun suggestReread(texts: List<ReadingText>, log: List<ReadingLogEntry>): ReadingText? {
+    val lastRead = log.groupBy { it.textId }.mapValues { (_, entries) -> entries.maxOf { it.finishedAt } }
+    if (texts.isEmpty() || texts.any { it.id !in lastRead }) return null
+    return texts.minBy { lastRead.getValue(it.id) }
 }

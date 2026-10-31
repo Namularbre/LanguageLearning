@@ -24,4 +24,5 @@
         <item quantity="many">%1$d nouveaux mots ajoutés aux révisions</item>
         <item quantity="other">%1$d nouveaux mots ajoutés aux révisions</item>
     </plurals>
+    <string name="feature_session_read_again">Tout est lu : à relire</string>
 </resources>

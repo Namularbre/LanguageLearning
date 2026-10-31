@@ -30,7 +30,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.sazerat.languagelearning.R
-import com.sazerat.languagelearning.core.domain.model.LanguageCode
+import com.sazerat.languagelearning.core.domain.progress.StudiedLanguages
 import com.sazerat.languagelearning.feature.dashboard.navigation.Progress
 import com.sazerat.languagelearning.feature.dashboard.navigation.progressScreen
 import com.sazerat.languagelearning.feature.grammar.navigation.LessonDetail
@@ -46,6 +46,7 @@ import com.sazerat.languagelearning.feature.session.navigation.Today
 import com.sazerat.languagelearning.feature.session.navigation.todayScreen
 import com.sazerat.languagelearning.feature.settings.navigation.navigateToSettings
 import com.sazerat.languagelearning.feature.settings.navigation.settingsScreen
+import com.sazerat.languagelearning.feature.settings.switcher.LanguageSwitcher
 import com.sazerat.languagelearning.feature.srs.navigation.Review
 import com.sazerat.languagelearning.feature.srs.navigation.reviewScreen
 import kotlin.reflect.KClass
@@ -99,14 +100,16 @@ fun LanguageLearningNavHost(onboardingDone: Boolean) {
             todayScreen(
                 onOpenReview = { navController.navigateToTab(Tab.REVIEW) },
                 onReadText = { id -> navController.navigateToReader(id) },
+                languageSwitcher = { LanguageSwitcher() },
             )
             readingScreens(
                 navController = navController,
                 onLessonClick = { id -> navController.navigate(LessonDetail(lessonId = id.value)) },
                 onExerciseClick = { id -> navController.navigate(PronunciationDetail(exerciseId = id.value)) },
+                languageSwitcher = { LanguageSwitcher() },
             )
             reviewScreen(onReadText = { id -> navController.navigateToReader(id) })
-            progressScreen(onOpenSettings = { navController.navigateToSettings() })
+            progressScreen(onOpenSettings = { navController.navigateToSettings() }, languageSwitcher = { LanguageSwitcher() })
             settingsScreen(navController, languages = studiedLanguages)
             pronunciationScreens(navController)
             grammarScreens(navController)
@@ -128,5 +131,4 @@ private fun NavController.navigateToTab(tab: Tab) {
     }
 }
 
-// Languages that have content. M2 will derive them from the downloaded content packs.
-private val studiedLanguages = listOf(LanguageCode("en-GB"), LanguageCode("ro-RO"), LanguageCode("fr-FR"))
+private val studiedLanguages = StudiedLanguages
