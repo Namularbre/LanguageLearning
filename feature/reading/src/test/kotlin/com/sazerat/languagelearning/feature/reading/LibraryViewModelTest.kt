@@ -11,6 +11,12 @@ import com.sazerat.languagelearning.core.domain.model.TextId
 import com.sazerat.languagelearning.core.domain.model.UserPreferences
 import com.sazerat.languagelearning.core.domain.model.WordStatus
 import com.sazerat.languagelearning.core.domain.repository.ReadingLogEntry
+import com.sazerat.languagelearning.core.testing.FakeLessonRepository
+import com.sazerat.languagelearning.core.testing.FakePronunciationRepository
+import com.sazerat.languagelearning.core.testing.FakeReadingLogRepository
+import com.sazerat.languagelearning.core.testing.FakeTextRepository
+import com.sazerat.languagelearning.core.testing.FakeUserPreferencesRepository
+import com.sazerat.languagelearning.core.testing.FakeWordStatusRepository
 import com.sazerat.languagelearning.core.testing.MainDispatcherRule
 import com.sazerat.languagelearning.feature.reading.library.LibrarySection
 import com.sazerat.languagelearning.feature.reading.library.LibraryUiState

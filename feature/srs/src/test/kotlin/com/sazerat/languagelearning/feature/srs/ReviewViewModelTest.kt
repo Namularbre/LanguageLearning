@@ -4,7 +4,6 @@ import androidx.lifecycle.SavedStateHandle
 import com.sazerat.languagelearning.core.domain.model.CardContext
 import com.sazerat.languagelearning.core.domain.model.CefrLevel
 import com.sazerat.languagelearning.core.domain.model.Clock
-import com.sazerat.languagelearning.core.domain.model.DailyGoal
 import com.sazerat.languagelearning.core.domain.model.LanguageCode
 import com.sazerat.languagelearning.core.domain.model.LearnerWord
 import com.sazerat.languagelearning.core.domain.model.Lemma
@@ -25,20 +24,17 @@ import com.sazerat.languagelearning.core.domain.model.WordStatus
 import com.sazerat.languagelearning.core.domain.repository.LexiconRepository
 import com.sazerat.languagelearning.core.domain.repository.ReadingLogEntry
 import com.sazerat.languagelearning.core.domain.repository.ReadingLogRepository
-import com.sazerat.languagelearning.core.domain.repository.ReviewRepository
 import com.sazerat.languagelearning.core.domain.repository.TextRepository
-import com.sazerat.languagelearning.core.domain.repository.UserPreferencesRepository
 import com.sazerat.languagelearning.core.domain.repository.WordStatusRepository
+import com.sazerat.languagelearning.core.testing.FakeReviewRepository
+import com.sazerat.languagelearning.core.testing.FakeUserPreferencesRepository
 import com.sazerat.languagelearning.core.testing.MainDispatcherRule
 import com.sazerat.languagelearning.feature.srs.review.ReviewUiState
 import com.sazerat.languagelearning.feature.srs.review.ReviewViewModel
 import com.sazerat.languagelearning.speech.fake.FakeTextToSpeech
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flowOf
-import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.test.runTest
 import org.junit.Rule
 import kotlin.test.Test
@@ -84,7 +80,7 @@ class ReviewViewModelTest {
 
     private fun viewModel() = ReviewViewModel(
         SavedStateHandle(),
-        FakePreferences(),
+        FakeUserPreferencesRepository(UserPreferences(learningLanguage = romanian)),
         reviews,
         object : TextRepository {
             override fun observeTexts(languageCode: LanguageCode) = flowOf(listOf(text))
@@ -192,34 +188,4 @@ class ReviewViewModelTest {
 
     private suspend inline fun <reified T : ReviewUiState> ReviewViewModel.state(crossinline until: (T) -> Boolean = { true }): T =
         uiState.first { it is T && until(it) } as T
-
-    private class FakePreferences : UserPreferencesRepository {
-        override val preferences = MutableStateFlow(UserPreferences(learningLanguage = LanguageCode("ro-RO")))
-
-        override suspend fun setLearningLanguage(languageCode: LanguageCode) = Unit
-
-        override suspend fun setDailyGoal(goal: DailyGoal) = Unit
-
-        override suspend fun setPronunciationHelp(enabled: Boolean) = Unit
-
-        override suspend fun setOnboardingDone() = Unit
-    }
-
-    private class FakeReviewRepository : ReviewRepository {
-        val cards = MutableStateFlow<List<ReviewCard>>(emptyList())
-        val log = MutableStateFlow<List<ReviewLogEntry>>(emptyList())
-
-        override fun observeCards(languageCode: LanguageCode): Flow<List<ReviewCard>> = cards.map { all -> all.filter { it.languageCode == languageCode } }
-
-        override suspend fun addCard(card: ReviewCard) {
-            cards.update { it + card }
-        }
-
-        override suspend fun saveReview(card: ReviewCard, entry: ReviewLogEntry) {
-            cards.update { all -> all.map { if (it.lemmaId == card.lemmaId) card else it } }
-            log.update { it + entry }
-        }
-
-        override fun observeLog(languageCode: LanguageCode): Flow<List<ReviewLogEntry>> = log
-    }
 }

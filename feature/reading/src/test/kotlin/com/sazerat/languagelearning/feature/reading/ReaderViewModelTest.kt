@@ -6,6 +6,13 @@ import com.sazerat.languagelearning.core.domain.model.LemmaId
 import com.sazerat.languagelearning.core.domain.model.UserPreferences
 import com.sazerat.languagelearning.core.domain.model.WordStatus
 import com.sazerat.languagelearning.core.domain.repository.ReadingLogEntry
+import com.sazerat.languagelearning.core.testing.FakeClock
+import com.sazerat.languagelearning.core.testing.FakeLexiconRepository
+import com.sazerat.languagelearning.core.testing.FakeReadingLogRepository
+import com.sazerat.languagelearning.core.testing.FakeReviewRepository
+import com.sazerat.languagelearning.core.testing.FakeTextRepository
+import com.sazerat.languagelearning.core.testing.FakeUserPreferencesRepository
+import com.sazerat.languagelearning.core.testing.FakeWordStatusRepository
 import com.sazerat.languagelearning.core.testing.MainDispatcherRule
 import com.sazerat.languagelearning.feature.reading.navigation.Reader
 import com.sazerat.languagelearning.feature.reading.reader.ReaderUiState

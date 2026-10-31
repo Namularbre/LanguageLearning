@@ -1,4 +1,4 @@
-package com.sazerat.languagelearning.feature.reading
+package com.sazerat.languagelearning.core.testing
 
 import com.sazerat.languagelearning.core.domain.model.Clock
 import com.sazerat.languagelearning.core.domain.model.DailyGoal
@@ -31,27 +31,27 @@ import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.update
 
-// In-memory repositories for the ViewModel tests. Only what the tests need is stored.
+// In-memory repositories for the ViewModel tests of every feature. Only what the tests need is stored.
 
-internal class FakeClock(var now: Long = 1_000) : Clock {
+class FakeClock(var now: Long = 1_000) : Clock {
     override fun now(): Long = now
 
     override fun dayOf(millis: Long): Long = millis / 86_400_000
 }
 
-internal class FakeTextRepository(private val texts: List<ReadingText>) : TextRepository {
+class FakeTextRepository(private val texts: List<ReadingText>) : TextRepository {
     override fun observeTexts(languageCode: LanguageCode): Flow<List<ReadingText>> =
         flowOf(texts.filter { it.languageCode == languageCode })
 
     override fun observeText(id: TextId): Flow<ReadingText?> = flowOf(texts.find { it.id == id })
 }
 
-internal class FakeLexiconRepository(private val lemmas: List<Lemma>) : LexiconRepository {
+class FakeLexiconRepository(private val lemmas: List<Lemma>) : LexiconRepository {
     override fun observeLemmas(languageCode: LanguageCode): Flow<List<Lemma>> =
         flowOf(lemmas.filter { it.languageCode == languageCode })
 }
 
-internal class FakeWordStatusRepository : WordStatusRepository {
+class FakeWordStatusRepository : WordStatusRepository {
     val statuses = MutableStateFlow<Map<LemmaId, WordStatus>>(emptyMap())
 
     override fun observeWords(languageCode: LanguageCode): Flow<List<LearnerWord>> =
@@ -62,7 +62,7 @@ internal class FakeWordStatusRepository : WordStatusRepository {
     }
 }
 
-internal class FakeReviewRepository : ReviewRepository {
+class FakeReviewRepository : ReviewRepository {
     val cards = MutableStateFlow<List<ReviewCard>>(emptyList())
     val log = MutableStateFlow<List<ReviewLogEntry>>(emptyList())
 
@@ -81,7 +81,7 @@ internal class FakeReviewRepository : ReviewRepository {
     override fun observeLog(languageCode: LanguageCode): Flow<List<ReviewLogEntry>> = log
 }
 
-internal class FakeReadingLogRepository : ReadingLogRepository {
+class FakeReadingLogRepository : ReadingLogRepository {
     val entries = MutableStateFlow<List<ReadingLogEntry>>(emptyList())
 
     override fun observeLog(languageCode: LanguageCode): Flow<List<ReadingLogEntry>> = entries
@@ -91,7 +91,7 @@ internal class FakeReadingLogRepository : ReadingLogRepository {
     }
 }
 
-internal class FakeUserPreferencesRepository(initial: UserPreferences = UserPreferences()) : UserPreferencesRepository {
+class FakeUserPreferencesRepository(initial: UserPreferences = UserPreferences()) : UserPreferencesRepository {
     override val preferences = MutableStateFlow(initial)
 
     override suspend fun setLearningLanguage(languageCode: LanguageCode) {
@@ -111,14 +111,14 @@ internal class FakeUserPreferencesRepository(initial: UserPreferences = UserPref
     }
 }
 
-internal class FakeLessonRepository(private val lessons: List<Lesson> = emptyList()) : LessonRepository {
+class FakeLessonRepository(private val lessons: List<Lesson> = emptyList()) : LessonRepository {
     override fun observeLessons(languageCode: LanguageCode): Flow<List<Lesson>> =
         flowOf(lessons.filter { it.languageCode == languageCode })
 
     override fun observeLesson(id: LessonId): Flow<Lesson?> = flowOf(lessons.find { it.id == id })
 }
 
-internal class FakePronunciationRepository(private val exercises: List<PronunciationExercise> = emptyList()) :
+class FakePronunciationRepository(private val exercises: List<PronunciationExercise> = emptyList()) :
     PronunciationRepository {
     override fun observeExercises(languageCode: LanguageCode): Flow<List<PronunciationExercise>> =
         flowOf(exercises.filter { it.languageCode == languageCode })
