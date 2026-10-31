@@ -121,7 +121,7 @@ A **four-tab bar** (Today, Library, Review, Progress) plus an **onboarding** on 
 Every lemma has a status for the learner: **new** (never met or untouched), **learning** (added to the reviews), **known**. It is tracked per **base form**, so meeting *casei* after *casa* is the same word.
 
 - Tapping a word opens its sheet. "Add to review" → learning + a review card; "I already know it" → known.
-- "I'm done reading" marks the **new** words of the text that were not added to the reviews as **known**.
+- "I'm done reading" marks the **new** words of the text that the learner did not tap as **known** (a tapped word may still be unclear, so it stays new).
 - **Comprehension** of a text = share of its words (occurrences) whose lemma is known or learning. Shown in the Library and on Today.
 - The **suggested text** is the unread text whose comprehension is the highest while staying at or below 98 % (a text where everything is known teaches nothing), favouring the learner's level.
 

@@ -1,4 +1,6 @@
-# Understanding — Architecture (M1)
+# Understanding — Architecture
+
+> Written at the end of M1. Since the reading loop, Home is replaced by four tabs and the language being learnt comes from the settings (DataStore), not from chips on Home: see [reading-loop.md](reading-loop.md) and `ARCHITECTURE.md`. The principles below are unchanged.
 
 ## How it works
 
