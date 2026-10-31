@@ -2,28 +2,16 @@ package com.sazerat.languagelearning.feature.session.navigation
 
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
-import com.sazerat.languagelearning.core.domain.model.LanguageCode
-import com.sazerat.languagelearning.feature.session.home.HomeScreen
+import com.sazerat.languagelearning.core.domain.model.TextId
+import com.sazerat.languagelearning.feature.session.today.TodayScreen
 import kotlinx.serialization.Serializable
 
+/** The Today tab, the app's home. */
 @Serializable
-data object Home
+data object Today
 
-/** [languages] are the languages offered on Home, in display order; the first one is selected by default. */
-fun NavGraphBuilder.homeScreen(
-    languages: List<LanguageCode>,
-    onOpenPronunciation: (LanguageCode) -> Unit,
-    onOpenLessons: (LanguageCode) -> Unit,
-    onOpenLibrary: () -> Unit,
-    onOpenReview: () -> Unit,
-) {
-    composable<Home> {
-        HomeScreen(
-            languages = languages,
-            onOpenPronunciation = onOpenPronunciation,
-            onOpenLessons = onOpenLessons,
-            onOpenLibrary = onOpenLibrary,
-            onOpenReview = onOpenReview,
-        )
+fun NavGraphBuilder.todayScreen(onOpenReview: () -> Unit, onReadText: (TextId) -> Unit) {
+    composable<Today> {
+        TodayScreen(onOpenReview = onOpenReview, onReadText = onReadText)
     }
 }

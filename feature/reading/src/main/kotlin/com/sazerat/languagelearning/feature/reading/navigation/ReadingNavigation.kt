@@ -10,7 +10,7 @@ import com.sazerat.languagelearning.feature.reading.library.LibraryScreen
 import com.sazerat.languagelearning.feature.reading.reader.ReaderScreen
 import kotlinx.serialization.Serializable
 
-/** The Library of the language being learnt (from the preferences, not from the route). */
+/** The Library tab: texts of the language being learnt (from the preferences, not from the route). */
 @Serializable
 data object Library
 
@@ -20,10 +20,6 @@ data class Reader(val textId: String) {
         /** Navigation saves each route property under its own name; must match the property above. */
         const val TEXT_ID_KEY = "textId"
     }
-}
-
-fun NavController.navigateToLibrary() {
-    navigate(Library)
 }
 
 fun NavController.navigateToReader(textId: TextId) {
@@ -44,7 +40,8 @@ fun NavGraphBuilder.readingScreens(
             onTextClick = { id -> navController.navigateToReader(id) },
             onLessonClick = onLessonClick,
             onExerciseClick = onExerciseClick,
-            onBack = { navController.navigateUp() },
+            // A tab: nothing to go back to.
+            onBack = null,
         )
     }
     composable<Reader> {

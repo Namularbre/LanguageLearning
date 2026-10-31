@@ -1,16 +1,27 @@
 <resources>
-    <string name="feature_session_home_title">Entraînement du jour</string>
-    <string name="feature_session_daily_title">Session quotidienne</string>
-    <string name="feature_session_minutes">%1$d min</string>
-    <string name="feature_session_start">Démarrer</string>
-    <string name="feature_session_coming_soon">La session guidée arrive dans une prochaine version. En attendant, choisis un module ci-dessous.</string>
-    <string name="feature_session_a_la_carte">À la carte</string>
-    <string name="feature_session_module_pronunciation">Prononciation</string>
-    <string name="feature_session_module_pronunciation_description">Sons difficiles, accent de mot, phrases à écouter et à répéter.</string>
-    <string name="feature_session_module_lessons">Leçons</string>
-    <string name="feature_session_module_lessons_description">Le fonctionnement de la langue, avec des exemples à écouter.</string>
-    <string name="feature_session_module_library">Bibliothèque</string>
-    <string name="feature_session_module_library_description">De courts textes à lire et à écouter. Touchez les mots que vous ne connaissez pas.</string>
-    <string name="feature_session_module_review">Révisions</string>
-    <string name="feature_session_module_review_description">Les mots que vous avez ajoutés, au moment où vous alliez les oublier.</string>
+    <string name="feature_session_today_title">Aujourd\'hui</string>
+    <string name="feature_session_goal_ring">%1$d/%2$d</string>
+    <string name="feature_session_goal_description">Minutes de pratique aujourd\'hui : %1$d, objectif : %2$d</string>
+    <string name="feature_session_goal_reached">Objectif du jour atteint. Bravo !</string>
+    <string name="feature_session_goal_pending">Quelques minutes par jour suffisent.</string>
+    <plurals name="feature_session_streak">
+        <item quantity="one">%1$d jour d\'affilée</item>
+        <item quantity="many">%1$d jours d\'affilée</item>
+        <item quantity="other">%1$d jours d\'affilée</item>
+    </plurals>
+    <string name="feature_session_to_review">À réviser</string>
+    <string name="feature_session_nothing_to_review">Rien à réviser. Lisez un texte pour trouver de nouveaux mots.</string>
+    <plurals name="feature_session_due_cards">
+        <item quantity="one">%1$d carte</item>
+        <item quantity="many">%1$d cartes</item>
+        <item quantity="other">%1$d cartes</item>
+    </plurals>
+    <string name="feature_session_review_time">Environ %1$d min</string>
+    <string name="feature_session_read_next">À lire ensuite</string>
+    <string name="feature_session_new_words">Cette semaine</string>
+    <plurals name="feature_session_new_words_count">
+        <item quantity="one">%1$d nouveau mot ajouté aux révisions</item>
+        <item quantity="many">%1$d nouveaux mots ajoutés aux révisions</item>
+        <item quantity="other">%1$d nouveaux mots ajoutés aux révisions</item>
+    </plurals>
 </resources>
