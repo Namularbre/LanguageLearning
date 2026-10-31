@@ -26,6 +26,7 @@ import com.sazerat.languagelearning.core.domain.repository.ReadingLogEntry
 import com.sazerat.languagelearning.core.domain.repository.ReadingLogRepository
 import com.sazerat.languagelearning.core.domain.repository.TextRepository
 import com.sazerat.languagelearning.core.domain.repository.WordStatusRepository
+import com.sazerat.languagelearning.core.domain.review.ExerciseKind
 import com.sazerat.languagelearning.core.testing.FakeReviewRepository
 import com.sazerat.languagelearning.core.testing.FakeUserPreferencesRepository
 import com.sazerat.languagelearning.core.testing.MainDispatcherRule
@@ -40,6 +41,8 @@ import org.junit.Rule
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
+import kotlin.test.assertNotNull
+import kotlin.test.assertNull
 import kotlin.test.assertTrue
 
 class ReviewViewModelTest {
@@ -78,7 +81,12 @@ class ReviewViewModelTest {
     private val reviews = FakeReviewRepository()
     private val textToSpeech = FakeTextToSpeech()
 
-    private fun viewModel() = ReviewViewModel(
+    // Enough nouns to draw three wrong answers for any card.
+    private val lexicon = lemmas + listOf("casă", "gară", "școală").mapIndexed { index, word ->
+        Lemma(LemmaId("ro:$word"), romanian, word, PartOfSpeech.NOUN, meaning = LocalizedText.of(en = word), frequencyRank = index + 10)
+    }
+
+    private fun viewModel(lemmas: List<Lemma> = this.lemmas) = ReviewViewModel(
         SavedStateHandle(),
         FakeUserPreferencesRepository(UserPreferences(learningLanguage = romanian)),
         reviews,
@@ -184,6 +192,75 @@ class ReviewViewModelTest {
         viewModel.onPlayClick()
 
         assertEquals(listOf("Merg la piață."), textToSpeech.requests.map { it.text })
+    }
+
+    @Test
+    fun `with enough words a new card asks for its meaning among four choices`() = runTest {
+        reviews.cards.value = listOf(card("piață", 4, due = now))
+
+        val card = viewModel(lexicon).state<ReviewUiState.Reviewing>().card
+
+        val exercise = assertNotNull(card.exercise)
+        assertEquals(ExerciseKind.MEANING, exercise.kind)
+        assertEquals(4, exercise.choices.map { it.id }.toSet().size)
+        assertTrue(card.lemma in exercise.choices)
+        assertNull(exercise.selected)
+        assertFalse(card.revealed)
+    }
+
+    @Test
+    fun `a right answer turns the card over and is rated by FSRS without buttons`() = runTest {
+        reviews.cards.value = listOf(card("merge", 0, due = now), card("piață", 4, due = now))
+        val viewModel = viewModel(lexicon)
+        viewModel.state<ReviewUiState.Reviewing>()
+
+        viewModel.onChoiceClick(LemmaId("ro:merge"))
+
+        val answered = viewModel.state<ReviewUiState.Reviewing> { it.card.revealed }
+        assertEquals(LemmaId("ro:merge"), answered.card.exercise?.selected)
+        assertEquals(0, answered.position)
+        // Answered at once: "Easy".
+        assertEquals(listOf(ReviewLogEntry(LemmaId("ro:merge"), Rating.EASY, now)), reviews.log.first { it.isNotEmpty() })
+
+        viewModel.onContinueClick()
+
+        val next = viewModel.state<ReviewUiState.Reviewing> { it.position == 1 }
+        assertEquals("piață", next.card.lemma.text)
+        assertFalse(next.card.revealed)
+        assertNull(next.card.exercise?.selected)
+    }
+
+    @Test
+    fun `a wrong answer counts as Again, and only the first answer counts`() = runTest {
+        reviews.cards.value = listOf(card("merge", 0, due = now))
+        val viewModel = viewModel(lexicon)
+        val wrong = viewModel.state<ReviewUiState.Reviewing>().card.exercise!!.choices.first { it.id != LemmaId("ro:merge") }
+
+        viewModel.onChoiceClick(wrong.id)
+        viewModel.state<ReviewUiState.Reviewing> { it.card.revealed }
+        viewModel.onChoiceClick(LemmaId("ro:merge"))
+        viewModel.onContinueClick()
+
+        val finished = viewModel.state<ReviewUiState.Finished>()
+        assertEquals(0, finished.successRate)
+        assertEquals(listOf(ReviewLogEntry(LemmaId("ro:merge"), Rating.AGAIN, now)), reviews.log.value)
+        assertEquals(now + 600_000L, reviews.cards.value.single().due)
+    }
+
+    @Test
+    fun `a card cannot be left before it is answered`() = runTest {
+        reviews.cards.value = listOf(card("merge", 0, due = now))
+        val viewModel = viewModel(lexicon)
+        viewModel.state<ReviewUiState.Reviewing>()
+
+        viewModel.onContinueClick()
+        viewModel.onRevealClick()
+        viewModel.onRatingClick(Rating.GOOD)
+
+        val state = viewModel.state<ReviewUiState.Reviewing>()
+        assertEquals(0, state.position)
+        assertFalse(state.card.revealed)
+        assertTrue(reviews.log.value.isEmpty())
     }
 
     private suspend inline fun <reified T : ReviewUiState> ReviewViewModel.state(crossinline until: (T) -> Boolean = { true }): T =

@@ -10,6 +10,8 @@ import com.sazerat.languagelearning.core.domain.model.PartOfSpeech
 import com.sazerat.languagelearning.core.domain.model.Rating
 import com.sazerat.languagelearning.core.domain.model.Sentence
 import com.sazerat.languagelearning.core.domain.model.Token
+import com.sazerat.languagelearning.core.domain.review.ExerciseKind
+import com.sazerat.languagelearning.feature.srs.review.ExerciseUiState
 import com.sazerat.languagelearning.feature.srs.review.ReviewCardUiState
 import com.sazerat.languagelearning.feature.srs.review.ReviewUiState
 
@@ -42,4 +44,29 @@ internal val previewReviewing = ReviewUiState.Reviewing(
     ),
     position = 2,
     total = 8,
+)
+
+private fun previewNoun(word: String, meaning: String, rank: Int) = Lemma(
+    LemmaId("ro:$word"),
+    LanguageCode("ro-RO"),
+    word,
+    PartOfSpeech.NOUN,
+    Gender.FEMININE,
+    meaning = LocalizedText.of(en = meaning),
+    frequencyRank = rank,
+)
+
+internal val previewChoices = previewReviewing.copy(
+    card = previewReviewing.card.copy(
+        exercise = ExerciseUiState(
+            kind = ExerciseKind.FILL_BLANK,
+            choices = listOf(
+                previewNoun("casă", "house", 10),
+                previewReviewing.card.lemma,
+                previewNoun("gară", "station", 30),
+                previewNoun("școală", "school", 20),
+            ),
+            selected = null,
+        ),
+    ),
 )

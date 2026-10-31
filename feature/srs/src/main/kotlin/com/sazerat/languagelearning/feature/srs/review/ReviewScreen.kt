@@ -37,8 +37,10 @@ import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.sazerat.languagelearning.core.domain.model.LemmaId
 import com.sazerat.languagelearning.core.domain.model.Rating
 import com.sazerat.languagelearning.core.domain.model.TextId
+import com.sazerat.languagelearning.core.domain.review.ExerciseKind
 import com.sazerat.languagelearning.core.ui.component.AppScaffold
 import com.sazerat.languagelearning.core.ui.component.GlassCard
 import com.sazerat.languagelearning.core.ui.component.LoadingContent
@@ -51,6 +53,8 @@ import com.sazerat.languagelearning.core.ui.icon.AppIcons
 import com.sazerat.languagelearning.core.ui.localized
 import com.sazerat.languagelearning.core.ui.theme.LanguageLearningTheme
 import com.sazerat.languagelearning.core.ui.theme.ReadingTextStyle
+import com.sazerat.languagelearning.core.ui.theme.appColors
+import com.sazerat.languagelearning.feature.srs.previewChoices
 import com.sazerat.languagelearning.feature.srs.R
 import com.sazerat.languagelearning.feature.srs.previewReviewing
 import com.sazerat.languagelearning.core.ui.R as CoreUiR
@@ -67,6 +71,8 @@ internal fun ReviewScreen(
         onReveal = viewModel::onRevealClick,
         onPlay = viewModel::onPlayClick,
         onRating = viewModel::onRatingClick,
+        onChoice = viewModel::onChoiceClick,
+        onContinue = viewModel::onContinueClick,
         onSpeechErrorShown = viewModel::onSpeechErrorShown,
         onReadText = onReadText,
         onBack = onBack,
@@ -82,6 +88,8 @@ internal fun ReviewContent(
     onSpeechErrorShown: () -> Unit,
     onReadText: (TextId) -> Unit,
     onBack: (() -> Unit)?,
+    onChoice: (LemmaId) -> Unit = {},
+    onContinue: () -> Unit = {},
 ) {
     val snackbarHostState = remember { SnackbarHostState() }
     AppScaffold(
@@ -93,7 +101,7 @@ internal fun ReviewContent(
         when (uiState) {
             ReviewUiState.Loading -> LoadingContent(modifier)
             is ReviewUiState.NothingDue -> NothingDueContent(uiState, onReadText, modifier)
-            is ReviewUiState.Reviewing -> ReviewingContent(uiState, onReveal, onPlay, onRating, modifier)
+            is ReviewUiState.Reviewing -> ReviewingContent(uiState, onReveal, onPlay, onRating, onChoice, onContinue, modifier)
             is ReviewUiState.Finished -> FinishedContent(uiState, onReadText, modifier)
         }
     }
@@ -108,9 +116,12 @@ private fun ReviewingContent(
     onReveal: () -> Unit,
     onPlay: () -> Unit,
     onRating: (Rating) -> Unit,
+    onChoice: (LemmaId) -> Unit,
+    onContinue: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val card = uiState.card
+    val exercise = card.exercise
     Column(modifier = modifier.fillMaxSize().padding(16.dp), verticalArrangement = Arrangement.spacedBy(16.dp)) {
         Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
             Text(
@@ -128,26 +139,79 @@ private fun ReviewingContent(
             verticalArrangement = Arrangement.spacedBy(16.dp),
         ) {
             CardFront(card)
+            if (exercise != null) {
+                ChoiceButtons(card.lemma.id, exercise, onChoice)
+                if (exercise.answered) AnswerFeedback(correct = exercise.selected == card.lemma.id)
+            }
             if (card.revealed) CardBack(card, uiState.isPlaying, onPlay)
         }
-        if (card.revealed) {
-            RatingButtons(card.intervals, onRating)
-        } else {
-            PrimaryButton(stringResource(R.string.feature_srs_show_answer), onReveal)
+        when {
+            exercise != null -> if (exercise.answered) PrimaryButton(stringResource(R.string.feature_srs_continue), onContinue)
+            card.revealed -> RatingButtons(card.intervals, onRating)
+            else -> PrimaryButton(stringResource(R.string.feature_srs_show_answer), onReveal)
         }
     }
 }
 
-/** The sentence the word was met in, with the word hidden until the answer is shown. */
+/**
+ * The answers to pick from: words of the language to fill the blank, or meanings of the word shown.
+ * Once one is picked, the right answer turns green and a wrong pick red.
+ */
+@Composable
+private fun ChoiceButtons(answer: LemmaId, exercise: ExerciseUiState, onChoice: (LemmaId) -> Unit) {
+    Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+        exercise.choices.forEach { choice ->
+            val isAnswer = choice.id == answer
+            val (container, content) = when {
+                !exercise.answered -> MaterialTheme.appColors.glass to MaterialTheme.colorScheme.onSurface
+                isAnswer -> MaterialTheme.colorScheme.secondaryContainer to MaterialTheme.colorScheme.onSecondaryContainer
+                choice.id == exercise.selected -> MaterialTheme.colorScheme.errorContainer to MaterialTheme.colorScheme.onErrorContainer
+                else -> MaterialTheme.appColors.glass to MaterialTheme.colorScheme.onSurfaceVariant
+            }
+            OutlinedButton(
+                onClick = { onChoice(choice.id) },
+                modifier = Modifier.fillMaxWidth().heightIn(min = 56.dp),
+                shape = MaterialTheme.shapes.medium,
+                colors = ButtonDefaults.outlinedButtonColors(containerColor = container, contentColor = content),
+            ) {
+                val label = when (exercise.kind) {
+                    ExerciseKind.MEANING -> choice.meaning.localized()
+                    ExerciseKind.FILL_BLANK -> choice.text
+                }
+                // The words of the language are set like the text they fill.
+                val style = if (exercise.kind == ExerciseKind.FILL_BLANK) ReadingTextStyle else MaterialTheme.typography.titleMedium
+                Text(label, style = style, textAlign = TextAlign.Center)
+            }
+        }
+    }
+}
+
+@Composable
+private fun AnswerFeedback(correct: Boolean) {
+    Text(
+        stringResource(if (correct) R.string.feature_srs_right_answer else R.string.feature_srs_wrong_answer),
+        style = MaterialTheme.typography.titleMedium,
+        color = if (correct) MaterialTheme.colorScheme.secondary else MaterialTheme.colorScheme.error,
+        modifier = Modifier.fillMaxWidth(),
+        textAlign = TextAlign.Center,
+    )
+}
+
+/**
+ * The sentence the word was met in. The word is hidden until the answer is shown, except when the
+ * question asks for its meaning: the word is then highlighted, and the sentence's translation,
+ * which would give the meaning away, waits for the answer.
+ */
 @Composable
 private fun CardFront(card: ReviewCardUiState) {
+    val asksMeaning = card.exercise?.kind == ExerciseKind.MEANING
     GlassCard(modifier = Modifier.fillMaxWidth()) {
-        Overline(stringResource(R.string.feature_srs_front_hint))
+        Overline(stringResource(if (asksMeaning) R.string.feature_srs_meaning_hint else R.string.feature_srs_front_hint))
         val sentence = buildAnnotatedString {
             card.sentence.tokens.forEachIndexed { index, token ->
                 when {
                     index != card.tokenIndex -> append(token.text)
-                    card.revealed -> withStyle(SpanStyle(fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.primary)) {
+                    card.revealed || asksMeaning -> withStyle(SpanStyle(fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.primary)) {
                         append(token.text)
                     }
                     else -> withStyle(SpanStyle(color = MaterialTheme.colorScheme.primary)) {
@@ -157,12 +221,14 @@ private fun CardFront(card: ReviewCardUiState) {
             }
         }
         Text(sentence, style = ReadingTextStyle, modifier = Modifier.padding(vertical = 8.dp))
-        Text(
-            card.sentence.translation.localized(),
-            style = MaterialTheme.typography.bodyMedium,
-            fontStyle = FontStyle.Italic,
-            color = MaterialTheme.colorScheme.onSurfaceVariant,
-        )
+        if (!asksMeaning || card.revealed) {
+            Text(
+                card.sentence.translation.localized(),
+                style = MaterialTheme.typography.bodyMedium,
+                fontStyle = FontStyle.Italic,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+            )
+        }
     }
 }
 
@@ -297,6 +363,24 @@ private fun ReviewBackPreview() {
     LanguageLearningTheme {
         val revealed = previewReviewing.copy(card = previewReviewing.card.copy(revealed = true))
         ReviewContent(revealed, {}, {}, {}, {}, {}, onBack = null)
+    }
+}
+
+@PreviewLightDark
+@Composable
+private fun ReviewChoicesPreview() {
+    LanguageLearningTheme {
+        ReviewContent(previewChoices, {}, {}, {}, {}, {}, onBack = null)
+    }
+}
+
+@PreviewLightDark
+@Composable
+private fun ReviewChoiceAnsweredPreview() {
+    LanguageLearningTheme {
+        val card = previewChoices.card
+        val answered = card.copy(revealed = true, exercise = card.exercise?.copy(selected = card.exercise.choices.first().id))
+        ReviewContent(previewChoices.copy(card = answered), {}, {}, {}, {}, {}, onBack = null)
     }
 }
 

@@ -19,4 +19,8 @@
     <string name="feature_srs_success_rate">%1$d %% retenus</string>
     <string name="feature_srs_read_now">Lire un texte maintenant ?</string>
     <string name="feature_srs_read_suggested">Lire « %1$s »</string>
+    <string name="feature_srs_meaning_hint">Que veut dire ce mot ?</string>
+    <string name="feature_srs_continue">Continuer</string>
+    <string name="feature_srs_right_answer">Bonne réponse !</string>
+    <string name="feature_srs_wrong_answer">Pas tout à fait</string>
 </resources>
