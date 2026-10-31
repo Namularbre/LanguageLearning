@@ -16,6 +16,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
@@ -33,6 +34,8 @@ import com.sazerat.languagelearning.feature.dashboard.navigation.Progress
 import com.sazerat.languagelearning.feature.dashboard.navigation.progressScreen
 import com.sazerat.languagelearning.feature.grammar.navigation.LessonDetail
 import com.sazerat.languagelearning.feature.grammar.navigation.grammarScreens
+import com.sazerat.languagelearning.feature.onboarding.navigation.Onboarding
+import com.sazerat.languagelearning.feature.onboarding.navigation.onboardingScreen
 import com.sazerat.languagelearning.feature.pronunciation.navigation.PronunciationDetail
 import com.sazerat.languagelearning.feature.pronunciation.navigation.pronunciationScreens
 import com.sazerat.languagelearning.feature.reading.navigation.Library
@@ -59,8 +62,10 @@ private enum class Tab(val route: Any, val routeClass: KClass<*>, @StringRes val
  * rememberNavController() saves the back stack, so it is restored after process death.
  */
 @Composable
-fun LanguageLearningNavHost() {
+fun LanguageLearningNavHost(onboardingDone: Boolean) {
     val navController = rememberNavController()
+    // Chosen once: finishing the onboarding navigates to Today rather than changing the graph.
+    val startDestination = remember { if (onboardingDone) Today else Onboarding }
     val backStackEntry by navController.currentBackStackEntryAsState()
     val destination = backStackEntry?.destination
     Scaffold(
@@ -82,9 +87,12 @@ fun LanguageLearningNavHost() {
     ) { padding ->
         NavHost(
             navController = navController,
-            startDestination = Today,
+            startDestination = startDestination,
             modifier = Modifier.padding(bottom = padding.calculateBottomPadding()).consumeWindowInsets(padding),
         ) {
+            onboardingScreen(languages = studiedLanguages) {
+                navController.navigate(Today) { popUpTo(Onboarding) { inclusive = true } }
+            }
             todayScreen(
                 onOpenReview = { navController.navigateToTab(Tab.REVIEW) },
                 onReadText = { id -> navController.navigateToReader(id) },

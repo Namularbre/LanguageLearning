@@ -43,8 +43,10 @@ dependencies {
     implementation(projects.feature.srs)
     implementation(projects.feature.settings)
     implementation(projects.feature.dashboard)
+    implementation(projects.feature.onboarding)
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.activity.compose)
     implementation(libs.androidx.navigation.compose)
+    implementation(libs.androidx.lifecycle.runtime.compose)
 }
