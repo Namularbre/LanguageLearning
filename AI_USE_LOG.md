@@ -115,6 +115,20 @@ Each entry: goal · tool + prompt · what was produced · what was accepted / re
 - **Accepted / rejected / modified and why:** _TODO (author)_
 - **How I verified it:** _TODO (author). The AI ran `./gradlew assembleDebug test lintDebug` (green) and `connectedDebugAndroidTest` on an API 37 emulator, then went through onboarding, Today, Library, Reader, Review, Progress and Settings (English and French UI) with uiautomator and screenshots. That walkthrough found and fixed four issues (status-bar overlap, long press opening the word sheet, "3 d" shown for a 4-day interval, oversized calendar squares). Not checked: audio quality, process death on the new screens, IPA on the word sheet._
 
+### 2026-10-31 — Content as JSON language packs (draft, to be completed by the author)
+
+- **Goal:** Stop hard-coding lessons and texts in Kotlin, as the first step of "packs produced by AI then reviewed by native speakers" (direction chosen in the project thread "Concevoir les leçons dynamiques").
+- **Tool + prompt:** Claude Code (Claude Opus 5.5). Prompt: "Il faut aussi qu'on planche sur comment avoir des leçons dynamiquement"; after comparing options (static reviewed packs, on-demand Gemini generation, community packs), the author picked "Packs relus (IA + natif)".
+- **What was produced:**
+  - A pack format (JSON, one file per language): `ContentPack` and `ContentPackParser` (format check) in `:core:data/pack/`, `BundledPacks` reading `assets/packs/`.
+  - `ro-RO.json`, `en-GB.json`, `fr-FR.json` exported from the former Kotlin sample objects, checked to give back equal domain models; the Kotlin texts, lexicon and lessons removed.
+  - `PackTextRepository`, `PackLexiconRepository`, `PackLessonRepository` wired in `DataModule`.
+  - Tests: `ContentPackParserTest`, `PackRepositoriesTest`, `PackContentTest` (replaces `SampleReadingTest` and the lesson checks).
+  - `tools/content/format_pack.py`; docs: `docs/understanding/content-packs.md`, `ARCHITECTURE.md`.
+- **Choices made by the AI, to confirm:** tokens stored in the pack (not resolved by the app); one file per language; assets kept in memory until Room storage in M2; pronunciation exercises left in Kotlin for now.
+- **Accepted / rejected / modified and why:** _TODO (author)_
+- **How I verified it:** _TODO (author). The AI had no Android SDK: it ran the export round trip and the new `:core:data` unit tests in a plain JVM project (21 tests green); `assembleDebug`, the Android tests and lint are left to CI._
+
 ---
 
 ## Reflection
