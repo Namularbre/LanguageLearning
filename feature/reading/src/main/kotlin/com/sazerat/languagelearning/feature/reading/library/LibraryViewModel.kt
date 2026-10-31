@@ -58,6 +58,10 @@ sealed interface LibraryUiState {
         val levels: List<CefrLevel>,
         /** `null` shows every level. */
         val level: CefrLevel?,
+        /** Texts already read are left out of [texts]. */
+        val hideRead: Boolean,
+        /** Whether some text of the chosen level has been read: the "hide read texts" box is useless otherwise. */
+        val hasReadTexts: Boolean,
         val texts: List<TextItem>,
         val suggestedTextId: TextId?,
         val lessons: List<Lesson>,
@@ -78,6 +82,7 @@ class LibraryViewModel @Inject constructor(
     // Filters are screen state: saved so they survive process death.
     private val section = savedStateHandle.getStateFlow(SECTION_KEY, LibrarySection.TEXTS.name)
     private val level = savedStateHandle.getStateFlow<String?>(LEVEL_KEY, null)
+    private val hideRead = savedStateHandle.getStateFlow(HIDE_READ_KEY, false)
 
     @OptIn(ExperimentalCoroutinesApi::class)
     private val content: Flow<LibraryContent> = preferencesRepository.preferences.flatMapLatest { preferences ->
@@ -93,7 +98,7 @@ class LibraryViewModel @Inject constructor(
         }
     }
 
-    val uiState: StateFlow<LibraryUiState> = combine(content, section, level) { content, sectionName, levelName ->
+    val uiState: StateFlow<LibraryUiState> = combine(content, section, level, hideRead) { content, sectionName, levelName, hideRead ->
         val sections = buildList {
             add(LibrarySection.TEXTS)
             add(LibrarySection.LESSONS)
@@ -111,6 +116,7 @@ class LibraryViewModel @Inject constructor(
                 isRead = text.id in content.readTexts,
             )
         }
+        val inLevel = textItems.filter { level == null || it.level == level }.sortedWith(compareBy({ it.level }, { it.minutes }))
         LibraryUiState.Success(
             languageCode = content.languageCode,
             sections = sections,
@@ -118,7 +124,9 @@ class LibraryViewModel @Inject constructor(
             section = sections.find { it.name == sectionName } ?: LibrarySection.TEXTS,
             levels = content.texts.map { it.level }.distinct().sorted(),
             level = level,
-            texts = textItems.filter { level == null || it.level == level }.sortedWith(compareBy({ it.level }, { it.minutes })),
+            hideRead = hideRead,
+            hasReadTexts = inLevel.any { it.isRead },
+            texts = inLevel.filter { !hideRead || !it.isRead },
             suggestedTextId = suggestNextText(content.texts, content.statuses, content.readTexts)?.id,
             lessons = content.lessons,
             exercises = content.exercises.orEmpty(),
@@ -138,6 +146,10 @@ class LibraryViewModel @Inject constructor(
         savedStateHandle[LEVEL_KEY] = level?.name
     }
 
+    fun onHideReadChange(hide: Boolean) {
+        savedStateHandle[HIDE_READ_KEY] = hide
+    }
+
     private data class LibraryContent(
         val languageCode: LanguageCode,
         val texts: List<ReadingText>,
@@ -151,5 +163,6 @@ class LibraryViewModel @Inject constructor(
     private companion object {
         const val SECTION_KEY = "section"
         const val LEVEL_KEY = "level"
+        const val HIDE_READ_KEY = "hideRead"
     }
 }

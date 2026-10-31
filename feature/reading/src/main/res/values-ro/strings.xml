@@ -40,4 +40,6 @@
     </plurals>
     <string name="feature_reading_back_to_library">Înapoi la bibliotecă</string>
     <string name="feature_reading_read_again">Recitește textul</string>
+    <string name="feature_reading_hide_read">Ascunde textele deja citite</string>
+    <string name="feature_reading_all_read">Ai citit toate textele de aici. Debifează caseta ca să le vezi din nou.</string>
 </resources>
