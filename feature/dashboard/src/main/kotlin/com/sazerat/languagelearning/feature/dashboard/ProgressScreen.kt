@@ -5,7 +5,9 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -74,10 +76,16 @@ internal fun ProgressContent(uiState: ProgressUiState, onOpenSettings: () -> Uni
                     style = MaterialTheme.typography.titleMedium,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                 )
-                Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-                    StatCard(stringResource(R.string.feature_dashboard_known_words), uiState.knownWords, Modifier.weight(1f))
-                    StatCard(stringResource(R.string.feature_dashboard_in_review), uiState.learningWords, Modifier.weight(1f))
-                    StatCard(stringResource(R.string.feature_dashboard_streak), uiState.streak, Modifier.weight(1f))
+                // The tiles share the height of the tallest one: a label on one line ("In review")
+                // must not leave its tile shorter than those whose label wraps.
+                Row(
+                    modifier = Modifier.fillMaxWidth().height(IntrinsicSize.Min),
+                    horizontalArrangement = Arrangement.spacedBy(12.dp),
+                ) {
+                    val tile = Modifier.weight(1f).fillMaxHeight()
+                    StatCard(stringResource(R.string.feature_dashboard_known_words), uiState.knownWords, tile)
+                    StatCard(stringResource(R.string.feature_dashboard_in_review), uiState.learningWords, tile)
+                    StatCard(stringResource(R.string.feature_dashboard_streak), uiState.streak, tile)
                 }
                 uiState.levelComprehension?.let { comprehension ->
                     GlassCard(modifier = Modifier.fillMaxWidth()) {
