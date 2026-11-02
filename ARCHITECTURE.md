@@ -2,7 +2,7 @@
 
 A map of the project, to find your way around quickly. The detailed *why* behind each choice and likely defence questions are in [`docs/understanding/architecture.md`](docs/understanding/architecture.md); the full specification is [`SPEC.md`](SPEC.md).
 
-Status: **reading loop** (branch `feature/reading-loop`). Texts, lexicon and lessons are sample data in memory; what the learner does (word statuses, review cards, logs) is stored in **Room**, and their settings in **DataStore**. Speech synthesis runs on the device. No networking or AI yet.
+Status: **reading loop** (branch `feature/reading-loop`). Texts, lexicon and lessons are language packs (JSON) shipped in the APK; what the learner does (word statuses, review cards, logs) is stored in **Room**, and their settings in **DataStore**. Speech synthesis runs on the device. No networking or AI yet.
 
 The app has four tabs (SPEC §4): **Today**, **Library**, **Review**, **Progress**, plus a first-launch **onboarding** and **Settings**.
 
@@ -61,7 +61,7 @@ graph TD
 |---|---|---|
 | `:app` | Android | `MainActivity`, navigation graph, Hilt modules (`di/`) |
 | `:core:domain` | Pure Kotlin | Models (`ReadingText`, `Lemma`, `ReviewCard`, `UserPreferences`, `Lesson`…), repository interfaces, and the rules: tokenizer and comprehension (`reading/`), FSRS scheduler (`review/`), streak / minutes / known words (`progress/`) |
-| `:core:data` | Android | Sample content (`sample/`), in-memory repositories for content, Room database (`database/`) and DataStore for the learner's data |
+| `:core:data` | Android | Language packs (`assets/packs/`, read by `pack/`) and their repositories, sample pronunciation exercises (`sample/`), Room database (`database/`) and DataStore for the learner's data |
 | `:core:ui` | Android + Compose | Theme, `AppScaffold`, `GlassCard`, listening components, content labels and badges, choice chips, `AppLanguage` (per-app UI language), localisation helpers |
 | `:core:testing` | Pure Kotlin | `MainDispatcherRule` and fake repositories shared by the feature tests |
 | `:speech:api` | Pure Kotlin | `TextToSpeech` interface, `SpeechPlayer` (one text at a time) |
@@ -113,8 +113,8 @@ Only `:app` knows which implementation sits behind each interface:
 
 | Interface | Current implementation | File |
 |---|---|---|
-| `PronunciationRepository`, `LessonRepository` | `InMemory…Repository` | [`di/DataModule.kt`](app/src/main/kotlin/com/sazerat/languagelearning/di/DataModule.kt) |
-| `TextRepository`, `LexiconRepository` | `InMemory…Repository` (sample texts and lexicon) | same |
+| `PronunciationRepository` | `InMemoryPronunciationRepository` | [`di/DataModule.kt`](app/src/main/kotlin/com/sazerat/languagelearning/di/DataModule.kt) |
+| `TextRepository`, `LexiconRepository`, `LessonRepository` | `Pack…Repository`, fed by `BundledPacks` (language packs in the APK) | same |
 | `WordStatusRepository`, `ReviewRepository`, `ReadingLogRepository` | `Room…Repository` | same |
 | `UserPreferencesRepository` | `DataStoreUserPreferencesRepository` | same |
 | `Clock` | `SystemClock` | same |
@@ -126,12 +126,13 @@ Downloading content packs (M2), or adding Azure, only touches these files and th
 
 ## 6. Content
 
-- All content is hard-coded in [`core/data/.../sample/`](core/data/src/main/kotlin/com/sazerat/languagelearning/core/data/sample/): graded texts (mainly Romanian, a few in English and French), their lexicon (`Lexicon.kt`: lemmas with frequency rank, meanings, IPA), lessons 1 to 3 for each language, and pronunciation exercises.
-- Texts are **pre-tokenised**: each token points to its lemma, so *casei* and *casa* are the same word. The tokenizer in `:core:domain` is used to build and test them.
-- **All texts, translations and IPA were written by the AI and need a native speaker's review.**
+- Texts, their lexicon and lessons are **language packs**: one JSON file per language in [`core/data/src/main/assets/packs/`](core/data/src/main/assets/packs/) (`ro-RO.json`, `en-GB.json`, `fr-FR.json`). `BundledPacks` reads them, `ContentPackParser` checks the format, and the `Pack…Repository` classes serve them. Format and workflow: [`docs/understanding/content-packs.md`](docs/understanding/content-packs.md).
+- Pronunciation exercises are still hard-coded in [`core/data/.../sample/`](core/data/src/main/kotlin/com/sazerat/languagelearning/core/data/sample/).
+- Texts are **pre-tokenised**: each token points to its lemma, so *casei* and *casa* are the same word. The app never lemmatises; the tokenizer in `:core:domain` documents the cutting rules.
+- **All texts, translations and IPA were written by the AI and need a native speaker's review.** `PackContentTest` checks every pack (ids, lemmas, translations, comma-below letters).
 - Every lesson and exercise carries its language (`languageCode`): repositories filter by language, and screens never assume a particular language.
 - Every text shown to the learner (titles, explanations, instructions, translations of examples) is a `LocalizedText` written in English, French and Romanian (see §7).
-- In M2, content will come from the API as language packs and be stored in Room (SPEC §9.2–9.3).
+- In M2, the same packs will be served by the API (`GET /packs/{languageCode}`) and stored in Room (SPEC §9.2–9.3); the bundled ones stay as the first-launch content.
 
 ---
 
@@ -199,7 +200,7 @@ Run before every PR:
 
 **Add a language**
 1. Add its code to `studiedLanguages` in `LanguageLearningNavHost.kt`.
-2. Add texts, lexicon and lessons with that `languageCode` in `core/data/.../sample/` (from M2: publish a pack on the API).
+2. Add a pack `<code>.json` in `core/data/src/main/assets/packs/` (from M2: publish it on the API), and make `PackContentTest` pass.
 3. If the language has its own writing rules: a `:lang:<code>` module implementing `LanguagePack`.
 
 No screen changes; the displayed name ("Roumain") comes from Android.
@@ -208,7 +209,7 @@ No screen changes; the displayed name ("Roumain") comes from Android.
 1. A `values-xx/strings.xml` in every module that has strings.
 2. Add `xx` to `supportedUiLanguages` in `core/ui/.../Localization.kt`, and an `xx` translation to every `LocalizedText` of the content.
 
-Lint and `SampleContentTest` list what is missing.
+Lint, `PackContentTest` and `SampleContentTest` list what is missing.
 
 **Add a screen**
 1. In the relevant feature: `XxxViewModel` + `XxxUiState`, `XxxScreen` + `XxxContent`, a `@Serializable` route.
